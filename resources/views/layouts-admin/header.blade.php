@@ -4,7 +4,7 @@
           background-color: #048b8e !important;
       }
   </style>
-  <nav class="main-header navbar navbar-expand bg-custom">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
       <ul class="navbar-nav">
           <li class="nav-item">

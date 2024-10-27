@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminListController;
+use App\Http\Controllers\OsisChairmanCandidateController;
 use App\Http\Controllers\web\AddictionLevelController;
 use App\Http\Controllers\web\AdminController;
 use App\Http\Controllers\web\AdminQuestionController;
@@ -60,14 +61,18 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('/', 'index')->name('dashboard');
     });
 
-    Route::controller(AdminQuestionController::class)->prefix('/admin/question')->group(function () {
+    Route::controller(OsisChairmanCandidateController::class)->prefix('/admin/osis-candidate')->group(function () {
         Route::get('/', 'index')->name('question');
         Route::get('/create', 'create')->name('question-create');
         Route::post('/', 'store')->name('question-store');
         Route::get('/edit/{id}', 'edit')->name('question-edit');
         Route::post('/{id}', 'update')->name('question-update');
         Route::delete('/{id}', 'destroy')->name('question-delete');
+        Route::post('/import_excel', 'import_excel')->name('question.upload');
     });
+
+
+
 
     Route::controller(AdminUserController::class)->prefix('/admin/user')->group(function () {
         Route::get('/', 'index')->name('user');

@@ -3,10 +3,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-        <img src="{{ asset('gambar/logounpam (1).png') }}" alt="Logo" class="brand-image mr-0 py-1" style="opacity: .8; width: 30px;">
-        <img src="{{ asset('gambar/logorsu (1).png') }}" alt="Logo" class="brand-image" style="opacity: .8">
-
+        <span>VOTING-OSIS</span>
         <span class="brand-text font-weight-light" style="color: transparent;">Admin</span>
+
     </a>
 
     <!-- Sidebar -->
@@ -14,7 +13,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('admin-page/dist/img/avatar5.png') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('gambar/logo-osis.png') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="/" class="d-block">{{auth()->user()->name ?? 'ADMIN'}}</a>
@@ -84,10 +83,10 @@
                     </a>
                 </li> -->
                 <li class="nav-item">
-                    <a href="/admin/question" class="nav-link">
+                    <a href="/admin/osis-candidate" class="nav-link">
                         <i class="nav-icon fa fa-clipboard"></i>
                         <p>
-                            Data Gejala
+                            Data Kandidat
                         </p>
                     </a>
                 </li>

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Imports\UsersImport;
 use App\Models\AnalysisResult;
 use App\Models\ResultQuestion;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminUserController extends Controller
 {
@@ -142,6 +144,30 @@ class AdminUserController extends Controller
                 'line' => $e->getLine(),
             ], 500);
         }
+    }
+
+    public function import_excel(Request $request)
+    {
+        // validation
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+
+        // get file excel
+        $file = $request->file('file');
+
+        // create unique file name
+        $nama_file = rand() . $file->getClientOriginalName();
+
+        // upload file to public folder
+        $file->move('file/excel', $nama_file);
+
+        // import data
+        Excel::import(new UsersImport, 'file/excel/' . $nama_file);
+
+
+        // redirect to main page upload
+        return redirect('/admin/user');
     }
 
     /**

@@ -34,7 +34,7 @@ Dashboard
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-lg-4 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>{{ $user_total }}</h3>
@@ -50,24 +50,13 @@ Dashboard
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-6">
-                    <div class="small-box bg-secondary">
-                        <div class="inner">
-                            <h3>{{ $user_not_addiction_total }}</h3>
-                            <p>Total Tidak Kecanduan</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
 
-                <div class="col-lg-2 col-6">
+
+                <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $user_addiction_low_total }}</h3>
-                            <p>Total Kecanduan Ringan</p>
+                            <p>Total Memilih</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
@@ -76,11 +65,11 @@ Dashboard
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-6">
+                <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ $user_addiction_medium_total }}</h3>
-                            <p>Total Kecanduan Sedang</p>
+                            <p>Total Belum Memilih</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
@@ -89,20 +78,65 @@ Dashboard
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-6">
-                    <div class="small-box bg-danger">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-secondary">
                         <div class="inner">
-                            <h3>{{ $user_addiction_high_total }}</h3>
-                            <p>Total Kecanduan Berat</p>
+                            <h3>{{ $user_not_addiction_total }}</h3>
+                            <p>Total Golput</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
+                            <i class="ion ion-stats-bars"></i>
                         </div>
                         <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+
+
             </div>
 
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row col-12">
+
+                            <div class="col-md-4" v-for="candidate in osisCandidate">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle" src="/gambar/logo-osis.png" alt="Logo OSIS">
+                                        </div>
+
+                                        <h3 class="profile-username text-center">@{{ candidate.name }}</h3>
+                                        <p class="text-muted text-center">NOMOR URUT @{{ candidate.sequence_number }}</p>
+
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>Total Suara Masuk</b> <a class="float-right">1,322</a>
+                                            </li>
+
+
+                                        </ul>
+
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                <span class="sr-only">40% Complete (success)</span> 40 /100
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
 
             <div class="row col-lg-12">
@@ -139,10 +173,14 @@ Dashboard
 
 <script>
     const chart = <?php echo Illuminate\Support\Js::from($chart) ?>;
+    const osisCandidate = <?php echo Illuminate\Support\Js::from($osis_candidate) ?>;
+    const candidateName = <?php echo Illuminate\Support\Js::from($candidate_name) ?>;
 
     let app = new Vue({
         el: '#app',
         data: {
+            osisCandidate,
+            candidateName,
             chart,
         },
         methods: {
@@ -157,11 +195,12 @@ Dashboard
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Tidak Kecanduan', 'Kecanduan Ringan', 'Kecanduan Sedang', 'Kecanduan Berat'],
+            // labels: ['Tidak Kecanduan', 'Kecanduan Ringan', 'Kecanduan Sedang', 'Kecanduan Berat'],
+            labels: candidateName,
             datasets: [{
-                label: '# Tingkat Kecanduan',
-                // data: [12, 19, 3, 5],
-                data: chart,
+                label: '# Perolehan Suara Masuk',
+                data: [12, 19, 3],
+                // data: chart,
                 backgroundColor: [
                     'rgb(125, 125, 125)',
                     'rgb(54, 162, 235)',
@@ -187,11 +226,12 @@ Dashboard
     new Chart(pieCh, {
         type: 'doughnut',
         data: {
-            labels: ['Tidak Kecanduan', 'Kecanduan Ringan', 'Kecanduan Sedang', 'Kecanduan Berat'],
+            // labels: ['Tidak Kecanduan', 'Kecanduan Ringan', 'Kecanduan Sedang', 'Kecanduan Berat'],
+            labels: candidateName,
             datasets: [{
                 label: '# Tingkat Kecanduan',
-                // data: [12, 19, 3, 5],
-                data: chart,
+                data: [12, 19, 3],
+                // data: chart,
                 backgroundColor: [
                     'rgb(125, 125, 125)',
                     'rgb(54, 162, 235)',

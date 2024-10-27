@@ -39,208 +39,63 @@ List User
 
 
                 <div class="col-12">
-                    <div class="card card-info card-tabs">
-                        <div class="card-header p-0 pt-1">
-                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Semua User</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Tidak Kecanduan</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Kecanduan Rendah</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Kecanduan Sedang</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="custom-tabs-one-more-tab" data-toggle="pill" href="#custom-tabs-one-more" role="tab" aria-controls="custom-tabs-one-more" aria-selected="false">Kecanduan Tinggi</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="card">
+
                         <div class="card-body">
-                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                            <div class="callout callout-success">
+                                <h5>Silahkan Upload File Excel dengan format yang sudah disediakan dibawah ini</h5>
 
-                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                                    <div class="table-responsive">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 30px;">No </th>
-                                                    <th>Nama </th>
-                                                    <th>Email </th>
-                                                    <th>Status </th>
-                                                    <th class="text-center" style="width: 200px;">Aksi</th>
-                                                </tr>
-                                            </thead>
+                                <p>download file template dengan format yang sudah di siapkan pada file disini.
+                                    <a href="/file/format/EXEL-IMPORT.xlsx" class="btn btn-sm btn-success" style="text-decoration: none; color:white;">Download Format Excel</a>
+                                </p>
+                                <br>
+                                <p>Upload File yang sudah di isi dari template yang sudah di siapkan. <br>
+                                    <input type="file" ref="file" class="form-control" accept=".xls, .xlsx, .csv" v-on:change="handleFileUpload">
+                                    <button type="button" class="btn btn-sm btn-primary" @click.prevent="submitForm"> Upload</button>
 
-                                            <tbody>
-                                                <tr v-for="(user, index) in users">
-                                                    <td class="text-center">@{{ index+1 }}</td>
-                                                    <td>@{{ user.name ?? ''}}</td>
-                                                    <td>@{{ user.email ?? ''}}</td>
-                                                    <td>
-                                                        <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
-                                                        <span class="badge badge-warning" v-else>Belum Mengisi</span>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
-                                                        <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-
-
-
-                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                                    <div class="table-responsive">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 30px;">No </th>
-                                                    <th>Nama </th>
-                                                    <th>Email </th>
-                                                    <th>Status </th>
-                                                    <th class="text-center" style="width: 200px;">Aksi</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr v-for="(user, index) in userNotAddictionList">
-                                                    <td class="text-center">@{{ index+1 }}</td>
-                                                    <td>@{{ user.name ?? ''}}</td>
-                                                    <td>@{{ user.email ?? ''}}</td>
-                                                    <td>
-                                                        <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
-                                                        <span class="badge badge-warning" v-else>Belum Mengisi</span>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
-                                                        <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-
-                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
-                                    <div class="table-responsive">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 30px;">No </th>
-                                                    <th>Nama </th>
-                                                    <th>Email </th>
-                                                    <th>Status </th>
-                                                    <th class="text-center" style="width: 200px;">Aksi</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr v-for="(user, index) in userAddictionLowList">
-                                                    <td class="text-center">@{{ index+1 }}</td>
-                                                    <td>@{{ user.name ?? ''}}</td>
-                                                    <td>@{{ user.email ?? ''}}</td>
-                                                    <td>
-                                                        <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
-                                                        <span class="badge badge-warning" v-else>Belum Mengisi</span>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
-                                                        <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
-                                    <div class="table-responsive">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 30px;">No </th>
-                                                    <th>Nama </th>
-                                                    <th>Email </th>
-                                                    <th>Status </th>
-                                                    <th class="text-center" style="width: 200px;">Aksi</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr v-for="(user, index) in userAddictionMediumList">
-                                                    <td class="text-center">@{{ index+1 }}</td>
-                                                    <td>@{{ user.name ?? ''}}</td>
-                                                    <td>@{{ user.email ?? ''}}</td>
-                                                    <td>
-                                                        <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
-                                                        <span class="badge badge-warning" v-else>Belum Mengisi</span>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
-                                                        <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-
-                                <div class="tab-pane fade" id="custom-tabs-one-more" role="tabpanel" aria-labelledby="custom-tabs-one-more-tab">
-                                    <div class="table-responsive">
-                                        <table id="example2" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="width: 30px;">No </th>
-                                                    <th>Nama </th>
-                                                    <th>Email </th>
-                                                    <th>Status </th>
-                                                    <th class="text-center" style="width: 200px;">Aksi</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <tr v-for="(user, index) in userAddictionHighList">
-                                                    <td class="text-center">@{{ index+1 }}</td>
-                                                    <td>@{{ user.name ?? ''}}</td>
-                                                    <td>@{{ user.email ?? ''}}</td>
-                                                    <td>
-                                                        <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
-                                                        <span class="badge badge-warning" v-else>Belum Mengisi</span>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
-                                                        <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-
+                                </p>
                             </div>
+                            <div class="table-responsive">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 30px;">No </th>
+                                            <th>Nama </th>
+                                            <th>Email </th>
+                                            <th>Status </th>
+                                            <th class="text-center" style="width: 200px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="(user, index) in users">
+                                            <td class="text-center">@{{ index+1 }}</td>
+                                            <td>@{{ user.name ?? ''}}</td>
+                                            <td>@{{ user.email ?? ''}}</td>
+                                            <td>
+                                                <span class="badge badge-success" v-if="user.answer_status == 1">Sudah Mengisi</span>
+                                                <span class="badge badge-warning" v-else>Belum Mengisi</span>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <button class="btn btn-sm btn-warning mr-2" @click.prevent="resetQuestion(user.id)">Reset Jawaban</button>
+                                                <button class="btn btn-sm btn-danger" @click.prevent="deleteRecord(user.id)">Hapus</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
-
                     </div>
+
                 </div>
-
-
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
+
+
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
 
 </div>
 
@@ -254,6 +109,7 @@ List User
     const userAddictionLowList = <?php echo Illuminate\Support\Js::from($user_low_addiction_list) ?>;
     const userAddictionMediumList = <?php echo Illuminate\Support\Js::from($user_medium_addiction_list) ?>;
     const userAddictionHighList = <?php echo Illuminate\Support\Js::from($user_high_addiction_list) ?>;
+
     let app = new Vue({
         el: '#app',
         data: {
@@ -262,8 +118,59 @@ List User
             userAddictionLowList,
             userAddictionMediumList,
             userAddictionHighList,
+            file: '',
         },
         methods: {
+            handleFileUpload() {
+                this.file = this.$refs.file.files[0];
+                if (!this.file) {
+                    return;
+                }
+                if (!this.isValidFileType(this.file)) {
+                    return;
+                }
+            },
+            isValidFileType(file) {
+                const allowedExtensions = ['.xls', '.xlsx', '.csv'];
+                return allowedExtensions.includes(file.name.split('.').pop().toLowerCase());
+            },
+            submitForm: function() {
+                this.sendData();
+            },
+            sendData: function() {
+                let vm = this;
+                let data = {
+                    file: vm.file,
+                }
+                let formData = new FormData();
+                for (var key in data) {
+                    formData.append(key, data[key]);
+                }
+                axios.post('/admin/osis-candidate/import_excel', formData)
+                    .then(function(response) {
+                        vm.loading = false;
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Data Kandidat Osis berhasil disimpan.',
+                            icon: 'success',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '/admin/osis-candidate';
+                            }
+                        })
+                    })
+                    .catch(function(error) {
+                        vm.loading = false;
+                        console.log(error);
+                        Swal.fire({
+                            title: 'Internal Error',
+                            error: true,
+                            icon: 'error',
+                            text: error.response.data.message,
+                        })
+                    });
+            },
             resetQuestion: function(id) {
                 Swal.fire({
                     title: 'Apakah yakin ingin mereset jawaban?',

@@ -31,8 +31,8 @@
             <div class="card-body">
 
                 <div style="text-align: center; padding: 15px;">
-                    <img src="/gambar/logounpam (1).png" alt="Logo UNPAM">
-                    <img src="/gambar/logorsu (1).png" alt="Logo RSU">
+                    <img src="/gambar/logo-osis.png" width="100px" alt="Logo OSIS">
+
 
                 </div>
 

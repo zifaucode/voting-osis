@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\OsisChairmanCandidate;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,11 +14,11 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $osisCandidate = OsisChairmanCandidate::all();
+        $candidateName = collect($osisCandidate)->pluck('name');
+        // return $candidateName;
         $userTotal = User::where('role', 2)->whereNot('id', 1)->count();
-        $user = User::with(['analysisResult', 'resultQuestion'])->whereNot('id', 1)->get();
-        $useFilter = collect($user)->filter(function ($q) {
-            return $q->analysisResult != null;
-        });
+
         $userAddictionHighTotal = 0;
         $userAddictionMediumTotal = 0;
         $userAddictionLowTotal = 0;
@@ -27,52 +28,6 @@ class AdminController extends Controller
         $userAddictionLowList = [];
         $userAddictionMediumList = [];
         $userAddictionHighList = [];
-
-
-        if (isset($useFilter)) {
-            $userNotAddictionTotal = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 1;
-            })->count();
-            $userNotAddictionList = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 1;
-            })->all();
-
-
-            $userAddictionLowTotal = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 2;
-            })->count();
-            $userAddictionLowList = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 2;
-            })->all();
-
-
-            $userAddictionMediumTotal = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 3;
-            })->count();
-            $userAddictionMediumList = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 3;
-            })->all();
-
-
-            $userAddictionHighTotal = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 4;
-            })->count();
-            $userAddictionHighList = collect($useFilter)->filter(function ($filter) {
-                return $filter->analysisResult->addiction_level_id == 4;
-            })->all();
-
-            // $userNotAddictionTotal = collect($$userNotAddictionTotal)->count();
-
-            $chart  = collect($useFilter)->map(function ($filter) use ($userNotAddictionTotal, $userAddictionLowTotal, $userAddictionMediumTotal, $userAddictionHighTotal) {
-                return [
-                    $userNotAddictionTotal,
-                    $userAddictionLowTotal,
-                    $userAddictionMediumTotal,
-                    $userAddictionHighTotal,
-                ];
-            })->values();
-        }
-
 
 
 
@@ -90,8 +45,10 @@ class AdminController extends Controller
             'user_medium_addiction_list' => $userAddictionMediumList,
             'user_high_addiction_list' => $userAddictionHighList,
 
-
-            'chart' => $chart[0],
+            // 'chart' => $chart[0],
+            'chart' => [],
+            'osis_candidate' => $osisCandidate,
+            'candidate_name' => $candidateName,
         ]);
     }
 

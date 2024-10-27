@@ -1,5 +1,5 @@
 @extends('layouts-admin.app')
-@section('title', 'Tingkat Kecanduan')
+@section('title', 'Data Kandidat')
 
 
 
@@ -19,7 +19,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Tingkat Kecanduan</h1>
+                    <h1 class="m-0">Data Kandidat</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -41,35 +41,41 @@
                         <div class="card-header">
 
                             <div style="text-align: right;">
-                                <a href="/admin/addiction-level/create" class="btn btn-primary">Tambah Tingkat Kecanduan</a>
+                                <a href="/admin/osis-candidate/create" class="btn btn-primary">Tambah Data Kandidat</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Kode </th>
-                                        <th>Tingkat </th>
-                                        <th>Solusi </th>
-                                        <th>Skor </th>
+                                        <th style="width: 5%; text-align:center;">No Urut </th>
+                                        <th style="text-align:center;">Nama Kandidat </th>
+                                        <th style="text-align:center;">Kelas </th>
+                                        <th style="text-align:center;">Visi </th>
+                                        <th style="text-align:center;">Misi </th>
+                                        <th style="text-align:center;">Foto </th>
                                         <th style="width: 100px;">Aksi </th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    <tr v-for="addiction in addictionLevel">
-                                        <td>@{{ addiction.code ?? ''}}</td>
-                                        <td>@{{ addiction.level ?? ''}}</td>
-                                        <td>@{{ addiction.solution ?? ''}}</td>
-                                        <td>@{{ addiction.start_score ?? 0}} - @{{ addiction.end_score ?? 0}}</td>
+                                    <tr v-for="candidate in osisCandidate">
+                                        <td style="text-align:center;">@{{ candidate.sequence_number ?? ''}}</td>
+                                        <td style="text-align:center;">@{{ candidate.name ?? ''}}</td>
+                                        <td style="text-align:center;">@{{ candidate.class ?? ''}}</td>
+                                        <td>@{{ candidate.visi ?? ''}}</td>
+                                        <td>@{{ candidate.misi ?? ''}}</td>
+                                        <td>
+                                            <img :src="`/file/image/` + candidate.image" alt="" width="100px">
+                                        </td>
                                         <td class="text-center">
-                                            <a :href="`/admin/addiction-level/edit/` + addiction.id" class="btn btn-warning">
+                                            <a :href="`/admin/osis-candidate/edit/` + candidate.id" class="btn btn-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                                     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                                                 </svg>
                                             </a>
-                                            <a href="#" @click.prevent="deleteRecord(addiction.id)" class="btn btn-danger" title="Delete">
+                                            <a href="#" @click.prevent="deleteRecord(candidate.id)" class="btn btn-danger" title="Delete">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -101,12 +107,12 @@
 
 @section('pagescript')
 <script>
-    const addictionLevel = <?php echo Illuminate\Support\Js::from($addiction_level) ?>;
+    const osisCandidate = <?php echo Illuminate\Support\Js::from($osis_candidate) ?>;
 
     let app = new Vue({
         el: '#app',
         data: {
-            addictionLevel,
+            osisCandidate,
 
         },
         methods: {
@@ -123,7 +129,7 @@
                     cancelButtonText: 'Cancel',
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
-                        return axios.delete('/admin/addiction-level/' + id)
+                        return axios.delete('/admin/osis-candidate/' + id)
                             .then(function(response) {
                                 console.log(response.data);
                             })
