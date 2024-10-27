@@ -94,7 +94,7 @@ List User
 
         </div>
         <!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
 </div>
 
 </div>
@@ -146,6 +146,7 @@ List User
                 for (var key in data) {
                     formData.append(key, data[key]);
                 }
+
                 axios.post('/admin/osis-candidate/import_excel', formData)
                     .then(function(response) {
                         vm.loading = false;
