@@ -68,7 +68,6 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('/edit/{id}', 'edit')->name('question-edit');
         Route::post('/{id}', 'update')->name('question-update');
         Route::delete('/{id}', 'destroy')->name('question-delete');
-        Route::post('/import_excel', 'import_excel')->name('question.upload');
     });
 
 
@@ -77,7 +76,9 @@ Route::group(['middleware' => 'admin'], function () {
     Route::controller(AdminUserController::class)->prefix('/admin/user')->group(function () {
         Route::get('/', 'index')->name('user');
         Route::post('/reset/{id}', 'resetQuestion')->name('user.reset');
-        Route::delete('/{id}', 'destroy')->name('use-delete');
+        Route::delete('/{id}', 'destroy')->name('user.delete');
+        Route::post('/selected-delete', 'selectedDestroy')->name('user.selected.delete');
+        Route::post('/import-excel', 'import_excel')->name('question.upload');
     });
 
     Route::controller(AdminListController::class)->prefix('/admin/admin-list')->group(function () {

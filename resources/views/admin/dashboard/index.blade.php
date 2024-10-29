@@ -105,7 +105,8 @@ Dashboard
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
-                                            <img class="profile-user-img img-fluid img-circle" src="/gambar/logo-osis.png" alt="Logo OSIS">
+                                            <!-- <img class="profile-user-img img-fluid img-circle" src="/gambar/logo-osis.png" alt="Logo OSIS"> -->
+                                            <img class="profile-user-img img-fluid img-circle" :src="'/file/image/' + candidate.image" alt="Logo OSIS">
                                         </div>
 
                                         <h3 class="profile-username text-center">@{{ candidate.name }}</h3>

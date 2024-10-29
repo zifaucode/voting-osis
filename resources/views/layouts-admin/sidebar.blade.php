@@ -94,24 +94,6 @@
 
 
                 <li class="nav-item">
-                    <a href="/admin/rules" class="nav-link">
-                        <i class="nav-icon fas fa-clone"></i>
-                        <p>
-                            Setting Aturan
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/admin/addiction-level" class="nav-link">
-                        <i class="nav-icon fa fa-bullseye"></i>
-                        <p>
-                            Tingkat Kecanduan
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a href="/admin/logout" class="nav-link">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>Keluar</p>
