@@ -34,7 +34,7 @@ Dashboard
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>{{ $user_total }}</h3>
@@ -52,10 +52,10 @@ Dashboard
 
 
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ $user_addiction_low_total }}</h3>
+                            <h3>{{ $already_chosen }}</h3>
                             <p>Total Memilih</p>
                         </div>
                         <div class="icon">
@@ -65,10 +65,10 @@ Dashboard
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-4 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $user_addiction_medium_total }}</h3>
+                            <h3>{{ $not_yet_chosen }}</h3>
                             <p>Total Belum Memilih</p>
                         </div>
                         <div class="icon">
@@ -78,10 +78,10 @@ Dashboard
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-6">
+                <!-- <div class="col-lg-3 col-6">
                     <div class="small-box bg-secondary">
                         <div class="inner">
-                            <h3>{{ $user_not_addiction_total }}</h3>
+                            <h3>0</h3>
                             <p>Total Golput</p>
                         </div>
                         <div class="icon">
@@ -89,7 +89,7 @@ Dashboard
                         </div>
                         <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                </div> -->
 
 
             </div>
@@ -106,7 +106,7 @@ Dashboard
                                     <div class="card-body box-profile">
                                         <div class="text-center">
                                             <!-- <img class="profile-user-img img-fluid img-circle" src="/gambar/logo-osis.png" alt="Logo OSIS"> -->
-                                            <img class="profile-user-img img-fluid img-circle" :src="'/file/image/' + candidate.image" alt="Logo OSIS">
+                                            <img :src="'/file/image/' + candidate.image" alt="Logo OSIS" width="220px" height="250px">
                                         </div>
 
                                         <h3 class="profile-username text-center">@{{ candidate.name }}</h3>
@@ -114,7 +114,7 @@ Dashboard
 
                                         <ul class="list-group list-group-unbordered mb-3">
                                             <li class="list-group-item">
-                                                <b>Total Suara Masuk</b> <a class="float-right">1,322</a>
+                                                <b>Total Suara Masuk</b> <a class="float-right">@{{ candidate.total }}</a>
                                             </li>
 
 
@@ -122,8 +122,8 @@ Dashboard
 
                                         <div class="progress">
                                             <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
-                                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                <span class="sr-only">40% Complete (success)</span> 40 /100
+                                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="`width:` +candidate.percentase + `%`">
+                                                <span class="sr-only">40% Complete (success)</span> @{{ candidate.percentase }} %
                                             </div>
                                         </div>
                                     </div>
@@ -176,12 +176,14 @@ Dashboard
     const chart = <?php echo Illuminate\Support\Js::from($chart) ?>;
     const osisCandidate = <?php echo Illuminate\Support\Js::from($osis_candidate) ?>;
     const candidateName = <?php echo Illuminate\Support\Js::from($candidate_name) ?>;
+    const candidateTotal = <?php echo Illuminate\Support\Js::from($candidate_total) ?>;
 
     let app = new Vue({
         el: '#app',
         data: {
             osisCandidate,
             candidateName,
+            candidateTotal,
             chart,
         },
         methods: {
@@ -200,7 +202,7 @@ Dashboard
             labels: candidateName,
             datasets: [{
                 label: '# Perolehan Suara Masuk',
-                data: [12, 19, 3],
+                data: candidateTotal,
                 // data: chart,
                 backgroundColor: [
                     'rgb(125, 125, 125)',
@@ -231,7 +233,7 @@ Dashboard
             labels: candidateName,
             datasets: [{
                 label: '# Tingkat Kecanduan',
-                data: [12, 19, 3],
+                data: candidateTotal,
                 // data: chart,
                 backgroundColor: [
                     'rgb(125, 125, 125)',

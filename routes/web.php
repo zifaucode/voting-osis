@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminListController;
 use App\Http\Controllers\OsisChairmanCandidateController;
+use App\Http\Controllers\UserSelectCandidateController;
 use App\Http\Controllers\web\AddictionLevelController;
 use App\Http\Controllers\web\AdminController;
 use App\Http\Controllers\web\AdminQuestionController;
@@ -156,6 +157,10 @@ Route::group(['middleware' => 'user'], function () {
 */
 Route::controller(HomeController::class)->prefix('/')->group(function () {
     Route::get('/', 'index')->name('dashboard');
+});
+
+Route::controller(UserSelectCandidateController::class)->prefix('/user-choose')->group(function () {
+    Route::post('/', 'store')->name('result.store');
 });
 /*
 |--------------------------------------------------------------------------

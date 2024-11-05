@@ -40,13 +40,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function analysisResult()
-    {
-        return $this->hasOne(AnalysisResult::class, 'user_id');
-    }
 
-    public function resultQuestion()
+    public function selectCandidate()
     {
-        return $this->hasMany(ResultQuestion::class, 'user_id');
+        return $this->belongsTo(OsisChairmanCandidate::class, 'is_vote');
     }
 }

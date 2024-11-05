@@ -14,41 +14,34 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $osisCandidate = OsisChairmanCandidate::all();
+        $user = User::with('selectCandidate')->where('role', 2)->get();
+        $userCount = collect($user)->count();
+
+        $notYetChosen = collect($user->where('vote_status', 0))->count();
+        $alreadyChosen = collect($user->where('vote_status', 1))->count();
+
+        $osisCandidate = OsisChairmanCandidate::with('totalVotes')->get()
+            ->each(function ($q) use ($userCount) {
+                $q['total'] = collect($q->totalVotes)->count();
+                $q['percentase'] = $q['total'] /  $userCount * 100;
+            });
+        // return $notYetChosen;
+
+
         $candidateName = collect($osisCandidate)->pluck('name');
-        // return $candidateName;
-        $userTotal = User::where('role', 2)->whereNot('id', 1)->count();
-
-        $userAddictionHighTotal = 0;
-        $userAddictionMediumTotal = 0;
-        $userAddictionLowTotal = 0;
-        $userNotAddictionTotal = 0;
-
-        $userNotAddictionList = [];
-        $userAddictionLowList = [];
-        $userAddictionMediumList = [];
-        $userAddictionHighList = [];
-
-
+        $candidateTotal = collect($osisCandidate)->pluck('total');
 
 
 
         return view('admin.dashboard.index', [
-            'user_total' => $userTotal,
-            'user_addiction_high_total' => $userAddictionHighTotal,
-            'user_addiction_medium_total' => $userAddictionMediumTotal,
-            'user_addiction_low_total' => $userAddictionLowTotal,
-            'user_not_addiction_total' => $userNotAddictionTotal,
-
-            'user_not_addiction_list' => $userNotAddictionList,
-            'user_low_addiction_list' => $userAddictionLowList,
-            'user_medium_addiction_list' => $userAddictionMediumList,
-            'user_high_addiction_list' => $userAddictionHighList,
-
+            'user_total' => $userCount,
+            'candidate_total' => $candidateTotal,
             // 'chart' => $chart[0],
             'chart' => [],
             'osis_candidate' => $osisCandidate,
             'candidate_name' => $candidateName,
+            'not_yet_chosen' => $notYetChosen,
+            'already_chosen' => $alreadyChosen,
         ]);
     }
 

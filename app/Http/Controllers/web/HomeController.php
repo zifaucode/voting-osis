@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\OsisChairmanCandidate;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,7 +13,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.dashboard.index', []);
+        $osisCandidate = OsisChairmanCandidate::all();
+        // return $osisCandidate;
+        return view('frontend.dashboard.index', [
+            'osis_candidate' => $osisCandidate,
+        ]);
     }
 
     /**
