@@ -49,7 +49,7 @@
                                         <tr>
                                             <th>No </th>
                                             <th>Nama </th>
-                                            <th>Email </th>
+                                            <th>Username </th>
                                             <th style="width: 50px; text-align:center;">Aksi </th>
 
                                         </tr>
@@ -59,7 +59,7 @@
                                         <tr v-for="(adminLists, index) in adminList">
                                             <td>@{{ index+1 }}</td>
                                             <td>@{{ adminLists.name }}</td>
-                                            <td>@{{ adminLists.email }}</td>
+                                            <td>@{{ adminLists.username }}</td>
                                             <td>
                                                 <!-- <a :href="`/admin/admin-list/edit/` + adminLists.id" class="btn btn-warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">

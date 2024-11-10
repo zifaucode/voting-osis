@@ -136,7 +136,11 @@ class AdminUserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $deleteUser =  User::findOrFail($id);
+            $deleteUser =  User::with('totalVoteUser')->findOrFail($id);
+
+            if ($deleteUser->totalVoteUser != null) {
+                $deleteUser->totalVoteUser()->delete();
+            }
             $deleteUser->delete();
 
 
@@ -165,7 +169,11 @@ class AdminUserController extends Controller
             DB::beginTransaction();
             $userId = $request->userIds;
             foreach ($userId as $user) {
-                $deleteUser =  User::findOrFail($user);
+                $deleteUser =  User::with('totalVoteUser')->findOrFail($user);
+
+                if ($deleteUser->totalVoteUser != null) {
+                    $deleteUser->totalVoteUser()->delete();
+                }
                 $deleteUser->delete();
             }
 

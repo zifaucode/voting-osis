@@ -42,7 +42,6 @@ class AdminListController extends Controller
             $newAdmin = new User();
             $newAdmin->role = 1;
             $newAdmin->name = $request->name;
-            $newAdmin->email = $request->email;
             $newAdmin->username = $request->username;
             $newAdmin->password = Hash::make($request->password);
             $newAdmin->save();

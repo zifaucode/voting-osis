@@ -4,6 +4,8 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\OsisChairmanCandidate;
+use App\Models\WebSetting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,9 +16,17 @@ class HomeController extends Controller
     public function index()
     {
         $osisCandidate = OsisChairmanCandidate::all();
+        $webSetting = WebSetting::first();
+        $yearPlus = '';
+        if (isset($webSetting)) {
+            $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
+        }
+        $webSetting = WebSetting::first();
         // return $osisCandidate;
         return view('frontend.dashboard.index', [
             'osis_candidate' => $osisCandidate,
+            'web_setting' => $webSetting,
+            'year_plus' => $yearPlus,
         ]);
     }
 

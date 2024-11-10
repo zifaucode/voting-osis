@@ -232,7 +232,7 @@ Dashboard
             // labels: ['Tidak Kecanduan', 'Kecanduan Ringan', 'Kecanduan Sedang', 'Kecanduan Berat'],
             labels: candidateName,
             datasets: [{
-                label: '# Tingkat Kecanduan',
+                label: '# Perolehan Suara Masuk',
                 data: candidateTotal,
                 // data: chart,
                 backgroundColor: [

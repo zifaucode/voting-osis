@@ -55,17 +55,6 @@
 
                                         </div>
 
-                                        <label for="">Email &nbsp; &nbsp; &nbsp;</label>
-                                        <div class="input-group mb-4">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-envelope"></span>
-                                                </div>
-                                            </div>
-                                            <input type="text" class="form-control" placeholder="email" v-model="email">
-
-                                        </div>
-
                                         <label for="">Username &nbsp; &nbsp; &nbsp;</label>
                                         <div class="input-group mb-4">
                                             <div class="input-group-append">
@@ -121,7 +110,6 @@
         el: '#app',
         data: {
             name: '',
-            email: '',
             username: '',
             password: '',
             loading: false,
@@ -137,7 +125,6 @@
 
                 const data = {
                     name: vm.name,
-                    email: vm.email,
                     username: vm.username,
                     password: vm.password,
                 }

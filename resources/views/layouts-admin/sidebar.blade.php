@@ -2,7 +2,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link">
+    <a href="/admin" class="brand-link">
         <span>VOTING-OSIS</span>
         <span class="brand-text font-weight-light" style="color: transparent;">Admin</span>
 
@@ -16,7 +16,7 @@
                 <img src="{{ asset('gambar/logo-osis.png') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="/" class="d-block">{{auth()->user()->name ?? 'ADMIN'}}</a>
+                <a href="/admin" class="d-block">{{auth()->user()->name ?? 'ADMIN'}}</a>
             </div>
         </div>
 
@@ -91,6 +91,15 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="/admin/web-setting" class="nav-link">
+                        <i class="nav-icon fa fa-cog"></i>
+                        <p>
+                            Setting
+                        </p>
+                    </a>
+                </li>
+
 
 
                 <li class="nav-item">
@@ -101,32 +110,6 @@
                 </li>
                 @endif
 
-                @if(auth()->user()->role == 2)
-                <li class="nav-item">
-                    <a href="/user/question" class="nav-link">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>
-                            Pertanyaan
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/user/result" class="nav-link">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>
-                            Hasil
-                        </p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/user/logout" class="nav-link">
-                        <i class="nav-icon fas fa-power-off"></i>
-                        <p>Keluar</p>
-                    </a>
-                </li>
-                @endif
                 @endauth
 
 

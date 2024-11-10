@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(OsisChairmanCandidate::class, 'is_vote');
     }
+
+    public function totalVoteUser()
+    {
+        return $this->hasOne(TotalVoteUser::class, 'user_id');
+    }
 }

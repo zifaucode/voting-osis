@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminListController;
 use App\Http\Controllers\OsisChairmanCandidateController;
+use App\Http\Controllers\SettingWebController;
 use App\Http\Controllers\UserSelectCandidateController;
 use App\Http\Controllers\web\AddictionLevelController;
 use App\Http\Controllers\web\AdminController;
@@ -90,58 +91,15 @@ Route::group(['middleware' => 'admin'], function () {
         Route::delete('/{id}', 'destroy')->name('admin.delete');
     });
 
-    Route::controller(RulesController::class)->prefix('/admin/rules')->group(function () {
-        Route::get('/', 'index')->name('rules');
-        Route::get('/create', 'create')->name('rules.create');
-        Route::post('/', 'store')->name('rules.store');
-        Route::post('/{id}', 'update')->name('rules.update');
-        Route::get('/edit/{id}', 'edit')->name('rules.edit');
-        Route::delete('/{id}', 'destroy')->name('rules.delete');
-    });
-
-    Route::controller(AddictionLevelController::class)->prefix('/admin/addiction-level')->group(function () {
-        Route::get('/', 'index')->name('addiction-level');
-        Route::get('/create', 'create')->name('addiction-level.create');
-        Route::post('/', 'store')->name('addiction-level.store');
-        Route::post('/{id}', 'store')->name('addiction-level.update');
-        Route::get('/edit/{id}', 'edit')->name('addiction-level.edit');
-        Route::post('/{id}', 'update')->name('addiction-level.update');
-        Route::delete('/{id}', 'destroy')->name('addiction-level.delete');
+    Route::controller(SettingWebController::class)->prefix('/admin/web-setting')->group(function () {
+        Route::get('/', 'index')->name('web-setting.index');
+        Route::post('/front-user-page', 'storeFrontPage')->name('web-setting.front-page');
+        Route::post('/voting-time', 'storeVotingTime')->name('web-setting.voting-time');
     });
 });
 /*
 |--------------------------------------------------------------------------
 | END DASHBOARD ADMIN 🟤
-|--------------------------------------------------------------------------
-*/
-
-
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| ROUTE USER PAGE 🟢
-|--------------------------------------------------------------------------
-*/
-Route::group(['middleware' => 'user'], function () {
-    Route::controller(UserQuestionController::class)->prefix('/user/question')->group(function () {
-        Route::get('/', 'index')->name('question.user');
-    });
-
-    Route::controller(UserResultController::class)->prefix('/user/result')->group(function () {
-        Route::get('/', 'index')->name('result.user');
-    });
-
-    Route::controller(ResultQuestionController::class)->prefix('/user/result')->group(function () {
-        Route::post('/', 'store')->name('result.store');
-        Route::get('/print/{id}', 'print')->name('result.print');
-    });
-});
-/*
-|--------------------------------------------------------------------------
-| END USER PAGE 🟤
 |--------------------------------------------------------------------------
 */
 

@@ -53,7 +53,7 @@
                 <a href="index.html" class="logo d-flex align-items-center">
                     <!-- Uncomment the line below if you also wish to use an image logo -->
                     <!-- <img src="assets/img/logo.png" alt=""> -->
-                    <h1 class="sitename">Voting<span>-</span>Osis</h1>
+                    <h1 class="sitename"><span>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</span></h1>
                 </a>
 
                 <nav id="navmenu" class="navmenu">
@@ -74,8 +74,8 @@
             <section id="pricing" class="pricing section">
 
                 <div class="container section-title" data-aos="fade-up">
-                    <h2>VOTING OSIS</h2>
-                    <div><span>SMAN 1 PARUNG</span> <span class="description-title">2021/2022</span></div>
+                    <h2>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</h2>
+                    <div><span>{{ $web_setting->school_name ?? 'NAMA SEKOLAH' }}</span> <span class="description-title">{{ $web_setting->year_period ?? 'TAHUN PERIODE' }} / {{ $year_plus ?? 'TAHUN PERIODE' }}</span></div>
                 </div>
 
                 <div class="container">
@@ -84,8 +84,8 @@
 
                         <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100" v-for="candidate in osisCandidate">
                             <div class="pricing-tem">
-                                <span class="featured">@{{ candidate.class }}</span>
-                                <h3 style="color: #20c997;">@{{ candidate.name }}</h3>
+                                <span class="featured">@{{ candidate.class ?? 'KELAS' }}</span>
+                                <h3 style="color: #20c997;">@{{ candidate.name ?? 'NAMA KANDIDAT' }}</h3>
 
                                 <div class="frame-image">
                                     <figure>
@@ -95,7 +95,7 @@
                                 <!-- <img :src="`/file/image/` + candidate.image" alt="" width="250px" height="300px" style="background-color: #20c997;"> -->
 
                                 <div class="icon">
-                                    <i class="bi bi-box" style="color: #20c997;">@{{ candidate.sequence_number }}</i>
+                                    <i class="bi bi-box" style="color: #20c997;">@{{ candidate.sequence_number ?? 'NOMOR URUT'}}</i>
                                 </div>
 
                                 <button type="button" @click="onSelcected(candidate.id)" class="btn-buy" data-toggle="modal" data-target="#chooseCandidateModal">PILIH KANDIDAT INI</button>
@@ -116,14 +116,14 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="chooseCandidateModalLabel">Anda Memilih : @{{ candidateDetail.name }}</h5>
+                        <h5 class="modal-title" id="chooseCandidateModalLabel">Anda Memilih : @{{ candidateDetail.name ?? 'NAMA KANDIDAT'}}</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputCodeAccess">Masukan Kode Akses</label>
-                            <input type="text" class="form-control" id="exampleInputCodeAccess" v-model="code_access" aria-describedby="codeAccessHelp" placeholder="kode akses">
+                            <input type="text" class="form-control" id="exampleInputCodeAccess" v-model="code_access" aria-describedby="codeAccessHelp" placeholder="kode akses" autocomplete="off">
                             <br>
-                            <small id="codeAccessHelp" class="form-text text-muted">Masukan kode akses yang valid, Untuk memilih : <span style="color:green;"> <b>@{{ candidateDetail.name }} </b></span> </small>
+                            <small id="codeAccessHelp" class="form-text text-muted">Masukan kode akses yang valid, Untuk memilih : <span style="color:green;"> <b>@{{ candidateDetail.name ?? 'NAMA KANDIDAT'}} </b></span> </small>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -151,18 +151,18 @@
 
                             <div class="card mb-4" v-for="candidate in osisCandidate">
                                 <div class="card-header bg-success text-white">
-                                    @{{ candidate.sequence_number }} - @{{ candidate.name }}
+                                    @{{ candidate.sequence_number ?? 'NOMOR URUT' }} - @{{ candidate.name ?? 'NAMA KANDIDAT'}}
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><b>VISI : </b>
                                         <br>
-                                        @{{ candidate.visi }}
+                                        @{{ candidate.visi ?? 'VISI'}}
                                         <br>
                                     </li>
                                     <li class="list-group-item"><b>MISI :</b>
                                         <br>
                                         <br>
-                                        @{{ candidate.misi }}
+                                        @{{ candidate.misi ?? 'MISI' }}
                                         <br>
                                     </li>
                                 </ul>

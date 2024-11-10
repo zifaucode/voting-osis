@@ -23,7 +23,7 @@ class AdminController extends Controller
         $osisCandidate = OsisChairmanCandidate::with('totalVotes')->get()
             ->each(function ($q) use ($userCount) {
                 $q['total'] = collect($q->totalVotes)->count();
-                $q['percentase'] = $q['total'] /  $userCount * 100;
+                $q['percentase'] = $userCount > 0 ? ($q['total'] / $userCount) * 100 : 0;
             });
         // return $notYetChosen;
 
