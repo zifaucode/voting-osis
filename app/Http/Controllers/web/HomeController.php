@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\OsisChairmanCandidate;
 use App\Models\WebSetting;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -30,6 +32,24 @@ class HomeController extends Controller
         ]);
     }
 
+
+    public function showOff()
+    {
+        $osisCandidate = OsisChairmanCandidate::all();
+        $webSetting = WebSetting::first();
+        $yearPlus = '';
+        if (isset($webSetting)) {
+            $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
+        }
+        $webSetting = WebSetting::first();
+        // return $osisCandidate;
+        return view('frontend.dashboard.show-off', [
+            'osis_candidate' => $osisCandidate,
+            'web_setting' => $webSetting,
+            'year_plus' => $yearPlus,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -44,6 +64,34 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function updateStatus(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $updateStatus = WebSetting::first();
+            $updateStatus->status = 'dibuka';
+            $updateStatus->save();
+
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Data has been saved',
+                'code' => 200,
+                'error' => false,
+                'data' => $updateStatus,
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Internal error',
+                'code' => 500,
+                'error' => true,
+                'errors' => $e->getMessage(),
+                'line' => $e->getLine(),
+            ], 500);
+        }
     }
 
     /**

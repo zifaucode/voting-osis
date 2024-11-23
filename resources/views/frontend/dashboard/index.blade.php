@@ -28,7 +28,7 @@
 
     <style>
         .frame-image {
-            border: 10px solid #20c997;
+            border: 10px solid #64cc61;
             padding: 15px;
             float: center;
         }
@@ -69,71 +69,141 @@
             </div>
         </header>
 
+
+
         <main class="main">
             <!-- ==================================== START CANDIDATE SECTION ============================== -->
             <section id="pricing" class="pricing section">
 
-                <div class="container section-title" data-aos="fade-up">
-                    <h2>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</h2>
-                    <div><span>{{ $web_setting->school_name ?? 'NAMA SEKOLAH' }}</span> <span class="description-title">{{ $web_setting->year_period ?? 'TAHUN PERIODE' }} / {{ $year_plus ?? 'TAHUN PERIODE' }}</span></div>
-                </div>
 
-                <div class="container">
 
-                    <div class="row gy-4">
 
-                        <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100" v-for="candidate in osisCandidate">
-                            <div class="pricing-tem">
-                                <span class="featured">@{{ candidate.class ?? 'KELAS' }}</span>
-                                <h3 style="color: #20c997;">@{{ candidate.name ?? 'NAMA KANDIDAT' }}</h3>
 
-                                <div class="frame-image">
-                                    <figure>
-                                        <img :src="`/file/image/` + candidate.image" width="220px" height="360px" alt="Example Photo">
-                                    </figure>
-                                </div>
-                                <!-- <img :src="`/file/image/` + candidate.image" alt="" width="250px" height="300px" style="background-color: #20c997;"> -->
 
-                                <div class="icon">
-                                    <i class="bi bi-box" style="color: #20c997;">@{{ candidate.sequence_number ?? 'NOMOR URUT'}}</i>
-                                </div>
 
-                                <button type="button" @click="onSelcected(candidate.id)" class="btn-buy" data-toggle="modal" data-target="#chooseCandidateModal">PILIH KANDIDAT INI</button>
 
-                            </div>
+
+                <!-- ================================= PEMILIHAN  DIMULAI ========================================= -->
+                <template v-if="status == 'buka'">
+
+                    <div class="container section-title" data-aos="fade-up">
+                        <div>
+                            <span id="getCountdown">
+                            </span>
                         </div>
+                    </div>
 
+                    <div class="container section-title" data-aos="fade-up">
+                        <h2>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</h2>
+                        <div><span>{{ $web_setting->school_name ?? 'NAMA SEKOLAH' }}</span> <span class="description-title">{{ $web_setting->year_period ?? 'TAHUN PERIODE' }} / {{ $year_plus ?? 'TAHUN PERIODE' }}</span></div>
+                    </div>
+
+                    <div class="container">
+
+                        <div class="row gy-4">
+
+                            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100" v-for="candidate in osisCandidate">
+                                <div class="pricing-tem" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;">
+                                    <span class="featured">@{{ candidate.class ?? 'KELAS' }}</span>
+                                    <h3 style="color: black; background-color: ffffff;"><b>@{{ candidate.name ?? 'NAMA KANDIDAT' }}</b></h3>
+
+                                    <div class="frame-image">
+                                        <figure>
+                                            <img :src="`/file/image/` + candidate.image" width="220px" height="360px" alt="Example Photo">
+                                        </figure>
+                                    </div>
+                                    <!-- <img :src="`/file/image/` + candidate.image" alt="" width="250px" height="300px" style="background-color: #20c997;"> -->
+
+                                    <div class="icon">
+                                        <i class="bi bi-box" style="color: #64cc61;"> &nbsp;<b>@{{ candidate.sequence_number ?? 'NOMOR URUT'}} </b></i>
+                                    </div>
+
+                                    <button type="button" @click="onSelcected(candidate.id)" class="btn-buy" data-toggle="modal" data-target="#chooseCandidateModal">PILIH KANDIDAT INI</button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </template>
+                <!-- ================================= PEMILIHAN  DIMULAI ========================================= -->
+
+
+
+
+
+
+
+                <!-- ================================= MULAI HITUNG MUNDUR ========================================= -->
+                <!-- <template v-if="status == ''"> -->
+                <div class="container section-title" data-aos="fade-up">
+                    <div>
+                        <span id="demo">
+                        </span>
                     </div>
                 </div>
+                <!-- </template> -->
+                <!-- ================================= SELESAI HITUNG MUNDUR ========================================= -->
+
+
+
+
+
+                <!-- ================================= PEMILIHAN  SELESAI ========================================= -->
+                <template v-if="status == 'tutup'">
+                    <div class="container section-title" data-aos="fade-up">
+
+                        <div>
+                            <span id="demo">
+                            </span>
+                        </div>
+                        <!-- <h2>PEMILIHAN TELAH SELESAI</h2>
+
+                        <br>
+
+                        <img src="/gambar/hero-img.png" alt=""> -->
+                    </div>
+                </template>
+                <!-- ================================= PEMILIHAN  SELESAI ========================================= -->
+
+
+
+
+
+
+
+
             </section>
             <!-- ==================================== END CANDIDATE SECTION ============================== -->
 
         </main>
 
 
-        <!-- ============================================= START MODAL CHOOSE CANDIDATE ========================================= -->
-        <div class="modal fade" id="chooseCandidateModal" tabindex="-1" role="dialog" aria-labelledby="chooseCandidateModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="chooseCandidateModalLabel">Anda Memilih : @{{ candidateDetail.name ?? 'NAMA KANDIDAT'}}</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="exampleInputCodeAccess">Masukan Kode Akses</label>
-                            <input type="text" class="form-control" id="exampleInputCodeAccess" v-model="code_access" aria-describedby="codeAccessHelp" placeholder="kode akses" autocomplete="off">
-                            <br>
-                            <small id="codeAccessHelp" class="form-text text-muted">Masukan kode akses yang valid, Untuk memilih : <span style="color:green;"> <b>@{{ candidateDetail.name ?? 'NAMA KANDIDAT'}} </b></span> </small>
+        <template v-if="status == 'buka'">
+            <!-- ============================================= START MODAL CHOOSE CANDIDATE ========================================= -->
+            <div class="modal fade" id="chooseCandidateModal" tabindex="-1" role="dialog" aria-labelledby="chooseCandidateModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #f1f1f1; opacity: 0.8; background: linear-gradient(135deg, #b7e0c255 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(225deg, #b7e0c2 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(315deg, #b7e0c255 25%, transparent 25%) 0px 0/ 42px 42px, linear-gradient(45deg, #b7e0c2 25%, #f1f1f1 25%) 0px 0/ 42px 42px;">
+                            <h4 class="modal-title" id="chooseCandidateModalLabel" style="background-color: #ffffff;"> <b>Anda Memilih : @{{ candidateDetail.name ?? 'NAMA KANDIDAT'}} </b></h4>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
-                        <button type="button" @click.prevent="submitForm" class="btn btn-success">PILIH</button>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="exampleInputCodeAccess">Masukan Kode Akses</label>
+                                <input type="text" class="form-control" id="exampleInputCodeAccess" v-model="code_access" aria-describedby="codeAccessHelp" placeholder="kode akses" autocomplete="off">
+                                <br>
+                                <small id="codeAccessHelp" class="form-text text-muted">Masukan kode akses yang valid, Untuk memilih : <span style="color:green;"> <b>@{{ candidateDetail.name ?? 'NAMA KANDIDAT'}} </b></span> </small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
+                            <button type="button" @click.prevent="submitForm" class="btn btn-success">PILIH</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- ============================================= END MODAL CHOOSE CANDIDATE ========================================= -->
+            <!-- ============================================= END MODAL CHOOSE CANDIDATE ========================================= -->
+        </template>
 
 
 
@@ -150,22 +220,24 @@
                         <div class="col-12">
 
                             <div class="card mb-4" v-for="candidate in osisCandidate">
-                                <div class="card-header bg-success text-white">
-                                    @{{ candidate.sequence_number ?? 'NOMOR URUT' }} - @{{ candidate.name ?? 'NAMA KANDIDAT'}}
+                                <div class="card-header bg-success text-dark" style="background-color: #f1f1f1; opacity: 0.8; background: linear-gradient(135deg, #b7e0c255 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(225deg, #b7e0c2 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(315deg, #b7e0c255 25%, transparent 25%) 0px 0/ 42px 42px, linear-gradient(45deg, #b7e0c2 25%, #f1f1f1 25%) 0px 0/ 42px 42px;">
+                                    <h3><b> @{{ candidate.sequence_number ?? 'NOMOR URUT' }} - @{{ candidate.name ?? 'NAMA KANDIDAT'}} </b></h3>
                                 </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><b>VISI : </b>
-                                        <br>
-                                        @{{ candidate.visi ?? 'VISI'}}
-                                        <br>
-                                    </li>
-                                    <li class="list-group-item"><b>MISI :</b>
-                                        <br>
-                                        <br>
-                                        @{{ candidate.misi ?? 'MISI' }}
-                                        <br>
-                                    </li>
-                                </ul>
+                                <div class="card-body" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;"><b>VISI : </b>
+                                            <br>
+                                            @{{ candidate.visi ?? 'VISI'}}
+                                            <br>
+                                        </li>
+                                        <li class="list-group-item" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;"><b>MISI :</b>
+                                            <br>
+                                            <br>
+                                            @{{ candidate.misi ?? 'MISI' }}
+                                            <br>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <hr>
                             <br>
@@ -180,20 +252,20 @@
             </div>
         </div>
         <!-- ============================================= END MODAL VISI MISI ========================================= -->
-
+        <template v-if="status == 'buka'">
+            <footer id="footer" class="footer light-background">
+                <div class="container">
+                    <div class="credits">
+                        VOTING OSIS by <a href="https://github.com/zifaucode/voting-osis" target="_blank">zifaucode</a> Template By <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </footer>
+        </template>
 
     </div>
 
-    <footer id="footer" class="footer light-background">
 
-        <div class="container">
 
-            <div class="credits">
-                VOTING OSIS by <a href="https://github.com/zifaucode/voting-osis" target="_blank">zifaucode</a> Template By <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
-        </div>
-
-    </footer>
 
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -245,6 +317,7 @@
             osisCandidate,
             candidateDetail: '',
             code_access: '',
+            status: '',
             loading: false,
         },
         methods: {
@@ -296,4 +369,91 @@
             },
         }
     })
+</script>
+
+<script>
+    var countDownDate = new Date("{!! $web_setting->start_date !!} {!! $web_setting->start_time !!}").getTime();
+    var countDownDateEnd = new Date("{!! $web_setting->start_date !!} {!! $web_setting->end_time !!}").getTime();
+
+    var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var distance2 = now - countDownDateEnd;
+        var distanceEnd = countDownDateEnd - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+        // ====================== WAKTU AKHIR =======================
+        var days2 = Math.floor(distanceEnd / (1000 * 60 * 60 * 24));
+        var hours2 = Math.floor((distanceEnd % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes2 = Math.floor((distanceEnd % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds2 = Math.floor((distanceEnd % (1000 * 60)) / 1000);
+        // ====================== SELESAI ====================
+
+        if (distance > 0 && distance2 < 0) {
+            document.getElementById("demo").innerHTML = "<br><h2>HITUNG MUNDUR PEMILIHAN : </h2><br>" + days + " Hari • " + hours + " Jam • " + minutes + " Menit • " + seconds + " Detik " + "<br> <img src='/gambar/hero-img.png'> <br>";
+        }
+
+        if (distance < 0 && distance2 < 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "<br><h2>SELESAI PADA : </h2><br>" + hours2 + " Jam • " + minutes2 + " Menit • " + seconds2 + " Detik ";
+            app.$data.status = 'buka';
+        }
+
+        if (distance < 0 && distance2 > 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "<br><h2>PEMILIHAN TELAH SELESAI </h2> <br> <img src='/gambar/hero-img.png'> <br>";
+            app.$data.status = 'tutup';
+        }
+
+        // console.log('DEMO :', distance);
+        // console.log('DEMO 2 :', distance2);
+    }, 1000);
+</script>
+
+
+
+<script>
+    var countDownDateEnd = new Date("{!! $web_setting->start_date !!} {!! $web_setting->end_time !!}").getTime();
+
+    var x = setInterval(function() {
+
+        var nowTime = new Date().getTime();
+        var distanceTime = countDownDateEnd - nowTime;
+
+        var days = Math.floor(distanceTime / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distanceTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distanceTime % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distanceTime % (1000 * 60)) / 1000);
+
+
+        if (distanceTime > 0) {
+            document.getElementById("getCountdown").innerHTML = "<br><h2>PEMILIHAN BERAKHIR PADA : </h2><br>" + days + " Hari - " + hours + " Jam - " + minutes + " Menit - " + seconds + " Detik ";
+        }
+
+        if (distanceTime < 0) {
+            clearInterval(x);
+            document.getElementById("getCountdown").innerHTML = "PEMILIHAN SELESAI";
+            app.$data.status = 'tutup';
+
+            console.log('getCountdown :', distanceTime);
+
+            // axios.post(`/update-status`, {
+            //         status: "ditutup",
+            //     })
+            //     .then((res) => {
+            //         setInterval(function() {
+            //             window.location.reload();
+            //         }, 4000);
+
+            //     })
+            //     .catch((err) => {
+            //         console.log(`Error  : ${err}`);
+            //     });
+        }
+    }, 1000);
 </script>

@@ -96,7 +96,10 @@ Dashboard
                 <div class="col-lg-6">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h5 class="m-0">Atur Waktu Pemilihan</h5>
+                            <h5 class="m-0">Atur Waktu Pemilihan
+                                <span class="badge badge-success" v-if="status == 'dibuka'"> @{{ status }}</span>
+                                <span class="badge badge-warning" v-if="status == 'ditutup'"> @{{ status }}</span>
+                            </h5>
                             <div style="text-align: right;">
                                 <button class="btn btn-warning" data-toggle="modal" data-target="#votingTimeModal"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -187,20 +190,20 @@ Dashboard
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleInputCodeAccess">TANGGAL MULAI</label>
-                        <input type="date" class="form-control" id="exampleInputCodeAccess" v-model="startDate" aria-describedby="startDateHelp" placeholder="TANGGAL MULAI" autocomplete="off">
+                        <label for="exampleInputStartDate">TANGGAL MULAI</label>
+                        <input type="date" class="form-control" id="exampleInputStartDate" v-model="startDate" aria-describedby="startDateHelp" placeholder="TANGGAL MULAI" autocomplete="off" min="<?php echo date('Y-m-d'); ?>">
                         <small id="startDateHelp" class="form-text text-muted">Tanggal Mulai untuk mengatur hari dilaksanakannya pemilihan</span> </small>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputCodeAccess">JAM MULAI</label>
-                        <input type="time" class="form-control" id="exampleInputCodeAccess" v-model="startTime" aria-describedby="startTimeHelp" placeholder="JAM MULAI" autocomplete="off">
+                        <label for="exampleInputStartTime">JAM MULAI</label>
+                        <input type="time" class="form-control" id="exampleInputStartTime" v-model="startTime" aria-describedby="startTimeHelp" placeholder="JAM MULAI" autocomplete="off">
                         <small id="startTimeHelp" class="form-text text-muted">Jam Mulai akan tampil untuk mengatur hitung mundur dimulainya Pemilihan</span> </small>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputCodeAccess">JAM SELESAI</label>
-                        <input type="time" class="form-control" id="exampleInputCodeAccess" v-model="endTime" aria-describedby="endTimeHelp" placeholder="JAM SELESAI" autocomplete="off">
+                        <label for="exampleInputEndTime">JAM SELESAI</label>
+                        <input type="time" class="form-control" id="exampleInputEndTime" v-model="endTime" aria-describedby="endTimeHelp" placeholder="JAM SELESAI" autocomplete="off">
                         <small id="endTimeHelp" class="form-text text-muted">Jam Selesai untuk mengatur berakhirnya Pemilihan</span> </small>
                     </div>
                 </div>
@@ -231,6 +234,7 @@ Dashboard
             startDate: '{{ $web_setting->start_date ?? "-" }}',
             startTime: '{{ $web_setting->start_time ?? "-" }}',
             endTime: '{{ $web_setting->end_time ?? "-" }}',
+            status: '{{ $web_setting->status ?? "-" }}',
         },
         methods: {
             submitFormFrontPageUser: function() {
@@ -319,5 +323,22 @@ Dashboard
             },
         }
     })
+</script>
+
+<script>
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("exampleInputStartDate").min = today;
+</script>
+
+
+<script>
+    // Get the current time in 24-hour format
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+
+    // Set the minimum attribute of the time input
+    document.getElementById("exampleInputStartTime").min = currentTime;
 </script>
 @endsection

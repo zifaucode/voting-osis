@@ -81,12 +81,14 @@ class SettingWebController extends Controller
                 $newWebSetting->start_date = $request->startDate;
                 $newWebSetting->start_time = $request->startTime;
                 $newWebSetting->end_time = $request->endTime;
+                $newWebSetting->status = 'dibuka';
                 $newWebSetting->save();
             } else {
                 $updateWebSetting = WebSetting::findOrFail($id);
                 $updateWebSetting->start_date = $request->startDate;
                 $updateWebSetting->start_time = $request->startTime;
                 $updateWebSetting->end_time = $request->endTime;
+                $updateWebSetting->status = 'dibuka';
                 $updateWebSetting->save();
             }
 

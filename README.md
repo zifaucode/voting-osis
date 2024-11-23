@@ -1,65 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://github.com/zifaucode/cek-lulus" target="_blank"><img src="https://user-images.githubusercontent.com/33486013/164989084-586c08af-43ea-4f59-93dd-54f25f22c830.png" width="900"></a></p>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href="https://trakteer.id/zifau"><img src="https://img.shields.io/static/v1?label=Trakteer&message=zifaucode&color=C02433"></a>
 </p>
 
-## About Laravel
+# Index
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **[BAHASA INDONESIA](#bahasa-indonesia)**
+-   **[ENGLISH LANGUAGE](#English-language)**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## BAHASA INDONESIA
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Dokumentasi Bahasa Indonesia
 
-## Learning Laravel
+<br>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+<b>Fork dan Star ⭐ jika ini membantu ♥️</b>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Index
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   **[Tentang VOTING OSIS](#tentang-voting-osis)**
+-   **[CARA INSTALL](#cara-install)**
+-   **[USER PASSWORD](#user-password)**
+-   **[NOTED](#noted)**
+-   **[TRAKTIR KOPI](#traktir-kopi)**
 
-## Laravel Sponsors
+<br>
+<br>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Tentang VOTING OSIS
 
-### Premium Partners
+Aplikasi Pemilihan Ketua osis online berbasis web. Website ini dibuat dengan laravel 10.10 (PHP 8.1), vuejs 2 cdn, Axios cdn, dengan template ADMIN LTE (Dashboard admin). VOTING OSIS memiliki fitur sebagai berikut:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+-   Terdapat Fitur upload pemilih (siswa) dengan file Excel yang format templatenya sudah disediakan tanpa ribet harus input 1 per 1 siswa
+-   Terdapat juga Fitur Edit web seperti nama web, title web, waktu hitung mundur, dan masih banyak lagi
 
-## Contributing
+<br>
+<br>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## CARA INSTALL
 
-## Code of Conduct
+Untuk Menginstall Secara Lokal Pastikan PHP anda diatas sama dengan atau > 8.1
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   Clone Repository ini Diterminal kesayangan anda `git clone https://github.com/zifaucode/voting-osis`
+-   Ketikan `composer install`
+-   Rename .env-lokal menjadi .env dan edit sesuai konfigurasi database anda
+-   Buat database pada dbms anda (ex: phpmyadmin) dengan nama sesuai konfigurasi DB_DATABASE pada .env
+-   Migrate databasenya : `php artisan migrate`
+-   Jalankan Seeder database : `php artisan db:seed`
 
-## Security Vulnerabilities
+Jalankan Diterminal
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   `php artisan optimize:clear` dan `php artisan serve`
+
+<br>
+<br>
+
+opsi selain jika tidak ingin menjalankan migrate database dan seeder:
+
+-   File SQL terletak pada folder DB VOTING , import Database ke dalam mysql yang sudah anda buat pada dbms anda (contoh dbms: phpmyadmin, navicat, dll)
+-   Misal anda memakai PhpMyadmin, buat buat database baru dengan nama voting_osis, jika sudah dibuat, lalu upload file sql yang teletak di Folder DB VOTING
+
+## USER PASSWORD
+
+-   U: admin
+-   P: 12345678
+
+<br>
+<br>
+
+## TRAKTIR KOPI
+
+Traktir kopi agar melek terus saat ngoding : <a href="https://trakteer.id/zifau"><img src="https://img.shields.io/static/v1?label=Trakteer&message=zifaucode&color=C02433"></a>
+
+<br>
+<br>
 
 ## License
 

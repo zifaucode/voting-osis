@@ -1,9 +1,12 @@
 <!-- Main Sidebar Container -->
+<!-- ============================================ PERMISION =========================================== -->
+@php $web_setting = \App\Models\WebSetting::first(); @endphp
+<!-- ================================================================================================== -->
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin" class="brand-link">
-        <span>VOTING-OSIS</span>
+        <span>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</span>
         <span class="brand-text font-weight-light" style="color: transparent;">Admin</span>
 
     </a>

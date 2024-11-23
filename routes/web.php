@@ -115,6 +115,8 @@ Route::group(['middleware' => 'admin'], function () {
 */
 Route::controller(HomeController::class)->prefix('/')->group(function () {
     Route::get('/', 'index')->name('dashboard');
+    Route::get('/show-off', 'showOff')->name('dashboard.showoff');
+    Route::post('/update-status', 'updateStatus')->name('update.status');
 });
 
 Route::controller(UserSelectCandidateController::class)->prefix('/user-choose')->group(function () {
