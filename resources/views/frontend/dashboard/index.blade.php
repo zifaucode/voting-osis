@@ -220,17 +220,17 @@
                         <div class="col-12">
 
                             <div class="card mb-4" v-for="candidate in osisCandidate">
-                                <div class="card-header bg-success text-dark" style="background-color: #f1f1f1; opacity: 0.8; background: linear-gradient(135deg, #b7e0c255 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(225deg, #b7e0c2 25%, transparent 25%) -21px 0/ 42px 42px, linear-gradient(315deg, #b7e0c255 25%, transparent 25%) 0px 0/ 42px 42px, linear-gradient(45deg, #b7e0c2 25%, #f1f1f1 25%) 0px 0/ 42px 42px;">
+                                <div class="card-header bg-success tex-white" style="background-color: #29b646; opacity: 1; background-image: radial-gradient(circle at center center, #ffffff, #29b646), repeating-radial-gradient(circle at center center, #ffffff, #ffffff, 40px, transparent 80px, transparent 40px); background-blend-mode: multiply;">
                                     <h3><b> @{{ candidate.sequence_number ?? 'NOMOR URUT' }} - @{{ candidate.name ?? 'NAMA KANDIDAT'}} </b></h3>
                                 </div>
-                                <div class="card-body" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;">
+                                <div class="card-body">
                                     <ul class="list-group list-group-flush">
-                                        <li class="list-group-item" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;"><b>VISI : </b>
+                                        <li class="list-group-item"><b>VISI : </b>
                                             <br>
                                             @{{ candidate.visi ?? 'VISI'}}
                                             <br>
                                         </li>
-                                        <li class="list-group-item" style="background-color: #ffffff; opacity: 1; background-image: radial-gradient(#4fb66b 0.8px, #ffffff 0.8px); background-size: 16px 16px;"><b>MISI :</b>
+                                        <li class="list-group-item"><b>MISI :</b>
                                             <br>
                                             <br>
                                             @{{ candidate.misi ?? 'MISI' }}
