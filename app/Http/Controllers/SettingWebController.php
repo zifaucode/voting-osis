@@ -37,17 +37,31 @@ class SettingWebController extends Controller
         try {
             DB::beginTransaction();
             $id =  $request->id;
+
+            $imageName = null;
+            if ($request->hasFile('logo_image')) {
+                $image = $request->file('logo_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('gambar/logo'), $imageName);
+            }
+
             if ($id == 0) {
                 $newWebSetting = new WebSetting();
                 $newWebSetting->web_title = $request->webTitle;
                 $newWebSetting->school_name = $request->schoolName;
                 $newWebSetting->year_period = $request->yearPeriod;
+                if ($imageName) {
+                    $newWebSetting->logo_image = $imageName;
+                }
                 $newWebSetting->save();
             } else {
                 $updateWebSetting = WebSetting::findOrFail($id);
                 $updateWebSetting->web_title = $request->webTitle;
                 $updateWebSetting->school_name = $request->schoolName;
                 $updateWebSetting->year_period = $request->yearPeriod;
+                if ($imageName) {
+                    $updateWebSetting->logo_image = $imageName;
+                }
                 $updateWebSetting->save();
             }
 
@@ -75,20 +89,29 @@ class SettingWebController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            if (strtotime($request->endTime) <= strtotime($request->startTime)) {
+                return response()->json([
+                    'message' => 'Jam Selesai tidak boleh kurang dari atau sama dengan Jam Mulai!',
+                    'code' => 400,
+                    'error' => true,
+                ], 400);
+            }
+
             $id =  $request->id;
             if ($id == 0) {
                 $newWebSetting = new WebSetting();
                 $newWebSetting->start_date = $request->startDate;
                 $newWebSetting->start_time = $request->startTime;
                 $newWebSetting->end_time = $request->endTime;
-                $newWebSetting->status = 'dibuka';
+                $newWebSetting->status = $request->status ?? 'dibuka';
                 $newWebSetting->save();
             } else {
                 $updateWebSetting = WebSetting::findOrFail($id);
                 $updateWebSetting->start_date = $request->startDate;
                 $updateWebSetting->start_time = $request->startTime;
                 $updateWebSetting->end_time = $request->endTime;
-                $updateWebSetting->status = 'dibuka';
+                $updateWebSetting->status = $request->status ?? 'dibuka';
                 $updateWebSetting->save();
             }
 

@@ -6,8 +6,8 @@
     <meta name="keywords" content="">
 
     <!-- Favicons -->
-    <link href="{{ asset('gambar/logo-osis.png') }}" rel="icon">
-    <link href="{{ asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -53,7 +53,7 @@
                 <a href="index.html" class="logo d-flex align-items-center">
                     <!-- Uncomment the line below if you also wish to use an image logo -->
                     <!-- <img src="assets/img/logo.png" alt=""> -->
-                    <h1 class="sitename"><span>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</span></h1>
+                    <h1 class="sitename"><span>{{ $web_setting?->web_title ?? 'VOTING OSIS' }}</span></h1>
                 </a>
 
                 <nav id="navmenu" class="navmenu">
@@ -94,8 +94,8 @@
                     </div>
 
                     <div class="container section-title" data-aos="fade-up">
-                        <h2>{{ $web_setting->web_title ?? 'JUDUL WEB' }}</h2>
-                        <div><span>{{ $web_setting->school_name ?? 'NAMA SEKOLAH' }}</span> <span class="description-title">{{ $web_setting->year_period ?? 'TAHUN PERIODE' }} / {{ $year_plus ?? 'TAHUN PERIODE' }}</span></div>
+                        <h2>{{ $web_setting?->web_title ?? 'VOTING OSIS' }}</h2>
+                        <div><span>{{ $web_setting?->school_name ?? 'NAMA SEKOLAH' }}</span> <span class="description-title">{{ $web_setting?->year_period ?? 'TAHUN PERIODE' }} / {{ $year_plus ?? 'TAHUN PERIODE' }}</span></div>
                     </div>
 
                     <div class="container">
@@ -371,6 +371,7 @@
     })
 </script>
 
+@if($web_setting)
 <script>
     var countDownDate = new Date("{!! $web_setting->start_date !!} {!! $web_setting->start_time !!}").getTime();
     var countDownDateEnd = new Date("{!! $web_setting->start_date !!} {!! $web_setting->end_time !!}").getTime();
@@ -414,9 +415,11 @@
         // console.log('DEMO 2 :', distance2);
     }, 1000);
 </script>
+@endif
 
 
 
+@if($web_setting)
 <script>
     var countDownDateEnd = new Date("{!! $web_setting->start_date !!} {!! $web_setting->end_time !!}").getTime();
 
@@ -457,3 +460,4 @@
         }
     }, 1000);
 </script>
+@endif

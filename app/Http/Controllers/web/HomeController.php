@@ -17,14 +17,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $osisCandidate = OsisChairmanCandidate::all();
         $webSetting = WebSetting::first();
+
+        if (!$webSetting || empty($webSetting->start_date) || empty($webSetting->end_time)) {
+            return view('frontend.dashboard.default', [
+                'web_setting' => $webSetting
+            ]);
+        }
+
+        $osisCandidate = OsisChairmanCandidate::all();
         $yearPlus = '';
         if (isset($webSetting)) {
             $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
         }
-        $webSetting = WebSetting::first();
-        // return $osisCandidate;
         return view('frontend.dashboard.index', [
             'osis_candidate' => $osisCandidate,
             'web_setting' => $webSetting,
@@ -35,14 +40,19 @@ class HomeController extends Controller
 
     public function showOff()
     {
-        $osisCandidate = OsisChairmanCandidate::all();
         $webSetting = WebSetting::first();
+
+        if (!$webSetting || empty($webSetting->start_date) || empty($webSetting->end_time)) {
+            return view('frontend.dashboard.default', [
+                'web_setting' => $webSetting
+            ]);
+        }
+
+        $osisCandidate = OsisChairmanCandidate::all();
         $yearPlus = '';
         if (isset($webSetting)) {
             $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
         }
-        $webSetting = WebSetting::first();
-        // return $osisCandidate;
         return view('frontend.dashboard.show-off', [
             'osis_candidate' => $osisCandidate,
             'web_setting' => $webSetting,

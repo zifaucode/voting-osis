@@ -170,6 +170,12 @@ Dashboard
                         <input type="text" class="form-control" id="exampleInputCodeAccess" v-model="yearPeriod" aria-describedby="codeAccessHelp" placeholder="TAHUN PEMILIHAN" autocomplete="off">
                         <small id="codeAccessHelp" class="form-text text-muted">Tahun Pemilihan akan tampil dihalaman depan pemilih</span> </small>
                     </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputLogo">UPLOAD LOGO (Opsional)</label>
+                        <input type="file" class="form-control" id="exampleInputLogo" ref="logo_image" accept="image/*" aria-describedby="logoHelp">
+                        <small id="logoHelp" class="form-text text-muted">Upload logo sekolah untuk ditampilkan dihalaman pemilih</span> </small>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">BATAL</button>
@@ -205,6 +211,15 @@ Dashboard
                         <label for="exampleInputEndTime">JAM SELESAI</label>
                         <input type="time" class="form-control" id="exampleInputEndTime" v-model="endTime" aria-describedby="endTimeHelp" placeholder="JAM SELESAI" autocomplete="off">
                         <small id="endTimeHelp" class="form-text text-muted">Jam Selesai untuk mengatur berakhirnya Pemilihan</span> </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputStatus">STATUS PEMILIHAN</label>
+                        <select class="form-control" id="exampleInputStatus" v-model="status">
+                            <option value="dibuka">Dibuka</option>
+                            <option value="ditutup">Ditutup</option>
+                        </select>
+                        <small id="statusHelp" class="form-text text-muted">Ubah status pemilihan secara manual jika diperlukan</span> </small>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -257,6 +272,11 @@ Dashboard
                 for (var key in data) {
                     formData.append(key, data[key]);
                 }
+                
+                // Append file if exists
+                if (this.$refs.logo_image.files.length > 0) {
+                    formData.append('logo_image', this.$refs.logo_image.files[0]);
+                }
 
                 axios.post('/admin/web-setting/front-user-page', formData)
                     .then(function(response) {
@@ -285,11 +305,22 @@ Dashboard
             },
             sendDataFrontVotingTime: function() {
                 let vm = this;
+
+                if (vm.endTime <= vm.startTime) {
+                    Swal.fire({
+                        title: 'Kesalahan',
+                        icon: 'warning',
+                        text: 'Jam Selesai tidak boleh kurang dari atau sama dengan Jam Mulai!',
+                    });
+                    return;
+                }
+
                 let data = {
                     id: vm.id,
                     startDate: vm.startDate,
                     startTime: vm.startTime,
                     endTime: vm.endTime,
+                    status: vm.status,
                 }
                 let formData = new FormData();
                 for (var key in data) {
