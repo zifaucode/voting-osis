@@ -36,15 +36,10 @@
             from { opacity: 0.3; transform: scale(0.88); }
             to   { opacity: 1;   transform: scale(1); }
         }
-        @keyframes barGrow {
-            from { width: 0 !important; }
-        }
-
         .anim-fade-up   { animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both; }
         .anim-d1        { animation-delay: 0.07s; }
         .anim-d2        { animation-delay: 0.15s; }
         .anim-d3        { animation-delay: 0.24s; }
-        .progress-grow  { animation: barGrow 1s cubic-bezier(0.16,1,0.3,1) both; }
         .num-flash      { animation: countUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
 
         /* Live pulse ring around dot */
@@ -78,22 +73,23 @@
 
         /* Paslon thumbnail box & auto-scaling img */
         .paslon-thumb-box {
-            width: 48px !important;
-            height: 48px !important;
-            min-width: 48px !important;
-            min-height: 48px !important;
-            max-width: 48px !important;
-            max-height: 48px !important;
+            width: 52px !important;
+            height: 52px !important;
+            min-width: 52px !important;
+            min-height: 52px !important;
+            max-width: 52px !important;
+            max-height: 52px !important;
             flex-shrink: 0 !important;
             position: relative !important;
             overflow: hidden !important;
-            border-radius: 0.75rem !important;
+            border-radius: 0.875rem !important;
             background: #ffffff !important;
-            border: 1px solid rgba(226, 232, 240, 0.9) !important;
+            border: 1.5px solid rgba(226, 232, 240, 0.95) !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             padding: 3px !important;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
         }
         .paslon-thumb-img {
             width: 100% !important;
@@ -249,10 +245,10 @@
                     </span>
                     <span class="text-xs font-bold text-ocean-950" id="turnoutLabel">{{ $initial_payload['summary']['turnout_percentage'] ?? 0 }}%</span>
                 </div>
-                <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                <div class="w-full rounded-full overflow-hidden p-0.5" style="height:14px;background:#e2e8f0;border-radius:9999px;box-shadow:inset 0 1px 2px rgba(15,23,42,0.12);border:1px solid #cbd5e1;">
                     <div id="turnoutBar"
-                         class="h-full rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 transition-all duration-700 progress-grow"
-                         style="width:{{ min(100, $initial_payload['summary']['turnout_percentage'] ?? 0) }}%"></div>
+                         class="h-full rounded-full transition-all duration-700"
+                         style="width:{{ min(100, $initial_payload['summary']['turnout_percentage'] ?? 0) }}%;min-width:{{ ($initial_payload['summary']['turnout_percentage'] ?? 0) > 0 ? '8px' : '0' }};background:linear-gradient(90deg, #2872A1 0%, #0d9488 100%);"></div>
                 </div>
                 <div class="flex justify-between text-[10px] text-cloudy-400 mt-1.5 font-medium select-none">
                     <span>0%</span><span>50%</span><span>100%</span>
@@ -312,25 +308,25 @@
                                 @endphp
                                 <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-50/80 border {{ $isLeader ? 'border-amber-300 shadow-sm bg-gradient-to-r from-amber-50/40 to-white' : 'border-slate-100/90' }} transition-all">
                                     <div class="flex items-center gap-3 mb-2">
-                                        <!-- Photo Thumbnail with number badge -->
-                                        <div class="paslon-thumb-box" style="width:48px;height:48px;min-width:48px;min-height:48px;max-width:48px;max-height:48px;flex-shrink:0;position:relative;overflow:hidden;border-radius:12px;background:#fff;border:1px solid rgba(226,232,240,0.9);display:flex;align-items:center;justify-content:center;padding:3px;">
+                                        <!-- Photo Thumbnail (Bersih tanpa badge penutup) -->
+                                        <div class="paslon-thumb-box" style="width:52px;height:52px;min-width:52px;min-height:52px;max-width:52px;max-height:52px;flex-shrink:0;overflow:hidden;border-radius:14px;background:#ffffff;border:1.5px solid rgba(226,232,240,0.95);display:flex;align-items:center;justify-content:center;padding:3px;box-shadow:0 2px 6px rgba(15,23,42,0.06);">
                                             <img src="{{ $cand['image'] ? asset('file/image/' . $cand['image']) : asset('gambar/logo-osis.png') }}"
                                                  onerror="this.src='{{ asset('gambar/logo-osis.png') }}'"
                                                  alt="{{ $cand['name'] }}"
                                                  class="paslon-thumb-img"
                                                  style="width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block;">
-                                            <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:{{ $col['bg'] }}">
-                                                #{{ $cand['sequence_number'] }}
-                                            </span>
                                         </div>
                                         
                                         <!-- Details -->
                                         <div class="min-w-0 flex-1">
                                             <div class="flex items-center justify-between gap-2">
                                                 <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate flex items-center gap-1.5">
-                                                    <span>{{ $cand['name'] }}</span>
+                                                    <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[10px] font-black text-white shrink-0 shadow-xs" style="background:{{ $col['bg'] }}">
+                                                        #{{ $cand['sequence_number'] }}
+                                                    </span>
+                                                    <span class="truncate">{{ $cand['name'] }}</span>
                                                     @if($isLeader)
-                                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200">
+                                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200 shrink-0">
                                                             <i class="bi bi-trophy-fill text-[8px] text-amber-600"></i> Unggul
                                                         </span>
                                                     @endif
@@ -490,7 +486,10 @@
             if (elTurnoutBig)   elTurnoutBig.textContent   = (sum.turnout_percentage ?? 0) + '%';
             if (elLastUpdated && data.last_updated) elLastUpdated.textContent = data.last_updated;
 
-            if (elTurnoutBar)   elTurnoutBar.style.width   = Math.min(turnout, 100) + '%';
+            if (elTurnoutBar) {
+                elTurnoutBar.style.width   = Math.min(turnout, 100) + '%';
+                elTurnoutBar.style.minWidth = turnout > 0 ? '8px' : '0';
+            }
             if (elTurnoutLabel) elTurnoutLabel.textContent = turnout.toFixed(1) + '%';
 
             if (!isInitial) {
@@ -539,7 +538,7 @@
                     ' transition-all duration-300';
 
                 const winnerBadge = isWinner ? `
-                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200">
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200 shrink-0">
                         <i class="bi bi-trophy-fill text-[8px] text-amber-600"></i> Unggul
                     </span>
                 ` : '';
@@ -548,20 +547,20 @@
 
                 row.innerHTML = `
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="paslon-thumb-box" style="width:48px;height:48px;min-width:48px;min-height:48px;max-width:48px;max-height:48px;flex-shrink:0;position:relative;overflow:hidden;border-radius:12px;background:#fff;border:1px solid rgba(226,232,240,0.9);display:flex;align-items:center;justify-content:center;padding:3px;">
+                        <div class="paslon-thumb-box" style="width:52px;height:52px;min-width:52px;min-height:52px;max-width:52px;max-height:52px;flex-shrink:0;overflow:hidden;border-radius:14px;background:#ffffff;border:1.5px solid rgba(226,232,240,0.95);display:flex;align-items:center;justify-content:center;padding:3px;box-shadow:0 2px 6px rgba(15,23,42,0.06);">
                             <img src="${cand.image ? '/file/image/' + cand.image : '/gambar/logo-osis.png'}"
                                  onerror="this.src='/gambar/logo-osis.png'"
                                  alt="${cand.name}"
                                  class="paslon-thumb-img"
                                  style="width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block;">
-                            <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:${color.bg}">
-                                #${cand.sequence_number}
-                            </span>
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center justify-between gap-2">
                                 <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate flex items-center gap-1.5">
-                                    <span>${cand.name}</span>
+                                    <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[10px] font-black text-white shrink-0 shadow-xs" style="background:${color.bg}">
+                                        #${cand.sequence_number}
+                                    </span>
+                                    <span class="truncate">${cand.name}</span>
                                     ${winnerBadge}
                                 </h4>
                                 <span class="text-xs font-black tabular-nums shrink-0" style="color:${color.bg}">
