@@ -87,7 +87,7 @@
                         <span class="block text-[10px] text-cloudy-500 font-medium">{{ $current_user->class }}</span>
                     </div>
                 </div>
-                @if(isset($current_user) && $current_user)
+
                 <a href="{{ route('logout.user') }}" class="btn-island-secondary hover:text-rose-600 hover:border-rose-200" title="Keluar dari Bilik Suara">
                     <i class="bi bi-box-arrow-right text-sm"></i>
                     <span class="hidden sm:inline">Keluar</span>
