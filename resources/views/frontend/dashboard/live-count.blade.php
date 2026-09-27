@@ -164,16 +164,6 @@
                 Data diperbarui secara otomatis langsung dari bilik suara elektronik.
             </p>
 
-            <!-- Live Sync Strip -->
-            <div class="mt-4 inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/80 border border-slate-100 shadow-sm text-xs font-medium text-cloudy-600">
-                <span class="relative flex w-2.5 h-2.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ocean-400 opacity-60"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-ocean-500"></span>
-                </span>
-                <span>Terakhir diperbarui:</span>
-                <strong class="text-ocean-950 font-bold" id="lastUpdatedText">{{ $initial_payload['last_updated'] ?? '—' }}</strong>
-                <span class="text-cloudy-400" id="syncModeText">• WebSocket Instan</span>
-            </div>
         </div>
 
         <!-- ─── Bento Stats Row ─── -->
@@ -594,12 +584,12 @@
                 badge.className   = 'hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-ocean-50 border border-ocean-200 text-ocean-800 text-xs font-bold';
                 dot.className     = 'live-dot w-2.5 h-2.5 rounded-full bg-ocean-500 inline-block';
                 text.textContent  = 'WEBSOCKET INSTAN';
-                syncMode.textContent = '• WebSocket Instan (<20ms)';
+                if (syncMode) syncMode.textContent = '• WebSocket Instan (<20ms)';
             } else if (status === 'polling') {
                 badge.className   = 'hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold';
                 dot.className     = 'w-2.5 h-2.5 rounded-full bg-amber-400 inline-block animate-pulse';
                 text.textContent  = 'POLLING AKTIF';
-                syncMode.textContent = '• Fallback Polling (5 Detik)';
+                if (syncMode) syncMode.textContent = '• Fallback Polling (5 Detik)';
             }
         }
 
