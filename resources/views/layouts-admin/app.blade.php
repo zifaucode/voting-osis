@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="{{ asset('admin-page/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-page/plugins/summernote/summernote-bs4.min.css') }}">
 
+    <!-- Tailwind & Custom Design System -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
     @yield('head')
     <style>
         [v-cloak]>* {
@@ -25,6 +28,12 @@
 
         [v-cloak]::before {
             content: "loading...";
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+            background-color: #f8fafc !important;
+            color: #0b1e2c;
         }
 
         table tr td {
@@ -37,10 +46,12 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-color: #f8fafc !important;
         }
         .content-wrapper {
             min-height: auto !important;
             flex: 1 1 auto;
+            background-color: #f8fafc !important;
         }
         .main-footer {
             flex-shrink: 0;

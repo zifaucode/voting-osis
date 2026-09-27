@@ -1,4 +1,4 @@
-<footer class="main-footer" style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 1.25rem 1.75rem; color: #475569; font-size: 0.875rem;">
+<footer class="main-footer" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(226, 232, 240, 0.85); padding: 1.25rem 1.75rem; color: #475569; font-size: 0.875rem;">
     <div class="container-fluid px-0">
         <div class="d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-left" style="gap: 0.85rem;">
             <!-- Left: Brand, Copyright & Status -->

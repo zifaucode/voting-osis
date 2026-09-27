@@ -93,7 +93,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-1.5 px-0.5">
                             <label for="nisn" class="text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
-                                <i class="bi bi-person-badge-fill text-ocean-500"></i> Username / NISN
+                                <i class="bi bi-person-badge-fill text-ocean-500"></i> Username
                             </label>
                             <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-700 bg-ocean-50 border border-ocean-200/60 px-2 py-0.5 rounded-md">Wajib</span>
                         </div>
@@ -119,7 +119,7 @@
                             <input type="password" 
                                    class="input-island pr-11 font-mono tracking-widest uppercase font-bold" 
                                    id="code_access" 
-                                   placeholder="Contoh: USR-82910" 
+                                   placeholder="Contoh: 123456" 
                                    name="code_access" 
                                    autocomplete="off" 
                                    required>
