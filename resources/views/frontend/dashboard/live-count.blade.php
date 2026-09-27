@@ -75,6 +75,34 @@
         ::-webkit-scrollbar-track  { background: transparent; }
         ::-webkit-scrollbar-thumb  { background: #cbdde9; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #2872A1; }
+
+        /* Paslon thumbnail box & auto-scaling img */
+        .paslon-thumb-box {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            min-height: 48px !important;
+            max-width: 48px !important;
+            max-height: 48px !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            overflow: hidden !important;
+            border-radius: 0.75rem !important;
+            background: #ffffff !important;
+            border: 1px solid rgba(226, 232, 240, 0.9) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 3px !important;
+        }
+        .paslon-thumb-img {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+            display: block !important;
+        }
     </style>
 </head>
 
@@ -285,11 +313,12 @@
                                 <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-50/80 border {{ $isLeader ? 'border-amber-300 shadow-sm bg-gradient-to-r from-amber-50/40 to-white' : 'border-slate-100/90' }} transition-all">
                                     <div class="flex items-center gap-3 mb-2">
                                         <!-- Photo Thumbnail with number badge -->
-                                        <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/80 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                                        <div class="paslon-thumb-box" style="width:48px;height:48px;min-width:48px;min-height:48px;max-width:48px;max-height:48px;flex-shrink:0;position:relative;overflow:hidden;border-radius:12px;background:#fff;border:1px solid rgba(226,232,240,0.9);display:flex;align-items:center;justify-content:center;padding:3px;">
                                             <img src="{{ $cand['image'] ? asset('file/image/' . $cand['image']) : asset('gambar/logo-osis.png') }}"
                                                  onerror="this.src='{{ asset('gambar/logo-osis.png') }}'"
                                                  alt="{{ $cand['name'] }}"
-                                                 class="max-w-full max-h-full object-contain">
+                                                 class="paslon-thumb-img"
+                                                 style="width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block;">
                                             <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:{{ $col['bg'] }}">
                                                 #{{ $cand['sequence_number'] }}
                                             </span>
@@ -519,11 +548,12 @@
 
                 row.innerHTML = `
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/80 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                        <div class="paslon-thumb-box" style="width:48px;height:48px;min-width:48px;min-height:48px;max-width:48px;max-height:48px;flex-shrink:0;position:relative;overflow:hidden;border-radius:12px;background:#fff;border:1px solid rgba(226,232,240,0.9);display:flex;align-items:center;justify-content:center;padding:3px;">
                             <img src="${cand.image ? '/file/image/' + cand.image : '/gambar/logo-osis.png'}"
                                  onerror="this.src='/gambar/logo-osis.png'"
                                  alt="${cand.name}"
-                                 class="max-w-full max-h-full object-contain">
+                                 class="paslon-thumb-img"
+                                 style="width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block;">
                             <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:${color.bg}">
                                 #${cand.sequence_number}
                             </span>
