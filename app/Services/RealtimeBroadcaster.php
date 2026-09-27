@@ -70,8 +70,8 @@ class RealtimeBroadcaster
             $nodeServerUrl = env('REALTIME_SERVER_URL', 'http://127.0.0.1:3001');
             $secretKey = env('REALTIME_SECRET', 'pemilos_secret_broadcast_key_2026');
 
-            // Kirim request ke microservice Node.js dengan timeout ketat (500ms) agar tidak membebani proses voting
-            $response = Http::timeout(0.5)
+            // Kirim request ke microservice Node.js dengan timeout ketat (1s) agar tidak membebani proses voting
+            $response = Http::timeout(1)
                 ->withHeaders([
                     'x-realtime-secret' => $secretKey,
                     'Accept' => 'application/json',
