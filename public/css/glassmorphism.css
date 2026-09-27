@@ -1,37 +1,87 @@
 /* ==========================================================================
-   GLASSMORPHISM DESIGN SYSTEM - PEMILOS 2026
-   Ultra-modern, crystal frosted-glass aesthetic for OSIS Electronic Voting
+   PEMILOS MODERN DESIGN SYSTEM 2026
+   Palette: Ocean Blue (#2872A1) & Cloudy Sky (#CBDDE9)
+   Style Fusion: Glassmorphism + Claymorphism + Minimalism UI
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.78);
-    --glass-bg-hover: rgba(255, 255, 255, 0.9);
-    --glass-border: rgba(255, 255, 255, 0.65);
-    --glass-border-subtle: rgba(255, 255, 255, 0.35);
-    --glass-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
-    --glass-shadow-hover: 0 30px 65px rgba(5, 150, 105, 0.2);
-    --glass-blur: blur(24px);
+    /* ---------------- Primary Palette: Ocean Blue ---------------- */
+    --ocean-blue: #2872A1;
+    --ocean-blue-hover: #1e5e86;
+    --ocean-blue-active: #164969;
+    --ocean-blue-light: #3b8bc0;
+    --ocean-blue-glow: rgba(40, 114, 161, 0.28);
+    --ocean-blue-tint: rgba(40, 114, 161, 0.08);
 
-    /* Brand Palettes - Vibrant Emerald & Modern Indigo */
-    --primary-emerald: #059669;
-    --primary-light: #10b981;
-    --primary-dark: #047857;
-    --primary-glow: rgba(16, 185, 129, 0.4);
-    --accent-indigo: #4f46e5;
-    --accent-cyan: #06b6d4;
+    /* ---------------- Secondary Palette: Cloudy Sky ---------------- */
+    --cloudy-sky: #CBDDE9;
+    --cloudy-sky-light: #EBF3F8;
+    --cloudy-sky-tint: #F3F8FB;
+    --cloudy-sky-dark: #98B9D0;
+    --cloudy-sky-border: rgba(203, 221, 233, 0.75);
 
-    /* Typography & Neutral Colors */
-    --font-heading: 'Outfit', sans-serif;
-    --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --text-subtle: #94a3b8;
-    --bg-surface: #f8fafc;
+    /* ---------------- Contrast & Depth Neutrals ---------------- */
+    --ocean-navy: #0e2738;
+    --ocean-dark: #153952;
+    --text-main: #0d2232;
+    --text-muted: #516d82;
+    --text-subtle: #829eb2;
+    --bg-surface: #F4F8FA;
+
+    /* ---------------- Glassmorphic Tokens ---------------- */
+    --glass-bg: rgba(255, 255, 255, 0.76);
+    --glass-bg-hover: rgba(255, 255, 255, 0.90);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --glass-border-subtle: rgba(203, 221, 233, 0.5);
+    --glass-blur: blur(20px);
+    --glass-blur-sm: blur(12px);
+
+    /* ---------------- Claymorphic Tokens ---------------- */
+    --clay-radius-sm: 14px;
+    --clay-radius-md: 20px;
+    --clay-radius-lg: 28px;
+    --clay-radius-pill: 9999px;
+
+    /* Soft inflated 3D clay elevation */
+    --clay-shadow-card: 
+        0 18px 38px rgba(40, 114, 161, 0.09),
+        0 4px 12px rgba(14, 39, 56, 0.04),
+        -6px -6px 16px rgba(255, 255, 255, 0.95),
+        inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.9),
+        inset -1.5px -1.5px 4px rgba(40, 114, 161, 0.04);
+
+    --clay-shadow-card-hover: 
+        0 24px 48px rgba(40, 114, 161, 0.16),
+        0 8px 18px rgba(14, 39, 56, 0.06),
+        -6px -6px 18px rgba(255, 255, 255, 1),
+        inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95),
+        inset -1.5px -1.5px 4px rgba(40, 114, 161, 0.05);
+
+    --clay-shadow-btn: 
+        0 10px 24px rgba(40, 114, 161, 0.32),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+        inset 0 -2px 3px rgba(14, 39, 56, 0.2);
+
+    --clay-shadow-inset: 
+        inset 2px 2px 5px rgba(14, 39, 56, 0.06),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.85);
+
+    /* ---------------- Typography ---------------- */
+    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* ---------------- Global Reset & Typography ---------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-body);
     color: var(--text-main);
@@ -41,136 +91,163 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: var(--font-heading);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
 }
 
-/* ---------------- Ambient Dynamic Background ---------------- */
+/* ---------------- Ambient Fluid Canvas Background ---------------- */
 .ambient-wrapper {
     position: relative;
     min-height: 100vh;
-    background-color: #f1f5f9;
+    min-height: 100dvh;
+    background-color: var(--bg-surface);
+    background-image: 
+        radial-gradient(circle at 10% 12%, rgba(203, 221, 233, 0.45) 0%, transparent 40%),
+        radial-gradient(circle at 90% 25%, rgba(40, 114, 161, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(203, 221, 233, 0.35) 0%, transparent 50%),
+        radial-gradient(circle at 80% 90%, rgba(40, 114, 161, 0.06) 0%, transparent 40%);
+    background-attachment: fixed;
     overflow-x: hidden;
 }
 
+/* Hide legacy blobs cleanly */
 .ambient-blob {
     display: none !important;
 }
 
-/* ---------------- Glassmorphism Navbar ---------------- */
+/* ---------------- Modern Glassmorphic Sticky Navbar ---------------- */
 .glass-navbar {
     position: sticky;
     top: 0;
     z-index: 1020;
-    background: rgba(255, 255, 255, 0.78);
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-bottom: 1px solid var(--glass-border);
-    box-shadow: 0 4px 25px rgba(15, 23, 42, 0.03);
+    border-bottom: 1.5px solid var(--glass-border);
+    box-shadow: 0 4px 24px rgba(40, 114, 161, 0.06);
     padding: 0.85rem 0;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-navbar .brand-title {
     font-family: var(--font-heading);
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 800;
-    color: var(--primary-dark);
+    color: var(--ocean-dark);
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.75rem;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: transform 0.2s ease;
+}
+
+.glass-navbar .brand-title:hover {
+    transform: translateY(-1px);
+    color: var(--ocean-blue);
     text-decoration: none;
 }
 
 .glass-navbar .brand-title img {
-    height: 44px;
+    height: 42px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+    filter: drop-shadow(0 4px 10px rgba(40, 114, 161, 0.15));
 }
 
 .glass-navbar-badge {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    color: var(--primary-dark);
+    background: var(--cloudy-sky-light);
+    border: 1.5px solid var(--cloudy-sky);
+    color: var(--ocean-dark);
     font-size: 0.8rem;
     font-weight: 700;
-    padding: 0.35rem 0.85rem;
-    border-radius: 9999px;
+    padding: 0.4rem 0.95rem;
+    border-radius: var(--clay-radius-pill);
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(40, 114, 161, 0.06);
 }
 
 .status-dot {
     width: 8px;
     height: 8px;
-    background-color: var(--primary-light);
+    background-color: var(--ocean-blue);
     border-radius: 50%;
     display: inline-block;
-    box-shadow: 0 0 10px var(--primary-light);
+    box-shadow: 0 0 10px var(--ocean-blue);
     animation: pulseDot 2s infinite;
 }
 
 @keyframes pulseDot {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(40, 114, 161, 0.6); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(40, 114, 161, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(40, 114, 161, 0); }
 }
 
-/* ---------------- Hero & Section Headers ---------------- */
+/* ---------------- Minimalist Section Headers & Badges ---------------- */
 .glass-section-header {
     text-align: center;
-    padding: 3rem 1rem 1.5rem;
+    padding: 2.75rem 1rem 1.75rem;
     position: relative;
     z-index: 2;
 }
 
-.glass-section-header .school-badge {
+.glass-section-header .school-badge,
+.school-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    border: 1.5px solid var(--glass-border);
     padding: 0.45rem 1.25rem;
-    border-radius: 9999px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--primary-emerald);
+    border-radius: var(--clay-radius-pill);
+    font-weight: 800;
+    font-size: 0.78rem;
+    color: var(--ocean-blue);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-    margin-bottom: 1rem;
+    box-shadow: 
+        0 6px 18px rgba(40, 114, 161, 0.07),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.95);
+    margin-bottom: 1.15rem;
 }
 
-.glass-section-header h1, .glass-section-header h2 {
-    font-size: 2.75rem;
+.glass-section-header h1, 
+.glass-section-header h2 {
+    font-size: 2.5rem;
     font-weight: 900;
-    color: var(--text-main);
-    margin-bottom: 0.65rem;
-    line-height: 1.15;
+    color: var(--ocean-navy);
+    margin-bottom: 0.75rem;
+    line-height: 1.18;
+    text-wrap: balance;
 }
 
 .glass-section-header p {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     color: var(--text-muted);
-    max-width: 680px;
+    max-width: 660px;
     margin: 0 auto;
+    line-height: 1.6;
 }
 
-/* ---------------- Glass Countdown Component ---------------- */
+/* ---------------- Claymorphic + Glass Countdown ---------------- */
 .glass-countdown-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
     flex-wrap: wrap;
-    margin: 1.5rem auto 2.5rem;
+    margin: 1.5rem auto 2.25rem;
     max-width: 720px;
     position: relative;
     z-index: 2;
@@ -180,47 +257,56 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background: rgba(255, 255, 255, 0.82);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 22px;
-    padding: 1.25rem 1.5rem;
-    min-width: 105px;
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--clay-radius-md);
+    padding: 1.15rem 1.35rem;
+    min-width: 100px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.9);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 
+        0 14px 30px rgba(40, 114, 161, 0.08),
+        -4px -4px 12px rgba(255, 255, 255, 0.95),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9),
+        inset -1px -1px 3px rgba(40, 114, 161, 0.03);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .glass-countdown-item:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 45px rgba(16, 185, 129, 0.15);
+    box-shadow: 
+        0 20px 40px rgba(40, 114, 161, 0.16),
+        -4px -4px 14px rgba(255, 255, 255, 1),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.95);
 }
 
 .glass-countdown-num {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: 2.35rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--primary-emerald);
+    color: var(--ocean-blue);
+    font-variant-numeric: tabular-nums;
 }
 
 .glass-countdown-lbl {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--text-muted);
-    margin-top: 0.5rem;
+    margin-top: 0.45rem;
 }
 
-/* ---------------- Glass Candidate Cards ---------------- */
-.glass-card {
+/* ---------------- Claymorphic + Glass Candidate Cards ---------------- */
+.glass-card,
+.clay-card {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: 28px;
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--clay-radius-lg);
     padding: 1.75rem;
     position: relative;
-    box-shadow: var(--glass-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    box-shadow: var(--clay-shadow-card);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
@@ -229,26 +315,29 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     z-index: 2;
 }
 
-.glass-card::before {
+.glass-card::before,
+.clay-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 5px;
-    background: var(--primary-emerald);
+    height: 4px;
+    background: linear-gradient(90deg, var(--ocean-blue), var(--cloudy-sky));
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.glass-card:hover {
-    transform: translateY(-10px) scale(1.012);
+.glass-card:hover,
+.clay-card:hover {
+    transform: translateY(-8px);
     background: var(--glass-bg-hover);
-    border-color: rgba(16, 185, 129, 0.45);
-    box-shadow: var(--glass-shadow-hover), inset 0 1px 2px rgba(255, 255, 255, 1);
+    border-color: rgba(203, 221, 233, 0.9);
+    box-shadow: var(--clay-shadow-card-hover);
 }
 
-.glass-card:hover::before {
+.glass-card:hover::before,
+.clay-card:hover::before {
     opacity: 1;
 }
 
@@ -260,52 +349,58 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .glass-badge-seq {
-    background: var(--primary-emerald);
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-hover));
     color: #ffffff;
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.15rem;
-    padding: 0.35rem 1rem;
-    border-radius: 9999px;
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    font-size: 1.05rem;
+    padding: 0.4rem 1.05rem;
+    border-radius: var(--clay-radius-pill);
+    box-shadow: 
+        0 6px 16px rgba(40, 114, 161, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
 }
 
 .glass-badge-class {
-    background: rgba(15, 23, 42, 0.05);
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    color: var(--text-muted);
+    background: var(--cloudy-sky-light);
+    border: 1px solid var(--cloudy-sky);
+    color: var(--ocean-dark);
     font-weight: 700;
-    font-size: 0.85rem;
-    padding: 0.35rem 0.9rem;
-    border-radius: 9999px;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--clay-radius-pill);
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .candidate-class-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #f1f5f9 !important;
-    color: #0f172a !important;
-    font-size: 0.82rem !important;
+    background-color: var(--cloudy-sky-light) !important;
+    color: var(--ocean-dark) !important;
+    font-size: 0.8rem !important;
     font-weight: 800 !important;
-    padding: 0.25rem 0.75rem !important;
+    padding: 0.25rem 0.7rem !important;
     border-radius: 8px !important;
-    border: 1.5px solid #cbd5e1 !important;
+    border: 1px solid var(--cloudy-sky) !important;
     line-height: 1.2 !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
 }
 
+/* Tactile 3D Inset Photo Frame */
 .candidate-photo-frame {
-    border-radius: 20px;
+    border-radius: var(--clay-radius-md);
     overflow: hidden;
     position: relative;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.04);
-    margin-bottom: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), var(--cloudy-sky-light));
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow: var(--clay-shadow-inset);
+    margin-bottom: 1.15rem;
     height: 220px;
     display: flex;
     align-items: center;
@@ -320,6 +415,27 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     height: auto;
     object-fit: contain;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 8px 16px rgba(14, 39, 56, 0.08));
+}
+
+.glass-card:hover .candidate-photo-frame img,
+.clay-card:hover .candidate-photo-frame img {
+    transform: scale(1.05);
+}
+
+.candidate-info {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+}
+
+.candidate-name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 0.35rem;
+    line-height: 1.25;
 }
 
 .candidate-card-section {
@@ -334,22 +450,22 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.75px;
     margin-bottom: 0.35rem;
 }
 
 .candidate-card-scrollbox {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 12px;
-    padding: 0.65rem 0.85rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(203, 221, 233, 0.6);
+    border-radius: var(--clay-radius-sm);
+    padding: 0.7rem 0.9rem;
     font-size: 0.825rem;
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--text-main);
     white-space: pre-line;
     max-height: 110px;
     overflow-y: auto;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    box-shadow: inset 1px 1px 3px rgba(14, 39, 56, 0.03);
 }
 
 .candidate-card-scrollbox::-webkit-scrollbar {
@@ -359,45 +475,27 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background: transparent;
 }
 .candidate-card-scrollbox::-webkit-scrollbar-thumb {
-    background: rgba(16, 185, 129, 0.3);
+    background: var(--cloudy-sky-dark);
     border-radius: 4px;
 }
 .candidate-card-scrollbox::-webkit-scrollbar-thumb:hover {
-    background: rgba(16, 185, 129, 0.6);
+    background: var(--ocean-blue);
 }
 
-.glass-card:hover .candidate-photo-frame img {
-    transform: scale(1.06);
-}
-
-.candidate-info {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-}
-
-.candidate-name {
-    font-family: var(--font-heading);
-    font-size: 1.45rem;
-    font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 0.35rem;
-    line-height: 1.25;
-}
-
-/* ---------------- Modern Buttons ---------------- */
-.glass-btn-primary {
-    background: var(--primary-emerald);
-    color: #ffffff;
+/* ---------------- Tactile Claymorphic Buttons ---------------- */
+.glass-btn-primary,
+.clay-btn-primary {
+    background: linear-gradient(135deg, #2d7dae, #1f6592);
+    color: #ffffff !important;
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.98rem;
     padding: 0.95rem 1.75rem;
-    border-radius: 16px;
-    border: none;
+    border-radius: var(--clay-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25);
-    transition: all 0.25s ease;
+    box-shadow: var(--clay-shadow-btn);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -405,129 +503,118 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     width: 100%;
     text-decoration: none;
     letter-spacing: 0.3px;
-}
-
-.glass-btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(5, 150, 105, 0.35);
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.glass-btn-primary:active {
-    transform: translateY(-1px);
-}
-
-.glass-btn-secondary {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    color: var(--text-main);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.75rem 1.4rem;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    transition: all 0.25s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    text-decoration: none;
-}
-
-.glass-btn-secondary:hover {
-    background: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    color: var(--primary-emerald);
-    text-decoration: none;
-}
-
-/* ---------------- Glass Modals ---------------- */
-.modal.glass-modal .modal-content {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border: 1px solid rgba(255, 255, 255, 0.85);
-    border-radius: 32px;
-    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18), inset 0 1px 1px rgba(255, 255, 255, 1);
+    position: relative;
     overflow: hidden;
 }
 
-.modal.glass-modal .modal-header {
-    background: rgba(255, 255, 255, 0.45);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.glass-btn-primary:hover,
+.clay-btn-primary:hover {
+    background: linear-gradient(135deg, #3388bd, #246f9f);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 14px 28px rgba(40, 114, 161, 0.38),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.55),
+        inset 0 -2px 3px rgba(14, 39, 56, 0.25);
+    color: #ffffff !important;
+    text-decoration: none;
 }
 
-.modal.glass-modal .modal-title {
+.glass-btn-primary:active,
+.clay-btn-primary:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow: 
+        0 4px 10px rgba(40, 114, 161, 0.25),
+        inset 0 2px 4px rgba(14, 39, 56, 0.3);
+}
+
+.glass-btn-secondary,
+.clay-btn-secondary {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    color: var(--ocean-dark);
     font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 1.45rem;
-    color: var(--text-main);
-    margin: 0;
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 0.72rem 1.35rem;
+    border-radius: var(--clay-radius-sm);
+    border: 1.5px solid var(--glass-border);
+    cursor: pointer;
+    box-shadow: 
+        0 6px 16px rgba(40, 114, 161, 0.05),
+        -2px -2px 6px rgba(255, 255, 255, 0.9),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
 }
 
-.modal.glass-modal .modal-body {
-    padding: 2.25rem 2rem;
+.glass-btn-secondary:hover,
+.clay-btn-secondary:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 10px 22px rgba(40, 114, 161, 0.1),
+        -2px -2px 8px rgba(255, 255, 255, 1),
+        inset 1px 1px 2px rgba(255, 255, 255, 1);
+    color: var(--ocean-blue);
+    text-decoration: none;
 }
 
-.modal.glass-modal .modal-footer {
-    background: rgba(255, 255, 255, 0.45);
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 1.25rem 2rem;
-    display: flex;
-    gap: 0.85rem;
+.glass-btn-secondary:active,
+.clay-btn-secondary:active {
+    transform: translateY(0) scale(0.985);
 }
 
-/* ---------------- Form Inputs ---------------- */
+/* ---------------- Tactile Claymorphic Inputs ---------------- */
 .glass-input-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.35rem;
 }
 
 .glass-input-label {
     display: block;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--text-main);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
 }
 
-.glass-input {
+.glass-input,
+.clay-input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1.5px solid rgba(203, 213, 225, 0.8);
-    border-radius: 16px;
-    padding: 1rem 1.25rem;
-    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    border: 1.5px solid var(--cloudy-sky-border);
+    border-radius: var(--clay-radius-sm);
+    padding: 0.95rem 1.25rem;
+    font-size: 1.05rem;
     font-family: var(--font-body);
     color: var(--text-main);
-    transition: all 0.25s ease;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--clay-shadow-inset);
 }
 
-.glass-input:focus {
+.glass-input:focus,
+.clay-input:focus {
     background: #ffffff;
-    border-color: var(--primary-light);
+    border-color: var(--ocean-blue);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16);
+    box-shadow: 
+        0 0 0 4px var(--ocean-blue-glow),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .glass-input::placeholder {
     color: var(--text-subtle);
 }
 
-/* ---------------- Auth / Login Box ---------------- */
+/* ---------------- Auth / Login Card ---------------- */
 .glass-auth-wrapper {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -541,12 +628,17 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 32px;
-    padding: 3rem 2.5rem;
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--clay-radius-lg);
+    padding: 2.75rem 2.25rem;
     width: 100%;
-    max-width: 460px;
-    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12), inset 0 1px 1px rgba(255, 255, 255, 1);
+    max-width: 480px;
+    box-shadow: 
+        0 28px 60px rgba(40, 114, 161, 0.12),
+        0 6px 18px rgba(14, 39, 56, 0.04),
+        -6px -6px 20px rgba(255, 255, 255, 0.95),
+        inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.95),
+        inset -1.5px -1.5px 4px rgba(40, 114, 161, 0.03);
     position: relative;
     overflow: hidden;
 }
@@ -557,85 +649,159 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     top: 0;
     left: 0;
     right: 0;
-    height: 5px;
-    background: var(--primary-emerald);
+    height: 4px;
+    background: linear-gradient(90deg, var(--ocean-blue), var(--cloudy-sky));
 }
 
 .glass-login-header {
     text-align: center;
-    margin-bottom: 2.25rem;
+    margin-bottom: 2rem;
 }
 
 .glass-login-logo {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.25rem;
+    width: 78px;
+    height: 78px;
+    margin: 0 auto 1.15rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff, var(--cloudy-sky-light));
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    border-radius: var(--clay-radius-md);
     padding: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 #ffffff;
+    box-shadow: 
+        0 10px 25px rgba(40, 114, 161, 0.1),
+        inset 1px 1px 2px rgba(255, 255, 255, 1);
 }
 
 .glass-login-logo img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(40, 114, 161, 0.15));
 }
 
 .glass-login-title {
-    font-size: 1.85rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--ocean-navy);
     margin-bottom: 0.35rem;
 }
 
 .glass-login-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: var(--text-muted);
+    line-height: 1.5;
 }
 
-/* ---------------- Visi Misi Modal Styling ---------------- */
+/* ---------------- Glassmorphic Modals ---------------- */
+.modal.glass-modal .modal-content {
+    background: rgba(255, 255, 255, 0.90);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--clay-radius-lg);
+    box-shadow: 
+        0 35px 80px rgba(14, 39, 56, 0.18),
+        inset 1px 1px 2px rgba(255, 255, 255, 1);
+    overflow: hidden;
+}
+
+.modal.glass-modal .modal-header {
+    background: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid var(--cloudy-sky-border);
+    padding: 1.35rem 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal.glass-modal .modal-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--ocean-navy);
+    margin: 0;
+}
+
+.modal.glass-modal .modal-body {
+    padding: 2rem 1.85rem;
+}
+
+.modal.glass-modal .modal-footer {
+    background: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid var(--cloudy-sky-border);
+    padding: 1.15rem 1.85rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* ---------------- Visi Misi Bento Cards ---------------- */
 .visi-misi-card {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid var(--glass-border);
+    border-radius: var(--clay-radius-md);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+    box-shadow: 
+        0 10px 25px rgba(40, 114, 161, 0.05),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .visi-misi-card h4 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 800;
-    color: var(--primary-dark);
-    margin-bottom: 0.75rem;
+    color: var(--ocean-dark);
+    margin-bottom: 0.65rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.visi-misi-card p, .visi-misi-card li {
+.visi-misi-card p, 
+.visi-misi-card li {
     color: var(--text-main);
     line-height: 1.6;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
 }
 
-/* ---------------- Responsive Adjustments ---------------- */
+/* ---------------- Responsive Rules ---------------- */
 @media (max-width: 768px) {
-    .glass-section-header h1, .glass-section-header h2 {
-        font-size: 2rem;
+    .glass-section-header {
+        padding: 2rem 0.75rem 1.25rem;
     }
+
+    .glass-section-header h1, 
+    .glass-section-header h2 {
+        font-size: 1.85rem;
+    }
+
+    .glass-countdown-container {
+        gap: 0.65rem;
+    }
+
     .glass-countdown-item {
-        min-width: 75px;
-        padding: 0.85rem 1rem;
+        min-width: 70px;
+        padding: 0.75rem 0.85rem;
+        border-radius: var(--clay-radius-sm);
     }
+
     .glass-countdown-num {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
     }
+
     .glass-login-card {
-        padding: 2.25rem 1.75rem;
+        padding: 2rem 1.5rem;
+        border-radius: var(--clay-radius-md);
+    }
+
+    .glass-card,
+    .clay-card {
+        padding: 1.35rem;
+        border-radius: var(--clay-radius-md);
+    }
+
+    .candidate-photo-frame {
+        height: 180px;
     }
 }

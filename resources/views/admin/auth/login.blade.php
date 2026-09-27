@@ -3,8 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login | Pemilos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Admin Portal | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
+
+    <!-- Favicons -->
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,37 +26,36 @@
 
 <body>
     <div class="ambient-wrapper glass-auth-wrapper">
-        <!-- Ambient Glowing Blobs -->
-        <div class="ambient-blob blob-1"></div>
-        <div class="ambient-blob blob-2"></div>
-        <div class="ambient-blob blob-3"></div>
-
         <div class="glass-login-card">
             <div class="glass-login-header">
                 <div class="glass-login-logo">
-                    <img src="/gambar/logo-osis.png" alt="Logo OSIS">
+                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
+                </div>
+                <div class="school-badge mb-2">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>ADMINISTRASI UTAMA</span>
                 </div>
                 <h1 class="glass-login-title">Admin Portal</h1>
-                <p class="glass-login-subtitle">Masuk untuk mengelola data pemilihan & paslon</p>
+                <p class="glass-login-subtitle">Masuk untuk mengelola data pemilihan, paslon, dan pemilih</p>
             </div>
 
             @if (Session::has('success'))
-            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 600;">
-                <i class="bi bi-check-circle-fill mr-2"></i> {{ Session::get('success') }}
+            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(40, 114, 161, 0.12); color: var(--ocean-dark); font-weight: 600; border-left: 4px solid var(--ocean-blue) !important;">
+                <i class="bi bi-check-circle-fill mr-2" style="color: var(--ocean-blue);"></i> {{ Session::get('success') }}
             </div>
             @endif
 
             @if (Session::has('error'))
-            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(239, 68, 68, 0.15); color: #991b1b; font-weight: 600;">
-                <i class="bi bi-exclamation-triangle-fill mr-2"></i> {{ Session::get('error') }}
+            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(239, 68, 68, 0.12); color: #991b1b; font-weight: 600; border-left: 4px solid #ef4444 !important;">
+                <i class="bi bi-exclamation-triangle-fill mr-2 text-danger"></i> {{ Session::get('error') }}
             </div>
             @endif
 
             <form action="{{ route('auth.admin') }}" method="post">
                 @csrf
-                <div class="glass-input-group">
+                <div class="glass-input-group mb-3">
                     <label class="glass-input-label" for="username">
-                        <i class="bi bi-person-fill text-muted mr-1"></i> Username
+                        <i class="bi bi-person-fill mr-1" style="color: var(--ocean-blue);"></i> Username Administrator
                     </label>
                     <input type="text" 
                            class="glass-input" 
@@ -66,22 +69,22 @@
 
                 <div class="glass-input-group mb-4">
                     <label class="glass-input-label" for="password">
-                        <i class="bi bi-lock-fill text-muted mr-1"></i> Password
+                        <i class="bi bi-lock-fill mr-1" style="color: var(--ocean-blue);"></i> Kata Sandi
                     </label>
                     <input type="password" 
                            class="glass-input" 
                            id="password" 
-                           placeholder="Masukkan password" 
+                           placeholder="Masukkan kata sandi" 
                            name="password" 
                            autocomplete="off" 
                            required>
                 </div>
 
                 <button type="submit" class="glass-btn-primary mb-3">
-                    <i class="bi bi-box-arrow-in-right"></i> Masuk Sekarang
+                    <i class="bi bi-box-arrow-in-right mr-1"></i> Masuk Sekarang
                 </button>
 
-                <div class="text-center mt-3">
+                <div class="text-center mt-3 pt-2 border-top" style="border-color: var(--cloudy-sky-border) !important;">
                     <a href="/" class="text-muted small text-decoration-none font-weight-bold" style="transition: color 0.2s;">
                         <i class="bi bi-arrow-left"></i> Kembali ke Beranda Pemilihan
                     </a>

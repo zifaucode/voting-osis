@@ -3,8 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pendaftaran Pemilih | Pemilos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Pendaftaran Pemilih | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
+
+    <!-- Favicons -->
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
+    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,35 +18,29 @@
     <!-- Bootstrap & Icons -->
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin-page/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <!-- Glassmorphism Stylesheet -->
+    <!-- Glassmorphism & Claymorphism Stylesheet -->
     <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
 </head>
 
 <body>
     <div class="ambient-wrapper glass-auth-wrapper py-5">
-        <!-- Ambient Glowing Blobs -->
-        <div class="ambient-blob blob-1"></div>
-        <div class="ambient-blob blob-2"></div>
-        <div class="ambient-blob blob-3"></div>
-
         <div class="glass-login-card" style="max-width: 540px;">
             <div class="glass-login-header">
                 <div class="glass-login-logo">
-                    <img src="/gambar/logo-osis.png" alt="Logo OSIS">
+                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
                 </div>
                 <h1 class="glass-login-title">Daftar Pemilih Baru</h1>
                 <p class="glass-login-subtitle">Lengkapi identitas untuk mendaftar sebagai pemilih</p>
             </div>
 
             @if(session()->has('message'))
-            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 600;">
-                <i class="bi bi-check-circle-fill mr-2"></i> {{ session()->get('message') }}
+            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(40, 114, 161, 0.12); color: var(--ocean-dark); font-weight: 600; border-left: 4px solid var(--ocean-blue) !important;">
+                <i class="bi bi-check-circle-fill mr-2" style="color: var(--ocean-blue);"></i> {{ session()->get('message') }}
             </div>
             @endif
 
-            <form method="post" action="{{ route('new.register') }}">
+            <form method="post" action="{{ \Illuminate\Support\Facades\Route::has('new.register') ? route('new.register') : '#' }}">
                 @csrf
                 <div class="row">
                     <div class="col-md-12">
@@ -94,15 +92,15 @@
                 </div>
 
                 <button type="submit" class="glass-btn-primary mb-3">
-                    <i class="bi bi-person-check-fill"></i> Selesaikan Pendaftaran
+                    <i class="bi bi-person-check-fill mr-1"></i> Selesaikan Pendaftaran
                 </button>
 
-                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top" style="border-color: var(--cloudy-sky-border) !important;">
                     <a href="/" class="text-muted small text-decoration-none">
                         <i class="bi bi-arrow-left"></i> Beranda
                     </a>
                     <span class="small text-muted">
-                        Sudah punya akun? <a href="/user/login" class="font-weight-bold" style="color: var(--primary-emerald); text-decoration: none;">Masuk di sini</a>
+                        Sudah punya akun? <a href="/user/login" class="font-weight-bold" style="color: var(--ocean-blue); text-decoration: none;">Masuk di sini</a>
                     </span>
                 </div>
             </form>

@@ -20,17 +20,12 @@
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/aos/aos.css') }}">
 
-    <!-- Glassmorphism Stylesheet -->
+    <!-- Glassmorphism & Claymorphism Stylesheet -->
     <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
 </head>
 
 <body>
-    <div class="ambient-wrapper d-flex flex-column" style="min-height: 100vh;">
-        <!-- Ambient Glowing Blobs -->
-        <div class="ambient-blob blob-1"></div>
-        <div class="ambient-blob blob-2"></div>
-        <div class="ambient-blob blob-3"></div>
-
+    <div class="ambient-wrapper d-flex flex-column" style="min-height: 100vh; min-height: 100dvh;">
         <!-- Glass Navbar -->
         <header class="glass-navbar">
             <div class="container d-flex align-items-center justify-content-between">
@@ -41,7 +36,7 @@
 
                 <nav class="navmenu">
                     <a href="/admin" class="glass-btn-secondary">
-                        <i class="bi bi-shield-lock"></i> Login Admin
+                        <i class="bi bi-shield-lock" style="color: var(--ocean-blue);"></i> Login Admin
                     </a>
                 </nav>
             </div>
@@ -49,24 +44,24 @@
 
         <!-- Main Content -->
         <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5" style="position: relative; z-index: 2;">
-            <div class="container d-flex justify-content-center">
-                <div class="glass-card text-center p-5 mx-auto" style="max-width: 620px; width: 100%; border-radius: 32px;" data-aos="zoom-in" data-aos-duration="900">
+            <div class="container d-flex justify-content-center px-3">
+                <div class="glass-card text-center p-4 p-md-5 mx-auto" style="max-width: 600px; width: 100%; border-radius: var(--clay-radius-lg);" data-aos="zoom-in" data-aos-duration="800">
                     <div class="mb-4">
-                        <div class="d-inline-flex align-items-center justify-content-center" style="width: 90px; height: 90px; background: rgba(16, 185, 129, 0.12); border-radius: 50%; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);">
-                            <i class="bi bi-calendar2-week text-success" style="font-size: 2.75rem;"></i>
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 86px; height: 86px; background: var(--cloudy-sky-light); border: 2px solid var(--cloudy-sky); box-shadow: 0 10px 24px rgba(40, 114, 161, 0.12);">
+                            <i class="bi bi-calendar2-week" style="font-size: 2.5rem; color: var(--ocean-blue);"></i>
                         </div>
                     </div>
 
                     <div class="school-badge mb-3">
-                        <i class="bi bi-award-fill mr-1"></i>
+                        <i class="bi bi-award-fill"></i>
                         <span>{{ $web_setting?->school_name ?? 'NAMA SEKOLAH BELUM DIATUR' }}</span>
                     </div>
 
-                    <h2 class="font-weight-bold mb-3" style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--text-main);">
+                    <h2 class="font-weight-bold mb-3" style="font-family: var(--font-heading); font-size: 2rem; color: var(--ocean-navy);">
                         Belum Ada Jadwal Pemilihan
                     </h2>
 
-                    <p class="text-muted mb-4" style="line-height: 1.65; font-size: 1.05rem;">
+                    <p class="mb-4" style="line-height: 1.65; font-size: 1rem; color: var(--text-muted);">
                         Saat ini sesi pemungutan suara belum dibuka atau jadwal pemilihan belum diatur oleh panitia. Silakan hubungi administrator sekolah atau periksa kembali secara berkala.
                     </p>
 
@@ -80,9 +75,9 @@
         </main>
 
         <!-- Footer -->
-        <footer class="py-4 text-center text-muted" style="position: relative; z-index: 2; border-top: 1px solid var(--glass-border-subtle); background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);">
+        <footer class="py-4 text-center text-muted" style="position: relative; z-index: 2; border-top: 1.5px solid var(--glass-border-subtle); background: rgba(255, 255, 255, 0.65); backdrop-filter: var(--glass-blur);">
             <div class="container">
-                <small class="d-block font-weight-bold text-dark mb-1">
+                <small class="d-block font-weight-bold mb-1" style="color: var(--ocean-navy);">
                     {{ $web_setting?->web_title ?? 'PEMILOS' }} &copy; {{ date('Y') }} • E-Voting OSIS Modern
                 </small>
                 <small class="text-muted d-inline-flex align-items-center justify-content-center flex-wrap" style="gap: 0.4rem;">
