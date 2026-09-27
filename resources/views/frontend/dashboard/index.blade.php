@@ -87,14 +87,6 @@
                         <span class="block text-[10px] text-cloudy-500 font-medium">{{ $current_user->class }}</span>
                     </div>
                 </div>
-                @endif
-
-                <!-- Visi Misi Modal Trigger -->
-                <button type="button" @click="openVisiMisiModal" class="btn-island-secondary" title="Lihat Rekap Visi Misi">
-                    <i class="bi bi-card-text text-ocean-500 text-sm"></i>
-                    <span class="hidden sm:inline">Visi & Misi</span>
-                </button>
-
                 @if(isset($current_user) && $current_user)
                 <a href="{{ route('logout.user') }}" class="btn-island-secondary hover:text-rose-600 hover:border-rose-200" title="Keluar dari Bilik Suara">
                     <i class="bi bi-box-arrow-right text-sm"></i>
@@ -339,79 +331,6 @@
             </section>
         </main>
 
-        <!-- Visi & Misi Modal Backdrop -->
-        <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ocean-950/40 backdrop-blur-xl animate-fade-in" @click.self="closeVisiMisiModal">
-            <div class="bezel-card-shell w-full max-w-4xl max-h-[90vh] flex flex-col">
-                <div class="bezel-card-core flex flex-col max-h-[85vh] p-6 sm:p-8">
-                    <!-- Modal Header -->
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-xl bg-ocean-50 text-ocean-600 flex items-center justify-center text-lg">
-                                <i class="bi bi-journal-text"></i>
-                            </div>
-                            <h3 class="font-display font-bold text-lg sm:text-xl text-ocean-950">
-                                Rekap Visi, Misi & Program Paslon
-                            </h3>
-                        </div>
-                        <button type="button" @click="closeVisiMisiModal" class="w-8 h-8 rounded-full bg-slate-100 text-cloudy-600 hover:bg-slate-200 hover:text-ocean-950 flex items-center justify-center transition-colors">
-                            <i class="bi bi-x-lg text-sm"></i>
-                        </button>
-                    </div>
-
-                    <!-- Modal Body -->
-                    <div class="overflow-y-auto custom-scrollbar space-y-6 pr-2">
-                        <div v-for="cand in osisCandidate" :key="cand.id" class="p-5 rounded-2xl bg-slate-50/70 border border-slate-100">
-                            <div class="flex items-center gap-3 mb-3">
-                                <span class="px-3 py-1 rounded-full bg-ocean-500 text-white font-display font-bold text-xs">
-                                    #@{{ cand.sequence_number }}
-                                </span>
-                                <div>
-                                    <h4 class="font-display font-bold text-base text-ocean-950">
-                                        @{{ cand.name }} <span class="text-xs text-cloudy-500 font-normal">(@{{ cand.class }})</span>
-                                    </h4>
-                                    <span v-if="cand.vice_name" class="text-xs text-cloudy-600 block">
-                                        Wakil: @{{ cand.vice_name }} (@{{ cand.vice_class }})
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div v-if="cand.slogan" class="italic text-xs text-ocean-700 bg-ocean-50 p-2 rounded-lg mb-3">
-                                “@{{ cand.slogan }}”
-                            </div>
-
-                            <div class="space-y-3">
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600 block mb-1">Visi</span>
-                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
-                                        @{{ cand.visi || 'Belum diisi.' }}
-                                    </div>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-600 block mb-1">Misi</span>
-                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
-                                        @{{ cand.misi || 'Belum diisi.' }}
-                                    </div>
-                                </div>
-                                <div v-if="cand.work_program">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-teal-600 block mb-1">Program Kerja</span>
-                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
-                                        @{{ cand.work_program }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal Footer -->
-                    <div class="pt-4 border-t border-slate-100 flex justify-end mt-4">
-                        <button type="button" @click="closeVisiMisiModal" class="btn-island-secondary">
-                            Tutup
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         <footer class="w-full py-6 px-4 text-center text-xs text-cloudy-400 border-t border-slate-100 bg-white/60 backdrop-blur-md">
             <div class="inline-flex items-center gap-2 flex-wrap justify-center">
@@ -442,7 +361,6 @@
                 currentUser,
                 status: '',
                 loading: false,
-                showModal: false,
                 countdown: {
                     days: '00',
                     hours: '00',
@@ -451,12 +369,6 @@
                 }
             },
             methods: {
-                openVisiMisiModal: function() {
-                    this.showModal = true;
-                },
-                closeVisiMisiModal: function() {
-                    this.showModal = false;
-                },
                 confirmVote: function(candidate) {
                     if (this.loading) return;
 
