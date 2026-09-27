@@ -51,10 +51,9 @@ class HomeController extends Controller
             return OsisChairmanCandidate::orderBy('sequence_number', 'asc')->get();
         });
 
-        $yearPlus = '';
-        if (isset($webSetting) && $webSetting->year_period) {
-            $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
-        }
+        $yearPlus = (isset($webSetting) && $webSetting->year_period) 
+            ? (string)((int)$webSetting->year_period + 1) 
+            : '';
 
         return view('frontend.dashboard.index', [
             'osis_candidate' => $osisCandidate,
@@ -76,10 +75,9 @@ class HomeController extends Controller
         }
 
         $osisCandidate = OsisChairmanCandidate::all();
-        $yearPlus = '';
-        if (isset($webSetting)) {
-            $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
-        }
+        $yearPlus = (isset($webSetting) && $webSetting->year_period) 
+            ? (string)((int)$webSetting->year_period + 1) 
+            : '';
         return view('frontend.dashboard.show-off', [
             'osis_candidate' => $osisCandidate,
             'web_setting' => $webSetting,
@@ -95,8 +93,8 @@ class HomeController extends Controller
         }
 
         $webSetting = WebSetting::first();
-        $yearPlus = $webSetting && $webSetting->year_period 
-            ? Carbon::parse($webSetting->year_period)->addYears(1)->format('Y') 
+        $yearPlus = ($webSetting && $webSetting->year_period) 
+            ? (string)((int)$webSetting->year_period + 1) 
             : '';
 
         $initialPayload = \App\Services\RealtimeBroadcaster::getCurrentVotePayload();

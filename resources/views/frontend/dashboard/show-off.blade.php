@@ -96,7 +96,7 @@
                     <i class="bi bi-award-fill text-ocean-500"></i>
                     <span>{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
                     <span class="text-cloudy-300">•</span>
-                    <span>PERIODE {{ $web_setting?->year_period ?? '2026' }} / {{ $year_plus ?? '2027' }}</span>
+                    <span>PERIODE {{ $web_setting?->year_period ?? '2026' }} / {{ !empty($year_plus) ? $year_plus : ((int)($web_setting?->year_period ?? 2026) + 1) }}</span>
                 </div>
 
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold text-ocean-950 tracking-tight text-balance leading-tight">
