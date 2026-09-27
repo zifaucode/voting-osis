@@ -134,13 +134,11 @@ class UserSelectCandidateController extends Controller
                 ], $result['code']);
             }
 
-            // Invalidate cache live votes agar live-count langsung membaca data terbaru
+            // Invalidate cache live votes
             \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
 
-            // Siarkan pembaruan langsung secara instan (<20ms) ke Socket.io microservice
-            \App\Services\RealtimeBroadcaster::broadcast();
-
-            // Pancarkan pembaruan juga via queue sebagai cadangan redundansi
+            // Kirim pembaruan realtime via background queue worker
+            // Membebaskan bilik suara pemilih seketika (<15ms) tanpa terhambat network latency socket
             \App\Jobs\BroadcastVoteUpdate::dispatch();
 
             // Otomatis logout pemilih dari sistem setelah berhasil memilih

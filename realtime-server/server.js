@@ -86,9 +86,11 @@ app.post('/broadcast', (req, res) => {
     });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
+const HOST = process.env.HOST || '127.0.0.1';
+
+server.listen(PORT, HOST, () => {
     console.log(`====================================================`);
-    console.log(`🚀 Pemilos Realtime Broadcaster running on :${PORT}`);
-    console.log(`📡 WebSocket ready | Health: http://localhost:${PORT}/health`);
+    console.log(`🚀 Pemilos Realtime Broadcaster running on ${HOST}:${PORT}`);
+    console.log(`📡 WebSocket ready | Reverse proxy via Nginx port 80/443`);
     console.log(`====================================================`);
 });

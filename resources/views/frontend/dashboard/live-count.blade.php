@@ -595,7 +595,8 @@
 
         // ── Realtime Init ────────────────────────────────────────────────────────
         let socket = null, pollingInterval = null;
-        const SOCKET_URL = window.location.protocol + '//' + window.location.hostname + ':3001';
+        // Terhubung via reverse proxy Nginx (port 80/443) agar aman dan ramah firewall lab sekolah
+        const SOCKET_URL = window.location.origin;
 
         function initRealtime() {
             if (typeof io !== 'undefined') {

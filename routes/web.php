@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthUserController::class)->prefix('/user')->group(function () {
     Route::get('/login', 'index')->name('login.user');
-    Route::post('/auth', 'authenticate')->name('auth.user');
+    Route::post('/auth', 'authenticate')->name('auth.user')->middleware('throttle:voter-login');
     Route::get('/logout', 'userLogout')->name('logout.user');
 });
 
