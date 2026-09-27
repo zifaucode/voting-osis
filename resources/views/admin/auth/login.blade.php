@@ -1,107 +1,200 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Admin Portal | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
+    <title>Admin Portal | {{ ($web_setting ?? null)?->web_title ?? 'PEMILOS' }}</title>
+    <meta name="description" content="Portal Masuk Administrator E-Voting OSIS">
 
     <!-- Favicons -->
-    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
-    <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
+    <link href="{{ ($web_setting ?? null)?->logo_image ? asset('gambar/logo/' . ($web_setting ?? null)->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
+    <link href="{{ ($web_setting ?? null)?->logo_image ? asset('gambar/logo/' . ($web_setting ?? null)->logo_image) : asset('gambar/logo-osis.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap & Icons -->
-    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin-page/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <!-- Glassmorphism Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
+    <!-- Compiled Tailwind CSS -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
-<body>
-    <div class="ambient-wrapper glass-auth-wrapper">
-        <div class="glass-login-card">
-            <div class="glass-login-header">
-                <div class="glass-login-logo">
-                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
-                </div>
-                <div class="school-badge mb-2">
-                    <i class="bi bi-shield-lock-fill"></i>
-                    <span>ADMINISTRASI UTAMA</span>
-                </div>
-                <h1 class="glass-login-title">Admin Portal</h1>
-                <p class="glass-login-subtitle">Masuk untuk mengelola data pemilihan, paslon, dan pemilih</p>
-            </div>
-
-            @if (Session::has('success'))
-            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(40, 114, 161, 0.12); color: var(--ocean-dark); font-weight: 600; border-left: 4px solid var(--ocean-blue) !important;">
-                <i class="bi bi-check-circle-fill mr-2" style="color: var(--ocean-blue);"></i> {{ Session::get('success') }}
-            </div>
-            @endif
-
-            @if (Session::has('error'))
-            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(239, 68, 68, 0.12); color: #991b1b; font-weight: 600; border-left: 4px solid #ef4444 !important;">
-                <i class="bi bi-exclamation-triangle-fill mr-2 text-danger"></i> {{ Session::get('error') }}
-            </div>
-            @endif
-
-            <form action="{{ route('auth.admin') }}" method="post">
-                @csrf
-                <div class="glass-input-group mb-3">
-                    <label class="glass-input-label" for="username">
-                        <i class="bi bi-person-fill mr-1" style="color: var(--ocean-blue);"></i> Username Administrator
-                    </label>
-                    <input type="text" 
-                           class="glass-input" 
-                           id="username" 
-                           placeholder="Masukkan username" 
-                           name="username" 
-                           autocomplete="off" 
-                           value="{{ old('username') }}" 
-                           required>
-                </div>
-
-                <div class="glass-input-group mb-4">
-                    <label class="glass-input-label" for="password">
-                        <i class="bi bi-lock-fill mr-1" style="color: var(--ocean-blue);"></i> Kata Sandi
-                    </label>
-                    <input type="password" 
-                           class="glass-input" 
-                           id="password" 
-                           placeholder="Masukkan kata sandi" 
-                           name="password" 
-                           autocomplete="off" 
-                           required>
-                </div>
-
-                <button type="submit" class="glass-btn-primary mb-3">
-                    <i class="bi bi-box-arrow-in-right mr-1"></i> Masuk Sekarang
-                </button>
-
-                <div class="text-center mt-3 pt-2 border-top" style="border-color: var(--cloudy-sky-border) !important;">
-                    <a href="/" class="text-muted small text-decoration-none font-weight-bold" style="transition: color 0.2s;">
-                        <i class="bi bi-arrow-left"></i> Kembali ke Beranda Pemilihan
-                    </a>
-                </div>
-            </form>
+<body class="min-h-[100dvh] mesh-gradient-bg flex flex-col justify-between text-ocean-950 font-sans antialiased selection:bg-ocean-500 selection:text-white">
+    <!-- Top Micro Banner -->
+    <header class="w-full pt-6 px-4 flex justify-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-white/90 shadow-sm backdrop-blur-md text-xs font-semibold text-ocean-800">
+            <span class="w-2 h-2 rounded-full bg-ocean-500 shadow-[0_0_8px_rgba(40,114,161,0.6)]"></span>
+            <span>Portal Manajemen & Rekapitulasi</span>
+            <span class="text-cloudy-300">•</span>
+            <span class="text-cloudy-500 font-normal">Hak Akses Terbatas</span>
         </div>
-    </div>
+    </header>
 
-    <!-- Scripts -->
-    <script src="{{ asset('admin-page/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Main Auth Center Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+        <div class="bezel-card-shell w-full max-w-[460px]">
+            <div class="bezel-card-core p-6 sm:p-8">
+                <!-- Card Header -->
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-white to-ocean-50 border border-white/90 p-3 shadow-sm flex items-center justify-center transition-transform duration-500 hover:scale-105">
+                        <img src="{{ ($web_setting ?? null)?->logo_image ? asset('gambar/logo/' . ($web_setting ?? null)->logo_image) : asset('gambar/logo-osis.png') }}" 
+                             alt="Logo OSIS" 
+                             class="max-w-full max-h-full object-contain filter drop-shadow">
+                    </div>
+
+                    <div class="eyebrow-badge mb-2">
+                        <i class="bi bi-shield-lock-fill text-ocean-500"></i>
+                        <span>Administrasi Utama</span>
+                    </div>
+
+                    <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-ocean-950 tracking-tight text-balance">
+                        Admin Portal
+                    </h1>
+                    <p class="mt-1.5 text-xs sm:text-sm text-cloudy-500 text-balance leading-relaxed max-w-[340px] mx-auto">
+                        Masuk untuk mengelola data paslon, daftar pemilih, jadwal bilik suara, dan rekapitulasi.
+                    </p>
+                </div>
+
+                <!-- Flash Message Alerts -->
+                @if (Session::has('success'))
+                <div class="mb-5 p-3.5 rounded-2xl bg-ocean-50/90 border border-ocean-200/90 text-ocean-800 text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-sm">
+                    <i class="bi bi-check-circle-fill text-ocean-600 text-base shrink-0"></i>
+                    <span>{{ Session::get('success') }}</span>
+                </div>
+                @endif
+
+                @if (Session::has('error'))
+                <div class="mb-5 p-3.5 rounded-2xl bg-rose-50/90 border border-rose-200/90 text-rose-800 text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-sm">
+                    <i class="bi bi-exclamation-triangle-fill text-rose-600 text-base shrink-0"></i>
+                    <span>{{ Session::get('error') }}</span>
+                </div>
+                @endif
+
+                @if (isset($errors) && $errors->any())
+                <div class="mb-5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs sm:text-sm font-medium shadow-sm">
+                    <div class="flex items-start gap-2">
+                        <i class="bi bi-info-circle-fill text-amber-600 text-base shrink-0 mt-0.5"></i>
+                        <ul class="space-y-0.5">
+                            @foreach ($errors->all() as $err)
+                                <li>{{ $err }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Auth Form -->
+                <form action="{{ route('auth.admin') }}" method="post" id="adminLoginForm" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label for="username" class="block text-xs sm:text-sm font-bold text-ocean-900 mb-1.5 px-0.5">
+                            <i class="bi bi-person-fill text-ocean-500 mr-1"></i> Username Administrator
+                        </label>
+                        <input type="text" 
+                               class="input-island" 
+                               id="username" 
+                               placeholder="Masukkan username admin" 
+                               name="username" 
+                               autocomplete="username" 
+                               value="{{ old('username') }}" 
+                               autofocus
+                               required>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-xs sm:text-sm font-bold text-ocean-900 mb-1.5 px-0.5">
+                            <i class="bi bi-lock-fill text-ocean-500 mr-1"></i> Kata Sandi
+                        </label>
+                        <div class="relative flex items-center">
+                            <input type="password" 
+                                   class="input-island pr-11" 
+                                   id="password" 
+                                   placeholder="Masukkan kata sandi" 
+                                   name="password" 
+                                   autocomplete="current-password" 
+                                   required>
+                            <button type="button" 
+                                    id="togglePasswordBtn" 
+                                    class="absolute right-3 p-1.5 text-cloudy-400 hover:text-ocean-600 transition-colors duration-200 focus:outline-none"
+                                    title="Tampilkan / Sembunyikan Sandi">
+                                <i class="bi bi-eye text-lg" id="togglePasswordIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Button-in-Button CTA -->
+                    <button type="submit" id="submitBtn" class="btn-island-primary w-full mt-2">
+                        <span id="btnText" class="flex items-center gap-2">
+                            <span>Masuk ke Panel Admin</span>
+                        </span>
+                        <span id="btnSpinner" class="hidden items-center gap-2">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>Memverifikasi Akses...</span>
+                        </span>
+                        <div class="btn-island-icon">
+                            <i class="bi bi-arrow-right text-base text-white"></i>
+                        </div>
+                    </button>
+
+                    <!-- Back to Booth -->
+                    <div class="pt-4 border-t border-slate-100 text-center">
+                        <a href="/" class="inline-flex items-center gap-1.5 text-xs font-semibold text-cloudy-500 hover:text-ocean-600 transition-colors">
+                            <i class="bi bi-arrow-left"></i> Kembali ke Beranda Pemilihan
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Micro Footer -->
+    <footer class="w-full pb-6 px-4 text-center text-xs text-cloudy-400">
+        <span class="font-medium text-ocean-900/80">{{ ($web_setting ?? null)?->web_title ?? 'PEMILOS' }} &copy; {{ date('Y') }}</span>
+    </footer>
+
+    <!-- Interactive Client Script -->
     <script>
-        window.setTimeout(function() {
-            $(".alert").fadeTo(300, 0).slideUp(300, function() {
-                $(this).remove();
-            });
-        }, 4000);
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleBtn = document.getElementById('togglePasswordBtn');
+            var passwordInput = document.getElementById('password');
+            var eyeIcon = document.getElementById('togglePasswordIcon');
+
+            if (toggleBtn && passwordInput && eyeIcon) {
+                toggleBtn.addEventListener('click', function() {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        eyeIcon.className = 'bi bi-eye-slash text-lg text-ocean-600';
+                    } else {
+                        passwordInput.type = 'password';
+                        eyeIcon.className = 'bi bi-eye text-lg text-cloudy-400';
+                    }
+                });
+            }
+
+            var loginForm = document.getElementById('adminLoginForm');
+            var submitBtn = document.getElementById('submitBtn');
+            var btnText = document.getElementById('btnText');
+            var btnSpinner = document.getElementById('btnSpinner');
+
+            if (loginForm && submitBtn) {
+                loginForm.addEventListener('submit', function() {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-80', 'cursor-wait');
+                    if (btnText) btnText.classList.add('hidden');
+                    if (btnSpinner) {
+                        btnSpinner.classList.remove('hidden');
+                        btnSpinner.classList.add('flex');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

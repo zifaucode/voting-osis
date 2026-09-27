@@ -14,7 +14,13 @@ class AuthAdminController extends Controller
      */
     public function index()
     {
-        return view('admin.auth.login', []);
+        $webSetting = \Illuminate\Support\Facades\Cache::rememberForever('pemilos_web_setting', function () {
+            return \App\Models\WebSetting::first();
+        });
+
+        return view('admin.auth.login', [
+            'web_setting' => $webSetting,
+        ]);
     }
 
     /**
