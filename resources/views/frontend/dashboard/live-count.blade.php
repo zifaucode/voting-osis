@@ -147,7 +147,7 @@
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-ocean-500"></span>
                 </span>
                 <span>Terakhir diperbarui:</span>
-                <strong class="text-ocean-950 font-bold" id="lastUpdatedText">—</strong>
+                <strong class="text-ocean-950 font-bold" id="lastUpdatedText">{{ $initial_payload['last_updated'] ?? '—' }}</strong>
                 <span class="text-cloudy-400" id="syncModeText">• WebSocket Instan</span>
             </div>
         </div>
@@ -162,7 +162,7 @@
                     </div>
                     <div>
                         <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-cloudy-400 mb-0.5">Total DPT</div>
-                        <div class="font-display font-black text-xl sm:text-3xl text-ocean-950 tabular-nums leading-none" id="statTotalVoters">—</div>
+                        <div class="font-display font-black text-xl sm:text-3xl text-ocean-950 tabular-nums leading-none" id="statTotalVoters">{{ number_format($initial_payload['summary']['total_voters'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[11px] text-cloudy-400 mt-1">Hak Suara Terdaftar</div>
                     </div>
                 </div>
@@ -176,8 +176,8 @@
                     </div>
                     <div>
                         <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-ocean-600 mb-0.5">Suara Masuk</div>
-                        <div class="font-display font-black text-xl sm:text-3xl text-ocean-600 tabular-nums leading-none" id="statTotalVoted">—</div>
-                        <div class="text-[11px] text-ocean-700 font-semibold mt-1" id="statTurnoutPct">0% Partisipasi</div>
+                        <div class="font-display font-black text-xl sm:text-3xl text-ocean-600 tabular-nums leading-none" id="statTotalVoted">{{ number_format($initial_payload['summary']['total_voted'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[11px] text-ocean-700 font-semibold mt-1" id="statTurnoutPct">{{ $initial_payload['summary']['turnout_percentage'] ?? 0 }}% Partisipasi</div>
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                     </div>
                     <div>
                         <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 mb-0.5">Belum Memilih</div>
-                        <div class="font-display font-black text-xl sm:text-3xl text-amber-600 tabular-nums leading-none" id="statTotalUnvoted">—</div>
+                        <div class="font-display font-black text-xl sm:text-3xl text-amber-600 tabular-nums leading-none" id="statTotalUnvoted">{{ number_format($initial_payload['summary']['total_unvoted'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[11px] text-cloudy-400 mt-1">Pemilih Belum Hadir</div>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                     </div>
                     <div>
                         <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-teal-600 mb-0.5">Partisipasi</div>
-                        <div class="font-display font-black text-xl sm:text-3xl text-teal-600 tabular-nums leading-none" id="statTurnoutBig">—%</div>
+                        <div class="font-display font-black text-xl sm:text-3xl text-teal-600 tabular-nums leading-none" id="statTurnoutBig">{{ $initial_payload['summary']['turnout_percentage'] ?? 0 }}%</div>
                         <div class="text-[11px] text-cloudy-400 mt-1">Persentase Kehadiran</div>
                     </div>
                 </div>
@@ -219,12 +219,12 @@
                         <i class="bi bi-bar-chart-steps text-ocean-500"></i>
                         Progress Partisipasi Pemilihan
                     </span>
-                    <span class="text-xs font-bold text-ocean-950" id="turnoutLabel">0%</span>
+                    <span class="text-xs font-bold text-ocean-950" id="turnoutLabel">{{ $initial_payload['summary']['turnout_percentage'] ?? 0 }}%</span>
                 </div>
                 <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
                     <div id="turnoutBar"
                          class="h-full rounded-full bg-gradient-to-r from-ocean-500 to-ocean-400 transition-all duration-700 progress-grow"
-                         style="width:0%"></div>
+                         style="width:{{ min(100, $initial_payload['summary']['turnout_percentage'] ?? 0) }}%"></div>
                 </div>
                 <div class="flex justify-between text-[10px] text-cloudy-400 mt-1.5 font-medium select-none">
                     <span>0%</span><span>50%</span><span>100%</span>
@@ -320,6 +320,8 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
     <script>
+        const INITIAL_PAYLOAD = @json($initial_payload ?? null);
+
         // ── Palette ─────────────────────────────────────────────────────────────
         const PALETTE = [
             { bg: '#2872A1', border: '#1e5e86', light: 'rgba(240,247,251,0.9)' },
@@ -399,43 +401,57 @@
         }
 
         // ── Main UI Update ───────────────────────────────────────────────────────
-        function updateUI(data) {
-            if (!data || !data.candidates) return;
+        function updateUI(data, isInitial = false) {
+            if (!data || !data.candidates || !data.summary) return;
             const sum = data.summary;
             const turnout = parseFloat(sum.turnout_percentage) || 0;
 
-            document.getElementById('statTotalVoters').textContent  = sum.total_voters.toLocaleString('id-ID');
-            document.getElementById('statTotalVoted').textContent   = sum.total_voted.toLocaleString('id-ID');
-            document.getElementById('statTotalUnvoted').textContent = sum.total_unvoted.toLocaleString('id-ID');
-            document.getElementById('statTurnoutPct').textContent   = sum.turnout_percentage + '% Partisipasi';
-            document.getElementById('statTurnoutBig').textContent   = sum.turnout_percentage + '%';
-            document.getElementById('lastUpdatedText').textContent  = data.last_updated;
+            const elTotalVoters  = document.getElementById('statTotalVoters');
+            const elTotalVoted   = document.getElementById('statTotalVoted');
+            const elTotalUnvoted = document.getElementById('statTotalUnvoted');
+            const elTurnoutPct   = document.getElementById('statTurnoutPct');
+            const elTurnoutBig   = document.getElementById('statTurnoutBig');
+            const elLastUpdated  = document.getElementById('lastUpdatedText');
+            const elTurnoutBar   = document.getElementById('turnoutBar');
+            const elTurnoutLabel = document.getElementById('turnoutLabel');
 
-            // Turnout bar
-            document.getElementById('turnoutBar').style.width = Math.min(turnout, 100) + '%';
-            document.getElementById('turnoutLabel').textContent = turnout.toFixed(1) + '%';
+            if (elTotalVoters)  elTotalVoters.textContent  = Number(sum.total_voters || 0).toLocaleString('id-ID');
+            if (elTotalVoted)   elTotalVoted.textContent   = Number(sum.total_voted || 0).toLocaleString('id-ID');
+            if (elTotalUnvoted) elTotalUnvoted.textContent = Number(sum.total_unvoted || 0).toLocaleString('id-ID');
+            if (elTurnoutPct)   elTurnoutPct.textContent   = (sum.turnout_percentage ?? 0) + '% Partisipasi';
+            if (elTurnoutBig)   elTurnoutBig.textContent   = (sum.turnout_percentage ?? 0) + '%';
+            if (elLastUpdated && data.last_updated) elLastUpdated.textContent = data.last_updated;
 
-            ['statTotalVoters','statTotalVoted','statTotalUnvoted','statTurnoutBig'].forEach(flash);
+            if (elTurnoutBar)   elTurnoutBar.style.width   = Math.min(turnout, 100) + '%';
+            if (elTurnoutLabel) elTurnoutLabel.textContent = turnout.toFixed(1) + '%';
 
-            const maxVotes  = Math.max(...data.candidates.map(c => c.votes));
+            if (!isInitial) {
+                ['statTotalVoters','statTotalVoted','statTotalUnvoted','statTurnoutBig'].forEach(flash);
+            }
+
+            const maxVotes  = Math.max(...data.candidates.map(c => c.votes || 0), 0);
             const leaderIdx = data.candidates.findIndex(c => c.votes === maxVotes && c.votes > 0);
 
             const labels = data.candidates.map(c =>
                 '#' + c.sequence_number + ' ' + c.name + (c.vice_name ? ' & ' + c.vice_name : '')
             );
-            const votes  = data.candidates.map(c => c.votes);
+            const votes  = data.candidates.map(c => c.votes || 0);
             const percs  = data.candidates.map(c => parseFloat(c.percentage) || 0);
 
-            barChart.data.labels = labels;
-            barChart.data.datasets[0].data = votes;
-            barChart.data.datasets[0].backgroundColor = PALETTE.slice(0, data.candidates.length).map((p, i) =>
-                i === leaderIdx ? p.bg : p.bg + 'a0'
-            );
-            barChart.update();
+            if (barChart) {
+                barChart.data.labels = labels;
+                barChart.data.datasets[0].data = votes;
+                barChart.data.datasets[0].backgroundColor = PALETTE.slice(0, data.candidates.length).map((p, i) =>
+                    i === leaderIdx ? p.bg : p.bg + 'a0'
+                );
+                barChart.update();
+            }
 
-            pieChart.data.labels = labels;
-            pieChart.data.datasets[0].data = percs;
-            pieChart.update();
+            if (pieChart) {
+                pieChart.data.labels = labels;
+                pieChart.data.datasets[0].data = percs;
+                pieChart.update();
+            }
 
             renderCandidateCards(data.candidates, leaderIdx);
         }
@@ -598,8 +614,11 @@
         // ── Boot ─────────────────────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
-            fetchLiveVotes();
+            if (INITIAL_PAYLOAD && INITIAL_PAYLOAD.candidates) {
+                updateUI(INITIAL_PAYLOAD, true);
+            }
             initRealtime();
+            fetchLiveVotes();
         });
     </script>
 </body>

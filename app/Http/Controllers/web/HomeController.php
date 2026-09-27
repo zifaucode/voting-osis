@@ -99,9 +99,15 @@ class HomeController extends Controller
             ? Carbon::parse($webSetting->year_period)->addYears(1)->format('Y') 
             : '';
 
+        $initialPayload = \App\Services\RealtimeBroadcaster::getCurrentVotePayload();
+
+        // Segarkan in-memory cache pada server Socket.io Node.js
+        \App\Services\RealtimeBroadcaster::broadcast($initialPayload);
+
         return view('frontend.dashboard.live-count', [
             'web_setting' => $webSetting,
             'year_plus' => $yearPlus,
+            'initial_payload' => $initialPayload,
         ]);
     }
 

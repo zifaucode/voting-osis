@@ -137,7 +137,10 @@ class UserSelectCandidateController extends Controller
             // Invalidate cache live votes agar live-count langsung membaca data terbaru
             \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
 
-            // Pancarkan pembaruan secara async via queue agar tidak memblokir proses voting
+            // Siarkan pembaruan langsung secara instan (<20ms) ke Socket.io microservice
+            \App\Services\RealtimeBroadcaster::broadcast();
+
+            // Pancarkan pembaruan juga via queue sebagai cadangan redundansi
             \App\Jobs\BroadcastVoteUpdate::dispatch();
 
             // Otomatis logout pemilih dari sistem setelah berhasil memilih
