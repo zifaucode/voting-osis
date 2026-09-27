@@ -4,17 +4,11 @@ use App\Http\Controllers\AdminListController;
 use App\Http\Controllers\OsisChairmanCandidateController;
 use App\Http\Controllers\SettingWebController;
 use App\Http\Controllers\UserSelectCandidateController;
-use App\Http\Controllers\web\AddictionLevelController;
 use App\Http\Controllers\web\AdminController;
-use App\Http\Controllers\web\AdminQuestionController;
 use App\Http\Controllers\web\AdminUserController;
 use App\Http\Controllers\web\AuthAdminController;
 use App\Http\Controllers\web\AuthUserController;
 use App\Http\Controllers\web\HomeController;
-use App\Http\Controllers\web\ResultQuestionController;
-use App\Http\Controllers\web\RulesController;
-use App\Http\Controllers\web\UserQuestionController;
-use App\Http\Controllers\web\UserResultController;
 use Illuminate\Support\Facades\Route;
 
 

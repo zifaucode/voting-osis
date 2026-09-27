@@ -180,8 +180,8 @@ class OsisChairmanCandidateController extends Controller
     public function destroy($id)
     {
         try {
-            $addiction = OsisChairmanCandidate::findOrFail($id);
-            $addiction->delete();
+            $candidate = OsisChairmanCandidate::findOrFail($id);
+            $candidate->delete();
 
             // Invalidate cache paslon
             \Illuminate\Support\Facades\Cache::forget('pemilos_candidates_list');
