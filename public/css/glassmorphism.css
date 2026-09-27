@@ -611,6 +611,51 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     color: var(--text-subtle);
 }
 
+.glass-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.glass-input-wrapper .glass-input {
+    padding-right: 2.85rem;
+}
+
+.glass-input-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.glass-input-toggle:hover {
+    color: var(--ocean-blue);
+}
+
+.glass-login-tip {
+    background: rgba(40, 114, 161, 0.05);
+    border: 1px dashed var(--cloudy-sky);
+    border-radius: var(--clay-radius-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
 /* ---------------- Auth / Login Card ---------------- */
 .glass-auth-wrapper {
     min-height: 100vh;
