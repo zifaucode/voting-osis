@@ -70,7 +70,7 @@ Dashboard Admin | {{ $web_setting?->web_title ?? 'Pemilos' }}
     <div class="max-w-7xl mx-auto space-y-7">
 
         <!-- ── Page Header ── -->
-        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-5 anim-up">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-slate-200/60 anim-up">
             <div>
                 <div class="flex items-center gap-2 mb-2 flex-wrap">
                     <span class="eyebrow-badge">
@@ -109,114 +109,155 @@ Dashboard Admin | {{ $web_setting?->web_title ?? 'Pemilos' }}
                 <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-ocean-950 tracking-tight">
                     Dashboard Pemilihan OSIS
                 </h1>
-                <p class="text-sm text-slate-500 mt-1">
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
                     Pemantauan realtime hasil pemungutan suara, statistik DPT, dan perolehan kandidat.
                 </p>
             </div>
 
             <!-- Header Actions -->
-            <div class="flex flex-wrap items-center gap-3 shrink-0">
+            <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
                 <button @click="confirmResetAllVotes" type="button"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 font-display font-bold text-xs sm:text-sm border border-rose-200/80 active:scale-[0.98] transition-all duration-200 shadow-sm">
+                        class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-display font-bold text-xs border border-rose-200/80 active:scale-[0.98] transition-all duration-200 shadow-sm">
                     <i class="fas fa-trash-restore text-rose-500"></i>
                     <span>Reset Uji Coba</span>
                 </button>
-                <a href="/live-count" target="_blank" class="btn-island-primary">
+                <a href="/live-count" target="_blank"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-ocean-500 to-ocean-600 hover:from-ocean-600 hover:to-ocean-700 text-white font-display font-bold text-xs shadow-sm hover:shadow active:scale-[0.98] transition-all duration-200 border border-white/20">
+                    <i class="fas fa-external-link-alt text-xs"></i>
                     <span>Buka Live Count</span>
-                    <div class="btn-island-icon">
-                        <i class="fas fa-external-link-alt text-xs"></i>
-                    </div>
                 </a>
             </div>
         </div>
 
         <!-- ── 4-Column Metric Strip ── -->
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 anim-up anim-up-d1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 anim-up anim-up-d1">
 
-            <!-- DPT -->
-            <div class="bezel-card-shell">
-                <div class="bezel-card-core p-4 sm:p-5 !flex-row items-start gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-ocean-50 text-ocean-500 flex items-center justify-center border border-ocean-100 shrink-0 text-base sm:text-lg">
-                        <i class="fas fa-users"></i>
+            <!-- Card 1: Total DPT -->
+            <div class="rounded-3xl bg-white/90 border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 inset-x-0 h-1 bg-ocean-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 rounded-2xl bg-ocean-50 text-ocean-600 flex items-center justify-center border border-ocean-100/90 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-users text-sm sm:text-base"></i>
                     </div>
-                    <div class="min-w-0">
-                        <div class="text-[10px] font-bold tracking-wider uppercase text-slate-400 mb-0.5">Total DPT</div>
-                        <div class="font-display font-extrabold text-xl sm:text-3xl text-ocean-950 tabular-nums leading-none" id="metTotalVoters">
-                            @{{ stats.total_voters.toLocaleString('id-ID') }}
-                        </div>
-                        <div class="text-[11px] text-slate-400 mt-1">Pemilih Terdaftar</div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                        Terdaftar
+                    </span>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold tracking-wider uppercase text-slate-400 mb-1">Total DPT</div>
+                    <div class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-ocean-950 tabular-nums leading-none" id="metTotalVoters">
+                        @{{ stats.total_voters.toLocaleString('id-ID') }}
                     </div>
+                </div>
+                <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+                    <span>Hak Suara Terdaftar</span>
+                    <span class="text-ocean-600 font-bold"><i class="fas fa-check-circle text-[10px]"></i> Valid</span>
                 </div>
             </div>
 
-            <!-- Suara Masuk -->
-            <div class="bezel-card-shell">
-                <div class="bezel-card-core p-4 sm:p-5 !flex-row items-start gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0 text-base sm:text-lg">
-                        <i class="fas fa-vote-yea"></i>
+            <!-- Card 2: Suara Masuk -->
+            <div class="rounded-3xl bg-white/90 border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 inset-x-0 h-1 bg-emerald-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100/90 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-vote-yea text-sm sm:text-base"></i>
                     </div>
-                    <div class="min-w-0">
-                        <div class="text-[10px] font-bold tracking-wider uppercase text-emerald-600 mb-0.5">Suara Masuk</div>
-                        <div class="font-display font-extrabold text-xl sm:text-3xl text-emerald-600 tabular-nums leading-none" id="metTotalVoted">
-                            @{{ stats.total_voted.toLocaleString('id-ID') }}
-                        </div>
-                        <div class="text-[11px] text-emerald-700 font-semibold mt-1">@{{ stats.turnout_percentage }}% Partisipasi</div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                        Live
+                    </span>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold tracking-wider uppercase text-emerald-600 mb-1">Suara Masuk</div>
+                    <div class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-emerald-600 tabular-nums leading-none" id="metTotalVoted">
+                        @{{ stats.total_voted.toLocaleString('id-ID') }}
                     </div>
+                </div>
+                <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium">
+                    <span class="text-slate-400">Partisipasi</span>
+                    <span class="text-emerald-700 font-bold">@{{ stats.turnout_percentage }}%</span>
                 </div>
             </div>
 
-            <!-- Belum Memilih -->
-            <div class="bezel-card-shell">
-                <div class="bezel-card-core p-4 sm:p-5 !flex-row items-start gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shrink-0 text-base sm:text-lg">
-                        <i class="fas fa-user-clock"></i>
+            <!-- Card 3: Belum Memilih -->
+            <div class="rounded-3xl bg-white/90 border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 inset-x-0 h-1 bg-amber-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100/90 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-user-clock text-sm sm:text-base"></i>
                     </div>
-                    <div class="min-w-0">
-                        <div class="text-[10px] font-bold tracking-wider uppercase text-amber-600 mb-0.5">Belum Memilih</div>
-                        <div class="font-display font-extrabold text-xl sm:text-3xl text-amber-600 tabular-nums leading-none" id="metTotalUnvoted">
-                            @{{ stats.total_unvoted.toLocaleString('id-ID') }}
-                        </div>
-                        <div class="text-[11px] text-slate-400 mt-1">Hak Suara Tersisa</div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-100">
+                        Sisa
+                    </span>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold tracking-wider uppercase text-amber-600 mb-1">Belum Memilih</div>
+                    <div class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-amber-600 tabular-nums leading-none" id="metTotalUnvoted">
+                        @{{ stats.total_unvoted.toLocaleString('id-ID') }}
                     </div>
+                </div>
+                <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium">
+                    <span class="text-slate-400">Belum Hadir</span>
+                    <span class="text-amber-700 font-bold">@{{ stats.unvoted_percentage }}%</span>
                 </div>
             </div>
 
-            <!-- Partisipasi % -->
-            <div class="bezel-card-shell">
-                <div class="bezel-card-core p-4 sm:p-5 !flex-row items-start gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-ocean-50 text-ocean-500 flex items-center justify-center border border-ocean-100 shrink-0 text-base sm:text-lg">
-                        <i class="fas fa-chart-pie"></i>
+            <!-- Card 4: Partisipasi -->
+            <div class="rounded-3xl bg-white/90 border border-slate-200/80 p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div class="absolute top-0 inset-x-0 h-1 bg-sky-500"></div>
+                <div class="flex items-center justify-between mb-3">
+                    <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center border border-sky-100/90 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-chart-pie text-sm sm:text-base"></i>
                     </div>
-                    <div class="min-w-0">
-                        <div class="text-[10px] font-bold tracking-wider uppercase text-ocean-600 mb-0.5">Partisipasi</div>
-                        <div class="font-display font-extrabold text-xl sm:text-3xl text-ocean-600 tabular-nums leading-none" id="metTurnout">
-                            @{{ stats.turnout_percentage }}%
-                        </div>
-                        <div class="text-[11px] text-slate-400 mt-1">Persentase Kehadiran</div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-50 text-sky-600 border border-sky-100">
+                        Rate
+                    </span>
+                </div>
+                <div>
+                    <div class="text-[11px] font-bold tracking-wider uppercase text-sky-600 mb-1">Partisipasi</div>
+                    <div class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-sky-600 tabular-nums leading-none" id="metTurnout">
+                        @{{ stats.turnout_percentage }}%
                     </div>
+                </div>
+                <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-medium">
+                    <span class="text-slate-400">Kehadiran DPT</span>
+                    <span class="text-sky-700 font-bold">@{{ stats.turnout_percentage }}%</span>
                 </div>
             </div>
         </div>
 
         <!-- ── Turnout Progress Bar ── -->
-        <div class="bezel-card-shell anim-up anim-up-d1">
-            <div class="bezel-card-core p-4 sm:p-5">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5">
+        <div class="rounded-3xl bg-white/90 border border-slate-200/80 p-4 sm:p-5 shadow-sm anim-up anim-up-d1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-ocean-50 text-ocean-600 flex items-center justify-center text-sm border border-ocean-100 shrink-0">
                         <i class="fas fa-tasks text-ocean-500"></i>
-                        Progress Partisipasi Keseluruhan
-                    </span>
-                    <span class="text-xs font-bold text-ocean-950 tabular-nums" id="turnoutPct">@{{ stats.turnout_percentage }}%</span>
-                </div>
-                <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div id="turnoutBar"
-                         class="h-2.5 rounded-full bg-gradient-to-r from-ocean-500 to-emerald-500 bar-grow transition-all duration-700"
-                         :style="'width: ' + Math.min(stats.turnout_percentage, 100) + '%'">
+                    </div>
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-bold text-ocean-950">Progress Partisipasi Pemilihan</h3>
+                        <p class="text-[11px] text-slate-400 font-medium">
+                            <strong class="text-ocean-900">@{{ stats.total_voted.toLocaleString('id-ID') }}</strong> dari <strong class="text-ocean-950">@{{ stats.total_voters.toLocaleString('id-ID') }}</strong> pemilih telah menggunakan hak suara (@{{ stats.total_unvoted.toLocaleString('id-ID') }} belum memilih)
+                        </p>
                     </div>
                 </div>
-                <div class="flex justify-between text-[10px] text-slate-400 mt-1.5 font-medium select-none">
-                    <span>0%</span><span>50%</span><span>100%</span>
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <span class="text-xs font-bold text-slate-400">Total:</span>
+                    <span class="font-display font-black text-base sm:text-lg text-ocean-600 tabular-nums px-3 py-1 rounded-full bg-ocean-50 border border-ocean-100 shadow-sm" id="turnoutPct">
+                        @{{ stats.turnout_percentage }}%
+                    </span>
                 </div>
+            </div>
+
+            <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/40">
+                <div id="turnoutBar"
+                     class="h-full rounded-full bg-gradient-to-r from-ocean-500 via-sky-400 to-emerald-400 bar-grow transition-all duration-700 shadow-sm"
+                     :style="'width: ' + Math.min(stats.turnout_percentage, 100) + '%'">
+                </div>
+            </div>
+
+            <div class="flex justify-between text-[10px] text-slate-400 mt-2 font-semibold select-none px-1">
+                <span>0% (Mulai)</span>
+                <span>50% (Target)</span>
+                <span>100% (Selesai)</span>
             </div>
         </div>
 
@@ -239,7 +280,7 @@ Dashboard Admin | {{ $web_setting?->web_title ?? 'Pemilos' }}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div v-for="(candidate, idx) in osisCandidate" :key="candidate.id"
                      class="group relative rounded-3xl border p-5 transition-all duration-300 ease-spring flex flex-col justify-between"
-                     :class="isLeader(candidate) ? 'candidate-winner' : 'bg-slate-50/70 border-slate-200/80 hover:bg-white hover:border-ocean-300 hover:shadow-bezel-hover'">
+                     :class="isLeader(candidate) && candidate.total > 0 ? 'candidate-winner' : 'bg-white/90 border-slate-200/80 shadow-sm hover:shadow-md hover:border-ocean-300 hover:-translate-y-1'">
 
                     <!-- Winner badge -->
                     <div v-if="isLeader(candidate) && candidate.total > 0"
@@ -250,23 +291,22 @@ Dashboard Admin | {{ $web_setting?->web_title ?? 'Pemilos' }}
 
                     <div>
                         <!-- Sequence & Class Pills -->
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center justify-between mb-3">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-display font-extrabold bg-ocean-500 text-white shadow-sm">
                                 <span>No. Urut</span>
                                 <span class="tabular-nums text-sm">@{{ candidate.sequence_number }}</span>
                             </span>
-                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-600">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-700">
                                 @{{ candidate.class || '—' }}
                             </span>
                         </div>
 
-                        <!-- Photo -->
-                        <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-inner mb-4 group-hover:scale-[1.01] transition-transform duration-300">
+                        <!-- Photo / Logo Frame -->
+                        <div class="relative h-44 rounded-2xl overflow-hidden bg-gradient-to-b from-slate-50 to-white border border-slate-200/70 p-3 mb-3.5 flex items-center justify-center">
                             <img :src="'/file/image/' + candidate.image"
                                  onerror="this.src='/gambar/logo-osis.png'"
-                                 class="w-full h-full object-cover object-top"
+                                 class="max-w-full max-h-full object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
                                  :alt="candidate.name">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
                         </div>
 
                         <!-- Names -->
@@ -370,15 +410,13 @@ Dashboard Admin | {{ $web_setting?->web_title ?? 'Pemilos' }}
             @endphp
             @foreach($quickLinks as $ql)
             <a href="{{ $ql['href'] }}"
-               class="bezel-card-shell group block text-decoration-none">
-                <div class="bezel-card-core p-4 !flex-row items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-ocean-50 border border-ocean-100 text-ocean-500 flex items-center justify-center text-sm shrink-0 group-hover:bg-ocean-500 group-hover:text-white transition-colors duration-300">
-                        <i class="{{ $ql['icon'] }}"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <div class="text-xs font-bold text-ocean-950 truncate">{{ $ql['label'] }}</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">{{ $ql['sub'] }}</div>
-                    </div>
+               class="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-ocean-300 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-3 group text-decoration-none">
+                <div class="w-10 h-10 rounded-xl bg-ocean-50 border border-ocean-100/90 text-ocean-500 flex items-center justify-center text-sm shrink-0 group-hover:bg-ocean-500 group-hover:text-white transition-colors duration-300">
+                    <i class="{{ $ql['icon'] }}"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-ocean-950 truncate">{{ $ql['label'] }}</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5 font-medium">{{ $ql['sub'] }}</div>
                 </div>
             </a>
             @endforeach

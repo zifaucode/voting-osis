@@ -286,14 +286,14 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6" id="candidateCardsContainer">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5" id="candidateCardsContainer">
                 <!-- Loading placeholder -->
-                <div class="col-span-full flex items-center justify-center py-16 text-cloudy-400">
+                <div class="col-span-full flex items-center justify-center py-12 text-cloudy-400">
                     <div class="text-center">
-                        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-ocean-50 border border-ocean-100 text-ocean-300 flex items-center justify-center text-2xl">
+                        <div class="w-10 h-10 mx-auto mb-2.5 rounded-2xl bg-ocean-50 border border-ocean-100 text-ocean-400 flex items-center justify-center text-xl">
                             <i class="bi bi-broadcast"></i>
                         </div>
-                        <p class="text-sm font-medium">Memuat data kandidat…</p>
+                        <p class="text-xs font-semibold">Memuat data kandidat…</p>
                     </div>
                 </div>
             </div>
@@ -440,94 +440,84 @@
             renderCandidateCards(data.candidates, leaderIdx);
         }
 
-        // ── Candidate Cards Renderer ─────────────────────────────────────────────
+        // ── Candidate Cards Renderer (Compact 3-in-a-row) ───────────────────────
         function renderCandidateCards(candidates, leaderIdx) {
             const container = document.getElementById('candidateCardsContainer');
             container.innerHTML = '';
 
             candidates.forEach((cand, idx) => {
                 const color    = PALETTE[idx % PALETTE.length];
-                const isWinner = idx === leaderIdx;
+                const isWinner = idx === leaderIdx && cand.votes > 0;
 
                 const col = document.createElement('div');
-                col.className = 'bezel-card-shell relative ' + (isWinner ? 'card-winner' : '');
+                col.className = 'bezel-card-shell relative transition-all duration-300 ' + (isWinner ? 'card-winner' : '');
 
                 const winnerBadge = isWinner ? `
-                    <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:10;"
-                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-lg border border-amber-300 whitespace-nowrap"
-                         style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                        <i class="bi bi-trophy-fill" style="font-size:9px"></i> Sementara Unggul
-                    </div>
-                ` : '';
-
-                // Use a separate div for the badge (style conflict fix)
-                const badgeDiv = isWinner ? `
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-lg border border-amber-300 whitespace-nowrap" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                        <i class="bi bi-trophy-fill" style="font-size:9px"></i> Sementara Unggul
+                    <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-md border border-amber-300 whitespace-nowrap" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+                        <i class="bi bi-trophy-fill" style="font-size:9px"></i> Unggul
                     </div>
                 ` : '';
 
                 const sloganHtml = cand.slogan ? `
-                    <div class="my-2.5 px-3 py-1.5 rounded-xl border text-center font-medium italic text-xs leading-snug" style="background:${color.light};border-color:${color.bg}30;color:${color.border}">
+                    <div class="my-1.5 px-2.5 py-1 rounded-lg border text-center font-medium italic text-[11px] truncate leading-tight" style="background:${color.light};border-color:${color.bg}25;color:${color.border}" title="${cand.slogan}">
                         &ldquo;${cand.slogan}&rdquo;
                     </div>
                 ` : '';
 
                 const viceHtml = cand.vice_name ? `
-                    <div class="pt-2 border-t border-slate-200/70 flex items-start justify-between gap-2">
-                        <div>
-                            <span class="block text-[10px] font-bold uppercase tracking-wider text-cloudy-500">Calon Wakil</span>
-                            <h4 class="font-display font-bold text-sm text-ocean-950 leading-tight">${cand.vice_name}</h4>
+                    <div class="pt-1.5 border-t border-slate-200/60 flex items-center justify-between gap-1.5">
+                        <div class="min-w-0 flex-1">
+                            <span class="block text-[9px] font-bold uppercase tracking-wider text-cloudy-400">Calon Wakil</span>
+                            <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate">${cand.vice_name}</h4>
                         </div>
-                        <span class="text-[11px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md shrink-0">${cand.vice_class || '—'}</span>
+                        <span class="text-[10px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-1.5 py-0.5 rounded shrink-0">${cand.vice_class || '—'}</span>
                     </div>
                 ` : '';
 
                 col.innerHTML = `
-                    ${badgeDiv}
-                    <div class="bezel-card-core p-4 sm:p-5 flex flex-col justify-between h-full">
-                        <!-- Header Row -->
+                    ${winnerBadge}
+                    <div class="bezel-card-core p-3.5 sm:p-4 flex flex-col justify-between h-full">
+                        <!-- Top Header Strip -->
                         <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-white font-display font-extrabold text-xs shadow-sm" style="background:${color.bg}">
-                                    <i class="bi bi-star-fill" style="font-size:9px"></i> #${cand.sequence_number}
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-white font-display font-extrabold text-xs shadow-sm" style="background:${color.bg}">
+                                    <i class="bi bi-star-fill text-[9px]"></i> #${cand.sequence_number}
                                 </span>
-                                <span class="text-xs font-bold text-white px-2.5 py-0.5 rounded-full" style="background:${color.bg}">
+                                <span class="text-xs font-bold text-ocean-950 bg-slate-100/90 border border-slate-200/80 px-2.5 py-0.5 rounded-full tabular-nums">
                                     ${parseInt(cand.votes).toLocaleString('id-ID')} Suara
                                 </span>
                             </div>
 
-                            <!-- Photo Frame -->
-                            <div class="relative w-full h-48 sm:h-52 my-3 rounded-2xl overflow-hidden border border-slate-100/80 flex items-center justify-center" style="background:linear-gradient(135deg,${color.light},#f8fafc)">
+                            <!-- Compact Photo Container -->
+                            <div class="relative w-full h-28 sm:h-32 my-2 rounded-xl overflow-hidden border border-slate-100/90 flex items-center justify-center p-2 group" style="background:linear-gradient(135deg,${color.light},#ffffff)">
                                 <img src="${cand.image ? '/file/image/' + cand.image : '/gambar/logo-osis.png'}"
                                      onerror="this.src='/gambar/logo-osis.png'"
                                      alt="${cand.name}"
-                                     class="max-w-full max-h-full object-contain transition-transform duration-500 hover:scale-105"
-                                     style="filter:drop-shadow(0 4px 12px rgba(15,23,42,0.08))">
+                                     class="max-w-full max-h-full object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
                             </div>
 
                             ${sloganHtml}
 
-                            <!-- Name Box -->
-                            <div class="p-3 my-2.5 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-2">
-                                <div class="flex items-start justify-between gap-2">
-                                    <div>
-                                        <span class="block text-[10px] font-bold uppercase tracking-wider" style="color:${color.bg}">Calon Ketua</span>
-                                        <h4 class="font-display font-bold text-sm sm:text-base text-ocean-950 leading-tight">${cand.name}</h4>
+                            <!-- Candidate Details -->
+                            <div class="p-2.5 my-2 rounded-xl bg-slate-50/80 border border-slate-100/90 space-y-1.5">
+                                <div class="flex items-center justify-between gap-1.5">
+                                    <div class="min-w-0 flex-1">
+                                        <span class="block text-[9px] font-bold uppercase tracking-wider" style="color:${color.bg}">Calon Ketua</span>
+                                        <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate">${cand.name}</h4>
                                     </div>
-                                    <span class="text-[11px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md shrink-0">${cand.class || '—'}</span>
+                                    <span class="text-[10px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-1.5 py-0.5 rounded shrink-0">${cand.class || '—'}</span>
                                 </div>
                                 ${viceHtml}
                             </div>
                         </div>
 
-                        <!-- Progress Bar -->
-                        <div class="pt-3 mt-auto border-t border-slate-100">
-                            <div class="flex justify-between text-xs font-bold text-cloudy-600 mb-1.5">
-                                <span>Persentase Suara</span>
-                                <span class="font-black" style="color:${color.bg}">${cand.percentage}%</span>
+                        <!-- Vote Progress Footer -->
+                        <div class="pt-2 mt-auto border-t border-slate-100">
+                            <div class="flex justify-between items-center text-xs mb-1">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-cloudy-400">Persentase</span>
+                                <span class="font-black text-xs tabular-nums" style="color:${color.bg}">${cand.percentage}%</span>
                             </div>
-                            <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                            <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                                 <div class="h-full rounded-full progress-grow transition-all duration-700"
                                      style="width:${cand.percentage}%;background:linear-gradient(90deg,${color.bg},${color.border})"></div>
                             </div>
