@@ -350,7 +350,7 @@
                         y: { beginAtZero: true,
                              ticks: { precision: 0, font: { ...baseFont, weight: '600' }, color: '#64748b' },
                              grid: { color: 'rgba(203,221,233,0.35)', drawBorder: false } },
-                        x: { ticks: { font: { ...baseFont, weight: '700' }, color: '#0b1e2c', maxRotation: 0 },
+                        x: { ticks: { autoSkip: false, maxRotation: 0, minRotation: 0, font: { ...baseFont, weight: '700', size: 11 }, color: '#0b1e2c' },
                              grid: { display: false } }
                     },
                     plugins: {
@@ -432,14 +432,21 @@
             const maxVotes  = Math.max(...data.candidates.map(c => c.votes || 0), 0);
             const leaderIdx = data.candidates.findIndex(c => c.votes === maxVotes && c.votes > 0);
 
-            const labels = data.candidates.map(c =>
+            // Pisahkan ke multi-baris agar label paslon muat dan tidak di-skip oleh Chart.js
+            const barLabels = data.candidates.map(c => {
+                const line1 = '#' + c.sequence_number + ' ' + c.name;
+                const line2 = c.vice_name ? '& ' + c.vice_name : '';
+                return line2 ? [line1, line2] : [line1];
+            });
+
+            const pieLabels = data.candidates.map(c =>
                 '#' + c.sequence_number + ' ' + c.name + (c.vice_name ? ' & ' + c.vice_name : '')
             );
             const votes  = data.candidates.map(c => c.votes || 0);
             const percs  = data.candidates.map(c => parseFloat(c.percentage) || 0);
 
             if (barChart) {
-                barChart.data.labels = labels;
+                barChart.data.labels = barLabels;
                 barChart.data.datasets[0].data = votes;
                 barChart.data.datasets[0].backgroundColor = PALETTE.slice(0, data.candidates.length).map((p, i) =>
                     i === leaderIdx ? p.bg : p.bg + 'a0'
@@ -448,7 +455,7 @@
             }
 
             if (pieChart) {
-                pieChart.data.labels = labels;
+                pieChart.data.labels = pieLabels;
                 pieChart.data.datasets[0].data = percs;
                 pieChart.update();
             }

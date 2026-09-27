@@ -491,7 +491,7 @@ const app = new Vue({
                                  ticks: { precision: 0, font: { ...baseFont, size: 11 }, color: '#64748b' }
                             },
                             x: { grid: { display: false },
-                                 ticks: { font: { ...baseFont, size: 11, weight: '600' }, color: '#0b1e2c', maxRotation: 0 }
+                                 ticks: { autoSkip: false, font: { ...baseFont, size: 11, weight: '600' }, color: '#0b1e2c', maxRotation: 0 }
                             }
                         },
                         plugins: {
