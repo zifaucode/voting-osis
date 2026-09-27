@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $web_setting?->web_title ?? 'VOTING OSIS' }} - E-Voting Modern</title>
-    <meta name="description" content="Aplikasi E-Voting Pemilihan Ketua dan Wakil Ketua OSIS">
+    <title>{{ $web_setting?->web_title ?? 'VOTING OSIS' }} - Bilik Suara Digital</title>
+    <meta name="description" content="Aplikasi E-Voting Modern Pemilihan Ketua dan Wakil Ketua OSIS">
 
     <!-- Favicons -->
     <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
@@ -15,338 +15,396 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
-    <!-- Vendor CSS Files -->
-    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/aos/aos.css') }}">
 
-    <!-- Glassmorphism & Claymorphism Main Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
+    <!-- Compiled Tailwind CSS -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <style>
         [v-cloak] {
             display: none;
         }
-        .hidden-timer {
-            display: none;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbdde9;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #2872A1;
         }
     </style>
 </head>
 
-<body>
-    <div id="app" class="ambient-wrapper" v-cloak>
-        <!-- Glassmorphism Floating Navbar -->
-        <header class="glass-navbar">
-            <div class="container d-flex align-items-center justify-content-between">
-                <a href="/" class="brand-title">
-                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
-                    <span>{{ $web_setting?->web_title ?? 'PEMILOS DIGITAL' }}</span>
-                </a>
-
-                <div class="d-flex align-items-center gap-2 gap-md-3">
-                    <div class="glass-navbar-badge d-none d-lg-inline-flex" v-if="status == 'buka'">
-                        <span class="status-dot"></span> Pemilihan Berlangsung
-                    </div>
-                    <div class="glass-navbar-badge d-none d-lg-inline-flex" v-else-if="status == 'tutup'" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #dc2626;">
-                        <span class="status-dot" style="background-color: #ef4444; box-shadow: 0 0 10px #ef4444;"></span> Pemilihan Berakhir
-                    </div>
-
-                    @if(isset($current_user) && $current_user)
-                    <!-- Voter Profile Pill -->
-                    <div class="d-none d-md-flex align-items-center py-1 px-3 rounded-pill" style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid var(--glass-border); box-shadow: 0 4px 15px rgba(40, 114, 161, 0.05); gap: 0.65rem;">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-hover)); color: white; font-weight: 700; font-size: 0.85rem; box-shadow: 0 2px 6px rgba(40, 114, 161, 0.3);">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
-                        <div class="text-left" style="line-height: 1.2;">
-                            <span class="d-block font-weight-bold" style="font-size: 0.85rem; color: var(--ocean-navy);">{{ $current_user->name }}</span>
-                            <span class="d-block" style="font-size: 0.72rem; color: var(--text-muted);">{{ $current_user->nisn }} &bull; {{ $current_user->class }}</span>
-                        </div>
-                    </div>
-                    @endif
-
-                    <button type="button" class="glass-btn-secondary" data-toggle="modal" data-target="#visiMisiModal" title="Lihat Rekap Visi Misi">
-                        <i class="bi bi-card-text text-primary"></i> <span class="d-none d-sm-inline">Visi & Misi</span>
-                    </button>
-
-                    @if(isset($current_user) && $current_user)
-                    <a href="{{ route('logout.user') }}" class="glass-btn-secondary" style="border-color: rgba(239, 68, 68, 0.35); color: #dc2626;" title="Keluar dari Bilik Suara">
-                        <i class="bi bi-box-arrow-right"></i> <span class="d-none d-sm-inline">Keluar</span>
-                    </a>
-                    @else
-                    <a href="/admin" class="glass-btn-secondary" title="Portal Masuk Admin">
-                        <i class="bi bi-shield-lock text-primary"></i> <span class="d-none d-sm-inline">Admin</span>
-                    </a>
-                    @endif
+<body class="min-h-[100dvh] mesh-gradient-bg flex flex-col justify-between text-ocean-950 font-sans antialiased selection:bg-ocean-500 selection:text-white">
+    <div id="app" v-cloak class="min-h-full flex flex-col justify-between">
+        <!-- Floating Island Detached Navbar -->
+        <header class="floating-island-nav">
+            <!-- Brand -->
+            <a href="/" class="flex items-center gap-3 group text-decoration-none">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-white to-ocean-50 border border-white/90 p-1.5 shadow-sm flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" 
+                         alt="Logo OSIS" 
+                         class="max-w-full max-h-full object-contain">
                 </div>
-            </div>
-        </header>
+                <div>
+                    <span class="font-display font-extrabold text-sm sm:text-base text-ocean-950 tracking-tight block leading-tight group-hover:text-ocean-600 transition-colors">
+                        {{ $web_setting?->web_title ?? 'PEMILOS DIGITAL' }}
+                    </span>
+                    <span class="text-[10px] font-semibold text-cloudy-500 uppercase tracking-widest block">
+                        Bilik Suara Siswa
+                    </span>
+                </div>
+            </a>
 
-        <!-- Main Content -->
-        <main class="py-4">
-            <!-- Hero Header Section -->
-            <div class="container">
-                <div class="glass-section-header" data-aos="fade-up">
-                    <div class="school-badge">
-                        <i class="bi bi-award-fill"></i>
-                        <span>{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
-                        <span>•</span>
-                        <span>PERIODE {{ $web_setting?->year_period ?? '2026' }} / {{ $year_plus ?? '2027' }}</span>
-                    </div>
-                    <h1>{{ $web_setting?->web_title ?? 'PEMILIHAN KETUA & WAKIL OSIS' }}</h1>
-                    <p>Gunakan hak suara Anda secara jujur, mandiri, dan bertanggung jawab demi kemajuan bersama kepengurusan OSIS.</p>
+            <!-- Right Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Status Chip -->
+                <div class="hidden lg:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ocean-50 border border-ocean-200/80 text-ocean-700 text-xs font-bold" v-if="status == 'buka'">
+                    <span class="w-2 h-2 rounded-full bg-ocean-500 animate-pulse shadow-[0_0_6px_rgba(40,114,161,0.8)]"></span>
+                    <span>Pemilihan Berlangsung</span>
+                </div>
+                <div class="hidden lg:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200/80 text-rose-700 text-xs font-bold" v-else-if="status == 'tutup'">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span>Pemilihan Ditutup</span>
                 </div>
 
-                <!-- Voter Status & Instructions Banner -->
                 @if(isset($current_user) && $current_user)
-                <div class="row justify-content-center mb-4" data-aos="fade-up">
-                    <div class="col-lg-10">
-                        @if($current_user->vote_status == 1)
-                        <div class="p-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: rgba(255, 255, 255, 0.85); border: 1.5px solid var(--cloudy-sky); border-radius: var(--clay-radius-md); backdrop-filter: var(--glass-blur); box-shadow: var(--clay-shadow-card);">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-hover)); color: white; font-size: 1.4rem; box-shadow: 0 6px 14px rgba(40, 114, 161, 0.25);">
-                                    <i class="bi bi-check2-all"></i>
-                                </div>
-                                <div>
-                                    <div class="font-weight-bold" style="color: var(--ocean-navy); font-size: 1.1rem;">
-                                        Terima Kasih, {{ $current_user->name }}!
-                                    </div>
-                                    <small class="d-block" style="font-size: 0.85rem; color: var(--text-muted);">
-                                        Suara Anda telah berhasil tercatat dengan aman pada sistem e-voting. Setiap pemilih hanya berhak memilih 1 kali.
-                                    </small>
-                                </div>
-                            </div>
-                            <span class="badge px-3 py-2 font-weight-bold text-white" style="border-radius: var(--clay-radius-pill); font-size: 0.85rem; background: var(--ocean-blue); box-shadow: 0 4px 10px rgba(40, 114, 161, 0.25);">
-                                <i class="bi bi-shield-check mr-1"></i> Hak Suara Sudah Digunakan
-                            </span>
-                        </div>
-                        @else
-                        <div class="p-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: rgba(255, 255, 255, 0.88); backdrop-filter: var(--glass-blur); border: 1.5px solid var(--glass-border); border-radius: var(--clay-radius-md); box-shadow: var(--clay-shadow-card);">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-hover)); color: white; font-size: 1.35rem; box-shadow: 0 6px 16px rgba(40, 114, 161, 0.25);">
-                                    <i class="bi bi-person-badge-fill"></i>
-                                </div>
-                                <div>
-                                    <div class="font-weight-bold" style="color: var(--ocean-navy); font-size: 1.05rem;">
-                                        Bilik Suara Aktif: <strong>{{ $current_user->name }}</strong> ({{ $current_user->class }})
-                                    </div>
-                                    <small class="d-block" style="font-size: 0.85rem; color: var(--text-muted);">
-                                        Username: <strong>{{ $current_user->nisn }}</strong> &bull; Pelajari visi & misi paslon, lalu tekan tombol <strong>"PILIH PASANGAN INI"</strong>.
-                                    </small>
-                                </div>
-                            </div>
-                            <span class="badge px-3 py-2 font-weight-bold" style="border-radius: var(--clay-radius-pill); font-size: 0.82rem; background: var(--cloudy-sky-light); border: 1.5px solid var(--cloudy-sky); color: var(--ocean-dark);">
-                                <i class="bi bi-fingerprint mr-1 text-primary"></i> Belum Memilih
-                            </span>
-                        </div>
-                        @endif
+                <!-- Voter Profile Chip -->
+                <div class="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/90 border border-white/95 shadow-sm">
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-ocean-600 to-ocean-500 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="text-left leading-tight pr-1">
+                        <span class="block font-bold text-xs text-ocean-950">{{ $current_user->name }}</span>
+                        <span class="block text-[10px] text-cloudy-500 font-medium">{{ $current_user->class }}</span>
                     </div>
                 </div>
                 @endif
 
-                <!-- Hidden containers for backward script compatibility -->
-                <div class="hidden-timer">
-                    <span id="demo"></span>
-                    <span id="getCountdown"></span>
+                <!-- Visi Misi Modal Trigger -->
+                <button type="button" @click="openVisiMisiModal" class="btn-island-secondary" title="Lihat Rekap Visi Misi">
+                    <i class="bi bi-card-text text-ocean-500 text-sm"></i>
+                    <span class="hidden sm:inline">Visi & Misi</span>
+                </button>
+
+                @if(isset($current_user) && $current_user)
+                <a href="{{ route('logout.user') }}" class="btn-island-secondary hover:text-rose-600 hover:border-rose-200" title="Keluar dari Bilik Suara">
+                    <i class="bi bi-box-arrow-right text-sm"></i>
+                    <span class="hidden sm:inline">Keluar</span>
+                </a>
+                @else
+                <a href="/admin/login" class="btn-island-secondary" title="Portal Masuk Admin">
+                    <i class="bi bi-shield-lock text-sm"></i>
+                    <span class="hidden sm:inline">Admin</span>
+                </a>
+                @endif
+            </div>
+        </header>
+
+        <!-- Main Hero Section -->
+        <main class="flex-grow pt-28 pb-12 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <!-- Hero Header -->
+            <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+                <div class="eyebrow-badge mb-3">
+                    <i class="bi bi-award-fill text-ocean-500"></i>
+                    <span>{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
+                    <span class="text-cloudy-300">•</span>
+                    <span>PERIODE {{ $web_setting?->year_period ?? '2026' }} / {{ $year_plus ?? '2027' }}</span>
                 </div>
 
-                <!-- Standby or Closed State Notices -->
-                <div class="text-center my-4" v-if="status == 'tutup'" data-aos="fade-up">
-                    <div class="glass-card d-inline-block p-4 mx-auto" style="max-width: 520px;">
-                        <div class="mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: var(--cloudy-sky-light); border: 1.5px solid var(--cloudy-sky);">
-                                <i class="bi bi-check-circle-fill" style="font-size: 2.75rem; color: var(--ocean-blue);"></i>
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-ocean-950 tracking-tight text-balance leading-tight">
+                    {{ $web_setting?->web_title ?? 'PEMILIHAN KETUA & WAKIL OSIS' }}
+                </h1>
+                
+                <p class="mt-3 text-sm sm:text-base text-cloudy-600 text-balance max-w-2xl mx-auto leading-relaxed">
+                    Tentukan pemimpin organisasi sekolah masa depan. Pelajari visi, misi, dan program kerja kandidat, lalu berikan suara Anda secara langsung dan rahasia.
+                </p>
+            </div>
+
+            <!-- Voter Status Notice -->
+            @if(isset($current_user) && $current_user)
+            <div class="max-w-4xl mx-auto mb-10">
+                @if($current_user->vote_status == 1)
+                <div class="bezel-card-shell">
+                    <div class="bezel-card-core p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-ocean-500 to-ocean-600 text-white flex items-center justify-center text-xl shrink-0 shadow-glow">
+                                <i class="bi bi-check2-all"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-base sm:text-lg text-ocean-950">
+                                    Terima Kasih, {{ $current_user->name }}!
+                                </h3>
+                                <p class="text-xs sm:text-sm text-cloudy-600 leading-snug">
+                                    Suara Anda telah berhasil tersimpan dengan aman pada bilik suara elektronik. Satu pemilih hanya dapat memilih 1 kali.
+                                </p>
                             </div>
                         </div>
-                        <h3 class="font-weight-bold" style="color: var(--ocean-navy);">Pemilihan Telah Ditutup</h3>
-                        <p class="mb-0" style="color: var(--text-muted);">Terima kasih atas partisipasi seluruh siswa dan siswi dalam pemungutan suara ini.</p>
+                        <span class="self-start sm:self-center shrink-0 px-4 py-1.5 rounded-full bg-ocean-50 border border-ocean-200 text-ocean-800 text-xs font-bold flex items-center gap-1.5 shadow-sm">
+                            <i class="bi bi-shield-check text-ocean-600"></i> Hak Suara Digunakan
+                        </span>
                     </div>
                 </div>
-
-                <div class="text-center my-4" v-if="status == ''" data-aos="fade-up">
-                    <div class="glass-card d-inline-block p-4 mx-auto" style="max-width: 580px;">
-                        <div class="mb-2">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 76px; height: 76px; background: var(--cloudy-sky-light); border: 1.5px solid var(--cloudy-sky);">
-                                <i class="bi bi-clock-history" style="font-size: 2.5rem; color: var(--ocean-blue);"></i>
+                @else
+                <div class="bezel-card-shell">
+                    <div class="bezel-card-core p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-white to-ocean-50 border border-ocean-200/80 text-ocean-600 flex items-center justify-center text-xl shrink-0 shadow-sm">
+                                <i class="bi bi-person-badge-fill"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-base sm:text-lg text-ocean-950">
+                                    Bilik Suara Aktif: {{ $current_user->name }} <span class="text-xs text-cloudy-500 font-normal">({{ $current_user->class }})</span>
+                                </h3>
+                                <p class="text-xs sm:text-sm text-cloudy-600 leading-snug">
+                                    Username: <strong>{{ $current_user->nisn }}</strong> &bull; Tekan tombol <strong>"PILIH PASANGAN INI"</strong> pada kandidat pilihan Anda.
+                                </p>
                             </div>
                         </div>
-                        <h4 class="font-weight-bold mb-2" style="color: var(--ocean-navy);">Menunggu Waktu Pemilihan</h4>
-                        <p class="mb-3" style="color: var(--text-muted);">Sesi pemungutan suara belum dimulai. Perhitungan mundur menuju pembukaan:</p>
-                        <div class="glass-countdown-container mb-0">
-                            <div class="glass-countdown-item">
-                                <div class="glass-countdown-num">@{{ countdown.days }}</div>
-                                <div class="glass-countdown-lbl">Hari</div>
+                        <span class="self-start sm:self-center shrink-0 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold flex items-center gap-1.5">
+                            <i class="bi bi-fingerprint text-amber-600"></i> Belum Memilih
+                        </span>
+                    </div>
+                </div>
+                @endif
+            </div>
+            @endif
+
+            <!-- Standby Countdown State -->
+            <div v-if="status == ''" class="max-w-2xl mx-auto my-8">
+                <div class="bezel-card-shell text-center">
+                    <div class="bezel-card-core p-6 sm:p-10">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-3xl bg-ocean-50 border border-ocean-200 text-ocean-600 flex items-center justify-center text-2xl shadow-sm">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-display font-bold text-ocean-950">
+                            Menunggu Waktu Pemilihan
+                        </h2>
+                        <p class="mt-1 text-xs sm:text-sm text-cloudy-600 max-w-md mx-auto">
+                            Sesi pemungutan suara belum dibuka. Perhitungan mundur menuju pembukaan bilik suara:
+                        </p>
+
+                        <!-- Countdown Tiles -->
+                        <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto mt-6">
+                            <div class="p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                <div class="font-display font-extrabold text-2xl sm:text-3xl text-ocean-600 tabular-nums">@{{ countdown.days }}</div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-cloudy-500 mt-1">Hari</div>
                             </div>
-                            <div class="glass-countdown-item">
-                                <div class="glass-countdown-num">@{{ countdown.hours }}</div>
-                                <div class="glass-countdown-lbl">Jam</div>
+                            <div class="p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                <div class="font-display font-extrabold text-2xl sm:text-3xl text-ocean-600 tabular-nums">@{{ countdown.hours }}</div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-cloudy-500 mt-1">Jam</div>
                             </div>
-                            <div class="glass-countdown-item">
-                                <div class="glass-countdown-num">@{{ countdown.minutes }}</div>
-                                <div class="glass-countdown-lbl">Menit</div>
+                            <div class="p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                <div class="font-display font-extrabold text-2xl sm:text-3xl text-ocean-600 tabular-nums">@{{ countdown.minutes }}</div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-cloudy-500 mt-1">Menit</div>
                             </div>
-                            <div class="glass-countdown-item">
-                                <div class="glass-countdown-num">@{{ countdown.seconds }}</div>
-                                <div class="glass-countdown-lbl">Detik</div>
+                            <div class="p-3 sm:p-4 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                                <div class="font-display font-extrabold text-2xl sm:text-3xl text-ocean-600 tabular-nums">@{{ countdown.seconds }}</div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-cloudy-500 mt-1">Detik</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Candidate Selection Grid -->
-                <section class="mt-4 mb-5" v-if="status == 'buka'">
-                    <div class="row g-4 justify-content-center">
-                        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch" data-aos="zoom-in" :data-aos-delay="index * 100" v-for="(candidate, index) in osisCandidate" :key="candidate.id">
-                            <div class="glass-card w-100 d-flex flex-column">
-                                <div class="glass-card-header">
-                                    <div class="glass-badge-seq">
-                                        <i class="bi bi-star-fill" style="font-size: 0.85rem;"></i>
+            <!-- Closed State Notice -->
+            <div v-if="status == 'tutup'" class="max-w-xl mx-auto my-8">
+                <div class="bezel-card-shell text-center">
+                    <div class="bezel-card-core p-8">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-3xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center text-3xl">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-display font-bold text-ocean-950">
+                            Pemilihan Telah Ditutup
+                        </h2>
+                        <p class="mt-2 text-sm text-cloudy-600 leading-relaxed">
+                            Terima kasih atas partisipasi seluruh siswa dan siswi dalam pemungutan suara ini. Hasil rekapitulasi dapat dipantau di halaman Live Count.
+                        </p>
+                        <a href="/live-count" class="btn-island-primary mt-6 inline-flex">
+                            <span>Buka Live Count</span>
+                            <div class="btn-island-icon">
+                                <i class="bi bi-broadcast text-white"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candidate Selection Grid (Active State) -->
+            <section v-if="status == 'buka'" class="mt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+                    <div v-for="(candidate, index) in osisCandidate" :key="candidate.id" class="bezel-card-shell flex flex-col h-full">
+                        <div class="bezel-card-core flex flex-col justify-between flex-grow">
+                            <!-- Card Top Bar -->
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-600 text-white font-display font-extrabold text-sm shadow-sm tabular-nums">
+                                        <i class="bi bi-star-fill text-[11px]"></i>
                                         <span>#@{{ candidate.sequence_number ?? (index + 1) }}</span>
                                     </div>
-                                    <span class="glass-badge-class">
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-cloudy-600 bg-cloudy-100 px-2.5 py-0.5 rounded-full">
                                         Paslon OSIS
                                     </span>
                                 </div>
 
-                                <div class="candidate-photo-frame">
-                                    <img :src="candidate.image ? '/file/image/' + candidate.image : '/gambar/logo-osis.png'" :alt="candidate.name" onerror="this.src='/gambar/logo-osis.png'">
+                                <!-- Photo Frame -->
+                                <div class="relative w-full h-56 sm:h-64 my-3 rounded-2xl bg-gradient-to-br from-slate-50 to-ocean-50/40 border border-slate-100/80 p-3 flex items-center justify-center overflow-hidden shadow-[inset_0_2px_4px_rgba(15,23,42,0.03)] group-hover:border-ocean-200 transition-colors">
+                                    <img :src="candidate.image ? '/file/image/' + candidate.image : '/gambar/logo-osis.png'" 
+                                         :alt="candidate.name" 
+                                         onerror="this.src='/gambar/logo-osis.png'"
+                                         class="max-w-full max-h-full object-contain filter drop-shadow transition-transform duration-500 ease-spring group-hover:scale-105">
                                 </div>
 
-                                <div v-if="candidate.slogan" class="my-2 px-3 py-1 text-center font-italic small" style="background: var(--cloudy-sky-light); border: 1px solid var(--cloudy-sky); border-radius: var(--clay-radius-pill); color: var(--ocean-dark); font-weight: 600; line-height: 1.4;">
+                                <!-- Slogan -->
+                                <div v-if="candidate.slogan" class="my-2.5 px-3 py-1.5 rounded-xl bg-ocean-50/70 border border-ocean-100 text-center font-medium italic text-xs text-ocean-800 leading-snug">
                                     “@{{ candidate.slogan }}”
                                 </div>
 
-                                <!-- Calon Ketua & Wakil Ketua Bento Info -->
-                                <div class="candidate-info text-left p-3 mb-3" style="background: rgba(255, 255, 255, 0.65); border-radius: var(--clay-radius-sm); border: 1.5px solid var(--cloudy-sky-border); box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.9);">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                <!-- Candidate Names Bento Box -->
+                                <div class="p-3.5 my-3 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-2.5">
+                                    <div class="flex items-start justify-between gap-2">
                                         <div>
-                                            <small class="d-block" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--ocean-blue);">Calon Ketua</small>
-                                            <h4 class="mb-0 font-weight-bold" style="font-size: 1.05rem; color: var(--ocean-navy);">@{{ candidate.name }}</h4>
+                                            <span class="block text-[10px] font-bold uppercase tracking-wider text-ocean-600">Calon Ketua</span>
+                                            <h4 class="font-display font-bold text-sm sm:text-base text-ocean-950 leading-tight">@{{ candidate.name }}</h4>
                                         </div>
-                                        <span class="candidate-class-badge">@{{ candidate.class }}</span>
+                                        <span class="text-[11px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md shadow-xs shrink-0">@{{ candidate.class }}</span>
                                     </div>
 
-                                    <div v-if="candidate.vice_name" class="d-flex align-items-center justify-content-between pt-2 border-top" style="border-color: var(--cloudy-sky-border) !important;">
+                                    <div v-if="candidate.vice_name" class="pt-2 border-t border-slate-200/70 flex items-start justify-between gap-2">
                                         <div>
-                                            <small class="d-block" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--ocean-dark);">Calon Wakil Ketua</small>
-                                            <h4 class="mb-0 font-weight-bold" style="font-size: 1.05rem; color: var(--ocean-navy);">@{{ candidate.vice_name }}</h4>
+                                            <span class="block text-[10px] font-bold uppercase tracking-wider text-cloudy-600">Calon Wakil</span>
+                                            <h4 class="font-display font-bold text-sm sm:text-base text-ocean-950 leading-tight">@{{ candidate.vice_name }}</h4>
                                         </div>
-                                        <span class="candidate-class-badge">@{{ candidate.vice_class }}</span>
+                                        <span class="text-[11px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md shadow-xs shrink-0">@{{ candidate.vice_class }}</span>
                                     </div>
                                 </div>
 
-                                <!-- VISI KANDIDAT -->
-                                <div class="candidate-card-section">
-                                    <div class="candidate-card-label" style="color: #b45309;">
+                                <!-- Visi Section -->
+                                <div class="mb-2.5 text-left">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600 flex items-center gap-1 mb-1">
                                         <i class="bi bi-lightbulb-fill"></i> Visi
-                                    </div>
-                                    <div class="candidate-card-scrollbox">
+                                    </span>
+                                    <div class="p-2.5 rounded-xl bg-white border border-slate-100 text-xs text-cloudy-700 leading-relaxed max-h-24 overflow-y-auto custom-scrollbar whitespace-pre-line shadow-[inset_0_1px_2px_rgba(15,23,42,0.02)]">
                                         @{{ candidate.visi || 'Belum diisi oleh kandidat.' }}
                                     </div>
                                 </div>
 
-                                <!-- MISI KANDIDAT -->
-                                <div class="candidate-card-section">
-                                    <div class="candidate-card-label" style="color: var(--ocean-blue);">
+                                <!-- Misi Section -->
+                                <div class="mb-2.5 text-left">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-600 flex items-center gap-1 mb-1">
                                         <i class="bi bi-bullseye"></i> Misi
-                                    </div>
-                                    <div class="candidate-card-scrollbox">
+                                    </span>
+                                    <div class="p-2.5 rounded-xl bg-white border border-slate-100 text-xs text-cloudy-700 leading-relaxed max-h-24 overflow-y-auto custom-scrollbar whitespace-pre-line shadow-[inset_0_1px_2px_rgba(15,23,42,0.02)]">
                                         @{{ candidate.misi || 'Belum diisi oleh kandidat.' }}
                                     </div>
                                 </div>
 
-                                <!-- PROGRAM KERJA UNGGULAN -->
-                                <div class="candidate-card-section mb-3">
-                                    <div class="candidate-card-label" style="color: #0d9488;">
-                                        <i class="bi bi-briefcase-fill"></i> Program Kerja Unggulan
-                                    </div>
-                                    <div class="candidate-card-scrollbox">
-                                        @{{ candidate.work_program || 'Belum diisi oleh kandidat.' }}
+                                <!-- Program Kerja Section -->
+                                <div v-if="candidate.work_program" class="mb-3 text-left">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-teal-600 flex items-center gap-1 mb-1">
+                                        <i class="bi bi-briefcase-fill"></i> Program Kerja
+                                    </span>
+                                    <div class="p-2.5 rounded-xl bg-white border border-slate-100 text-xs text-cloudy-700 leading-relaxed max-h-24 overflow-y-auto custom-scrollbar whitespace-pre-line shadow-[inset_0_1px_2px_rgba(15,23,42,0.02)]">
+                                        @{{ candidate.work_program }}
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Tombol Aksi Memilih -->
-                                <div class="mt-auto pt-2">
-                                    @if(isset($current_user) && $current_user->vote_status == 1)
-                                    <button type="button" class="glass-btn-secondary w-100 text-muted" disabled style="cursor: not-allowed; opacity: 0.8; font-size: 0.95rem;">
-                                        <i class="bi bi-check2-all text-primary"></i> Suara Anda Telah Tercatat
-                                    </button>
-                                    @else
-                                    <button type="button" @click="confirmVote(candidate)" class="glass-btn-primary w-100" :disabled="loading">
-                                        <i class="bi bi-box-arrow-in-down"></i> PILIH PASANGAN INI
-                                    </button>
-                                    @endif
-                                </div>
+                            <!-- Bottom Action Button -->
+                            <div class="pt-2 mt-auto">
+                                @if(isset($current_user) && $current_user->vote_status == 1)
+                                <button type="button" class="w-full py-3 px-4 rounded-full bg-slate-100 text-cloudy-400 font-display font-bold text-xs sm:text-sm cursor-not-allowed flex items-center justify-center gap-2 border border-slate-200" disabled>
+                                    <i class="bi bi-check2-all text-ocean-500"></i> Suara Anda Telah Tercatat
+                                </button>
+                                @else
+                                <button type="button" @click="confirmVote(candidate)" class="btn-island-primary w-full" :disabled="loading">
+                                    <span>PILIH PASANGAN INI</span>
+                                    <div class="btn-island-icon">
+                                        <i class="bi bi-box-arrow-in-down text-white text-sm"></i>
+                                    </div>
+                                </button>
+                                @endif
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </main>
 
-        <!-- Modal Visi Misi & Program Kerja Overview -->
-        <div class="modal fade glass-modal" id="visiMisiModal" tabindex="-1" role="dialog" aria-labelledby="visiMisiModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="visiMisiModalLabel">
-                            <i class="bi bi-journal-text text-primary mr-2"></i> Rekap Visi, Misi & Program Kerja Paslon
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="font-size: 1.75rem; border: none; background: transparent; color: var(--text-muted);">
-                            <span aria-hidden="true">&times;</span>
+        <!-- Visi & Misi Modal Backdrop -->
+        <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ocean-950/40 backdrop-blur-xl animate-fade-in" @click.self="closeVisiMisiModal">
+            <div class="bezel-card-shell w-full max-w-4xl max-h-[90vh] flex flex-col">
+                <div class="bezel-card-core flex flex-col max-h-[85vh] p-6 sm:p-8">
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-ocean-50 text-ocean-600 flex items-center justify-center text-lg">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-lg sm:text-xl text-ocean-950">
+                                Rekap Visi, Misi & Program Paslon
+                            </h3>
+                        </div>
+                        <button type="button" @click="closeVisiMisiModal" class="w-8 h-8 rounded-full bg-slate-100 text-cloudy-600 hover:bg-slate-200 hover:text-ocean-950 flex items-center justify-center transition-colors">
+                            <i class="bi bi-x-lg text-sm"></i>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-6 mb-4" v-for="candidate in osisCandidate" :key="candidate.id">
-                                <div class="visi-misi-card h-100">
-                                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style="border-color: var(--cloudy-sky-border) !important;">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="glass-badge-seq" style="font-size: 0.95rem; padding: 0.25rem 0.75rem;">
-                                                #@{{ candidate.sequence_number }}
-                                            </span>
-                                            <div>
-                                                <h5 class="font-weight-bold mb-0" style="color: var(--ocean-navy);">
-                                                    @{{ candidate.name }} <span class="text-muted font-weight-normal small">(@{{ candidate.class }})</span>
-                                                </h5>
-                                                <div v-if="candidate.vice_name" class="text-muted small">
-                                                    Wakil: @{{ candidate.vice_name }} (@{{ candidate.vice_class }})
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div v-if="candidate.slogan" class="font-italic small mb-3 px-3 py-1 rounded-pill" style="background: var(--cloudy-sky-light); border: 1px solid var(--cloudy-sky); color: var(--ocean-dark);">
-                                        <i class="bi bi-chat-quote-fill text-primary mr-1"></i> “@{{ candidate.slogan }}”
-                                    </div>
+                    <!-- Modal Body -->
+                    <div class="overflow-y-auto custom-scrollbar space-y-6 pr-2">
+                        <div v-for="cand in osisCandidate" :key="cand.id" class="p-5 rounded-2xl bg-slate-50/70 border border-slate-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="px-3 py-1 rounded-full bg-ocean-500 text-white font-display font-bold text-xs">
+                                    #@{{ cand.sequence_number }}
+                                </span>
+                                <div>
+                                    <h4 class="font-display font-bold text-base text-ocean-950">
+                                        @{{ cand.name }} <span class="text-xs text-cloudy-500 font-normal">(@{{ cand.class }})</span>
+                                    </h4>
+                                    <span v-if="cand.vice_name" class="text-xs text-cloudy-600 block">
+                                        Wakil: @{{ cand.vice_name }} (@{{ cand.vice_class }})
+                                    </span>
+                                </div>
+                            </div>
 
-                                    <div class="mb-3">
-                                        <h4><i class="bi bi-lightbulb-fill text-warning"></i> VISI</h4>
-                                        <div class="p-3 bg-white rounded-lg shadow-sm" style="border-left: 4px solid var(--ocean-blue-light); white-space: pre-line; border-radius: var(--clay-radius-sm);">
-                                            @{{ candidate.visi || 'Belum diisi oleh kandidat.' }}
-                                        </div>
-                                    </div>
+                            <div v-if="cand.slogan" class="italic text-xs text-ocean-700 bg-ocean-50 p-2 rounded-lg mb-3">
+                                “@{{ cand.slogan }}”
+                            </div>
 
-                                    <div class="mb-3">
-                                        <h4><i class="bi bi-bullseye text-primary"></i> MISI</h4>
-                                        <div class="p-3 bg-white rounded-lg shadow-sm" style="border-left: 4px solid var(--ocean-blue); white-space: pre-line; border-radius: var(--clay-radius-sm);">
-                                            @{{ candidate.misi || 'Belum diisi oleh kandidat.' }}
-                                        </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600 block mb-1">Visi</span>
+                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
+                                        @{{ cand.visi || 'Belum diisi.' }}
                                     </div>
-
-                                    <div v-if="candidate.work_program">
-                                        <h4><i class="bi bi-briefcase-fill" style="color: #0d9488;"></i> PROGRAM KERJA UNGGULAN</h4>
-                                        <div class="p-3 bg-white rounded-lg shadow-sm" style="border-left: 4px solid #0d9488; white-space: pre-line; border-radius: var(--clay-radius-sm);">
-                                            @{{ candidate.work_program }}
-                                        </div>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-600 block mb-1">Misi</span>
+                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
+                                        @{{ cand.misi || 'Belum diisi.' }}
+                                    </div>
+                                </div>
+                                <div v-if="cand.work_program">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-teal-600 block mb-1">Program Kerja</span>
+                                    <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs text-cloudy-800 whitespace-pre-line leading-relaxed">
+                                        @{{ cand.work_program }}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="glass-btn-secondary" data-dismiss="modal">
+
+                    <!-- Modal Footer -->
+                    <div class="pt-4 border-t border-slate-100 flex justify-end mt-4">
+                        <button type="button" @click="closeVisiMisiModal" class="btn-island-secondary">
                             Tutup
                         </button>
                     </div>
@@ -355,37 +413,25 @@
         </div>
 
         <!-- Footer -->
-        <footer class="py-4 text-center text-muted" style="position: relative; z-index: 2; border-top: 1.5px solid var(--glass-border-subtle); background: rgba(255, 255, 255, 0.65); backdrop-filter: var(--glass-blur);">
-            <div class="container">
-                <small class="d-block font-weight-bold mb-1" style="color: var(--ocean-navy);">
-                    {{ $web_setting?->web_title ?? 'PEMILOS' }} &copy; {{ date('Y') }} • Hak Suara Digital Sekolah
-                </small>
-                <small class="text-muted d-inline-flex align-items-center justify-content-center flex-wrap" style="gap: 0.4rem;">
-                    <span><strong>Zidan Fathul</strong></span>
-                    <span>•</span>
-                    <a href="https://instagram.com/zidan_kebanyakan_tugas" target="_blank" rel="noopener noreferrer" class="text-decoration-none font-weight-bold d-inline-flex align-items-center" style="color: #e1306c;">
-                        <i class="bi bi-instagram mr-1"></i>@zidan_kebanyakan_tugas
-                    </a>
-                </small>
+        <footer class="w-full py-6 px-4 text-center text-xs text-cloudy-400 border-t border-slate-100 bg-white/60 backdrop-blur-md">
+            <div class="inline-flex items-center gap-2 flex-wrap justify-center">
+                <span class="font-medium text-ocean-900/80">{{ $web_setting?->web_title ?? 'PEMILOS' }} &copy; {{ date('Y') }}</span>
+                <span>•</span>
+                <span class="font-medium text-ocean-900">Zidan Fathul</span>
+                <span>•</span>
+                <a href="https://instagram.com/zidan_kebanyakan_tugas" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600 font-medium transition-colors inline-flex items-center gap-1">
+                    <i class="bi bi-instagram text-pink-500"></i>@zidan_kebanyakan_tugas
+                </a>
             </div>
         </footer>
     </div>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('user-page/assets/vendor/aos/aos.js') }}"></script>
 
     <script>
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-
         const osisCandidate = <?php echo Illuminate\Support\Js::from($osis_candidate) ?>;
         const currentUser = <?php echo isset($current_user) ? Illuminate\Support\Js::from($current_user) : 'null' ?>;
 
@@ -396,6 +442,7 @@
                 currentUser,
                 status: '',
                 loading: false,
+                showModal: false,
                 countdown: {
                     days: '00',
                     hours: '00',
@@ -404,6 +451,12 @@
                 }
             },
             methods: {
+                openVisiMisiModal: function() {
+                    this.showModal = true;
+                },
+                closeVisiMisiModal: function() {
+                    this.showModal = false;
+                },
                 confirmVote: function(candidate) {
                     if (this.loading) return;
 
@@ -423,7 +476,7 @@
                     }
 
                     let sloganHtml = candidate.slogan 
-                        ? `<div class="font-italic small my-2" style="color: #2872A1; font-weight: 600;">“${candidate.slogan}”</div>` 
+                        ? `<div class="italic text-xs my-2 text-ocean-600 font-medium">“${candidate.slogan}”</div>` 
                         : '';
 
                     let vm = this;
@@ -431,27 +484,27 @@
                     Swal.fire({
                         title: 'Konfirmasi Pilihan Suara',
                         html: `
-                            <div class="text-left p-3 rounded" style="background: rgba(244, 248, 250, 0.95); border: 1.5px solid #CBDDE9; border-radius: 16px;">
-                                <div class="text-center mb-2">
-                                    <span class="badge px-3 py-1 font-weight-bold text-white" style="font-size: 0.95rem; border-radius: 999px; background: #2872A1;">
+                            <div class="text-left p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                                <div class="text-center mb-3">
+                                    <span class="inline-block px-3 py-1 font-bold text-white text-xs rounded-full bg-ocean-500 shadow-sm">
                                         Paslon #${candidate.sequence_number}
                                     </span>
-                                    <h5 class="mt-2 mb-1 font-weight-bold" style="font-size: 1.15rem; color: #0e2738;">${candidateTitle}</h5>
+                                    <h4 class="mt-2 font-display font-bold text-base text-ocean-950">${candidateTitle}</h4>
                                     ${sloganHtml}
                                 </div>
-                                <div class="p-2 bg-white rounded border mb-2 text-dark small" style="border-color: #CBDDE9 !important;">
-                                    <div class="d-flex justify-content-between align-items-center py-1">
+                                <div class="p-3 bg-white rounded-xl border border-slate-100 text-xs space-y-1.5 text-ocean-900">
+                                    <div class="flex justify-between items-center">
                                         <span><strong>Ketua:</strong> ${candidate.name}</span>
-                                        <span class="candidate-class-badge">${candidate.class}</span>
+                                        <span class="bg-slate-100 px-2 py-0.5 rounded font-bold">${candidate.class}</span>
                                     </div>
                                     ${candidate.vice_name ? `
-                                    <div class="d-flex justify-content-between align-items-center py-1 border-top" style="border-color: #EBF3F8 !important;">
+                                    <div class="flex justify-between items-center pt-1.5 border-t border-slate-100">
                                         <span><strong>Wakil:</strong> ${candidate.vice_name}</span>
-                                        <span class="candidate-class-badge">${candidate.vice_class}</span>
+                                        <span class="bg-slate-100 px-2 py-0.5 rounded font-bold">${candidate.vice_class}</span>
                                     </div>` : ''}
                                 </div>
-                                <div class="text-muted small text-center mt-2">
-                                    <i class="bi bi-shield-exclamation mr-1" style="color: #2872A1;"></i>
+                                <div class="text-cloudy-500 text-[11px] text-center mt-3">
+                                    <i class="bi bi-shield-exclamation text-ocean-500 mr-1"></i>
                                     Pilihan suara Anda bersifat final dan <strong>tidak dapat diubah</strong> setelah dikonfirmasi.
                                 </div>
                             </div>
@@ -460,8 +513,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#2872A1',
                         cancelButtonColor: '#94a3b8',
-                        confirmButtonText: '<i class="bi bi-check2-circle mr-1"></i> Ya, Pilih Sekarang',
-                        cancelButtonText: '<i class="bi bi-x-circle mr-1"></i> Batal',
+                        confirmButtonText: 'Ya, Pilih Sekarang',
+                        cancelButtonText: 'Batal',
                         reverseButtons: true,
                         showLoaderOnConfirm: true,
                         allowOutsideClick: () => !Swal.isLoading(),
@@ -526,7 +579,6 @@
                     return n < 10 ? '0' + n : '' + n;
                 }
 
-                // Sesi belum dimulai
                 if (distToStart > 0) {
                     app.status = '';
                     var d = Math.floor(distToStart / (1000 * 60 * 60 * 24));
@@ -535,7 +587,6 @@
                     var s = Math.floor((distToStart % (1000 * 60)) / 1000);
                     app.countdown = { days: formatNum(d), hours: formatNum(h), minutes: formatNum(m), seconds: formatNum(s) };
                 }
-                // Sesi sedang berlangsung
                 else if (distToStart <= 0 && distToEnd > 0) {
                     app.status = 'buka';
                     var d = Math.floor(distToEnd / (1000 * 60 * 60 * 24));
@@ -544,7 +595,6 @@
                     var s = Math.floor((distToEnd % (1000 * 60)) / 1000);
                     app.countdown = { days: formatNum(d), hours: formatNum(h), minutes: formatNum(m), seconds: formatNum(s) };
                 }
-                // Sesi selesai
                 else {
                     clearInterval(timerInterval);
                     app.status = 'tutup';

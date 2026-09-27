@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        color: #0b1e2c;
+        background-color: #F8FAFC;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Outfit', system-ui, sans-serif;
+        letter-spacing: -0.025em;
+    }
+}
+
+@layer components {
+    /* ---------------- Fluid Canvas Texture ---------------- */
+    .mesh-gradient-bg {
+        background-color: #F8FAFC;
+        background-image: 
+            radial-gradient(at 10% 12%, rgba(203, 221, 233, 0.45) 0px, transparent 50%),
+            radial-gradient(at 90% 20%, rgba(40, 114, 161, 0.08) 0px, transparent 50%),
+            radial-gradient(at 50% 85%, rgba(203, 221, 233, 0.35) 0px, transparent 55%),
+            radial-gradient(at 85% 90%, rgba(40, 114, 161, 0.06) 0px, transparent 50%);
+        background-attachment: fixed;
+    }
+
+    /* ---------------- Double-Bezel (Doppelrand) Architecture ---------------- */
+    .bezel-card-shell {
+        @apply relative p-1.5 sm:p-2 rounded-[2rem] bg-white/70 border border-white/80 shadow-bezel backdrop-blur-xl transition-all duration-500 ease-spring;
+    }
+
+    .bezel-card-shell:hover {
+        @apply shadow-bezel-hover -translate-y-1.5 border-ocean-200/90;
+    }
+
+    .bezel-card-core {
+        @apply relative h-full rounded-[calc(2rem-0.5rem)] bg-white/90 p-5 sm:p-6 border border-slate-100/90 shadow-inner-glass overflow-hidden flex flex-col;
+    }
+
+    /* ---------------- Floating Island Nav ---------------- */
+    .floating-island-nav {
+        @apply fixed top-4 inset-x-0 mx-auto w-[94%] max-w-5xl z-50 rounded-full bg-white/85 backdrop-blur-2xl border border-white/90 shadow-island px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between transition-all duration-300 ease-spring;
+    }
+
+    /* ---------------- Button-in-Button CTA Architecture ---------------- */
+    .btn-island-primary {
+        @apply relative inline-flex items-center justify-between gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-ocean-500 to-ocean-600 text-white font-display font-bold text-sm sm:text-base shadow-glow hover:from-ocean-600 hover:to-ocean-700 active:scale-[0.98] transition-all duration-300 ease-spring cursor-pointer border border-white/20 select-none;
+    }
+
+    .btn-island-icon {
+        @apply w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 shrink-0;
+    }
+
+    .btn-island-primary:hover .btn-island-icon {
+        transform: translateX(3px) scale(1.05);
+    }
+
+    .btn-island-secondary {
+        @apply relative inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/80 text-ocean-950 font-display font-bold text-xs sm:text-sm border border-white/90 shadow-sm hover:bg-white hover:text-ocean-600 hover:shadow-md active:scale-[0.98] transition-all duration-300 ease-spring cursor-pointer select-none;
+    }
+
+    /* ---------------- Modern Micro Eyebrow Badges ---------------- */
+    .eyebrow-badge {
+        @apply inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.18em] text-ocean-600 bg-ocean-50 border border-ocean-200/80 shadow-sm;
+    }
+
+    /* ---------------- Tactile Form Inputs ---------------- */
+    .input-island {
+        @apply w-full bg-white/90 border border-cloudy-300/80 rounded-2xl px-4 py-3 sm:py-3.5 text-ocean-950 font-sans text-sm sm:text-base shadow-[inset_0_1.5px_3px_rgba(15,23,42,0.03)] placeholder:text-cloudy-400 focus:outline-none focus:border-ocean-500 focus:bg-white focus:ring-4 focus:ring-ocean-500/15 transition-all duration-200 ease-spring;
+    }
+}

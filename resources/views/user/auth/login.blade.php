@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Login Bilik Suara | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
-    <meta name="description" content="Otentikasi Pemilih E-Voting OSIS - Bilik Suara Mandiri & Rahasia">
+    <title>Bilik Suara Digital | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
+    <meta name="description" content="Portal Otentikasi Pemilih E-Voting OSIS - Bilik Suara Mandiri, Sah, dan Rahasia">
 
     <!-- Favicons -->
     <link href="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" rel="icon">
@@ -14,167 +14,178 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap & Icons -->
-    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
 
-    <!-- Glassmorphism & Claymorphism Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
+    <!-- Compiled Tailwind CSS -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
-<body>
-    <div class="ambient-wrapper glass-auth-wrapper">
-        <div class="glass-login-card">
-            <!-- Header Section -->
-            <div class="glass-login-header">
-                <div class="d-flex align-items-center justify-content-center mb-3">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill" style="background: var(--cloudy-sky-light); border: 1.5px solid var(--cloudy-sky); color: var(--ocean-dark); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: inset 1px 1px 2px rgba(255,255,255,0.9);">
-                        <span class="status-dot"></span> Bilik Suara Elektronik
+<body class="min-h-[100dvh] mesh-gradient-bg flex flex-col justify-between text-ocean-950 font-sans antialiased selection:bg-ocean-500 selection:text-white">
+    <!-- Top Micro Banner -->
+    <header class="w-full pt-6 px-4 flex justify-center">
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 border border-white/90 shadow-sm backdrop-blur-md text-xs font-semibold text-ocean-800">
+            <span class="w-2 h-2 rounded-full bg-ocean-500 animate-pulse shadow-[0_0_8px_rgba(40,114,161,0.6)]"></span>
+            <span>Bilik Suara Elektronik Terverifikasi</span>
+            <span class="text-cloudy-300">•</span>
+            <span class="text-cloudy-500 font-normal">{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
+        </div>
+    </header>
+
+    <!-- Main Auth Center Content -->
+    <main class="flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+        <div class="bezel-card-shell w-full max-w-[460px]">
+            <div class="bezel-card-core">
+                <!-- Card Header -->
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-white to-ocean-50 border border-white/90 p-3 shadow-[0_10px_25px_rgba(40,114,161,0.08),inset_0_1px_2px_rgba(255,255,255,1)] flex items-center justify-center transition-transform duration-500 hover:scale-105">
+                        <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" 
+                             alt="Logo OSIS" 
+                             class="max-w-full max-h-full object-contain filter drop-shadow">
                     </div>
+
+                    <div class="eyebrow-badge mb-2">
+                        <i class="bi bi-award-fill text-ocean-500"></i>
+                        <span>{{ $web_setting?->school_name ?? 'PEMILOS DIGITAL' }}</span>
+                    </div>
+
+                    <h1 class="text-2xl sm:text-3xl font-display font-extrabold text-ocean-950 tracking-tight text-balance">
+                        Bilik Suara Pemilih
+                    </h1>
+                    <p class="mt-1.5 text-xs sm:text-sm text-cloudy-500 text-balance leading-relaxed max-w-[340px] mx-auto">
+                        Masukkan kredensial kartu suara untuk memberikan hak pilih Anda secara sah, mandiri, dan rahasia.
+                    </p>
                 </div>
 
-                <div class="glass-login-logo">
-                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
-                </div>
-
-                <div class="school-badge mb-2">
-                    <i class="bi bi-award-fill"></i>
-                    <span>{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
-                </div>
-
-                <h1 class="glass-login-title" style="letter-spacing: -0.03em; text-wrap: balance;">
-                    Bilik Suara Pemilih
-                </h1>
-                <p class="glass-login-subtitle" style="text-wrap: balance; max-width: 380px; margin: 0 auto;">
-                    Masukkan Username dan Kode Akses kartu suara Anda untuk memberikan hak suara secara sah dan rahasia.
-                </p>
-            </div>
-
-            <!-- Flash Notifications -->
-            @if (Session::has('success'))
-            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(40, 114, 161, 0.12); color: var(--ocean-dark); font-weight: 600; border-left: 4px solid var(--ocean-blue) !important;">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-check-circle-fill mr-1" style="color: var(--ocean-blue); font-size: 1.15rem;"></i>
+                <!-- Flash Message Alerts -->
+                @if (Session::has('success'))
+                <div class="mb-5 p-3.5 rounded-2xl bg-ocean-50/90 border border-ocean-200/90 text-ocean-800 text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-sm">
+                    <i class="bi bi-check-circle-fill text-ocean-600 text-base shrink-0"></i>
                     <span>{{ Session::get('success') }}</span>
                 </div>
-            </div>
-            @endif
+                @endif
 
-            @if (Session::has('error'))
-            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(239, 68, 68, 0.12); color: #991b1b; font-weight: 600; border-left: 4px solid #ef4444 !important;">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-triangle-fill mr-1 text-danger" style="font-size: 1.15rem;"></i>
+                @if (Session::has('error'))
+                <div class="mb-5 p-3.5 rounded-2xl bg-rose-50/90 border border-rose-200/90 text-rose-800 text-xs sm:text-sm font-medium flex items-center gap-2.5 shadow-sm">
+                    <i class="bi bi-exclamation-triangle-fill text-rose-600 text-base shrink-0"></i>
                     <span>{{ Session::get('error') }}</span>
                 </div>
-            </div>
-            @endif
+                @endif
 
-            @if (isset($errors) && $errors->any())
-            <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert" style="border-radius: var(--clay-radius-sm); background: rgba(245, 158, 11, 0.12); color: #92400e; font-weight: 600; border-left: 4px solid #f59e0b !important;">
-                <div class="d-flex align-items-start gap-2">
-                    <i class="bi bi-info-circle-fill mr-1 text-warning" style="font-size: 1.1rem; margin-top: 2px;"></i>
-                    <ul class="mb-0 pl-2" style="list-style-type: none;">
-                        @foreach ($errors->all() as $err)
-                            <li>{{ $err }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            @endif
-
-            <!-- Auth Form -->
-            <form action="{{ route('auth.user') }}" method="post" id="voterLoginForm">
-                @csrf
-                <div class="glass-input-group mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label class="glass-input-label mb-0" for="nisn">
-                            <i class="bi bi-person-badge-fill mr-1" style="color: var(--ocean-blue);"></i> Username / NISN
-                        </label>
-                        <span class="badge" style="background: var(--cloudy-sky-light); color: var(--ocean-dark); font-size: 0.7rem; font-weight: 700; border-radius: 6px;">KARTU PEMILIH</span>
+                @if (isset($errors) && $errors->any())
+                <div class="mb-5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-amber-900 text-xs sm:text-sm font-medium shadow-sm">
+                    <div class="flex items-start gap-2">
+                        <i class="bi bi-info-circle-fill text-amber-600 text-base shrink-0 mt-0.5"></i>
+                        <ul class="space-y-0.5">
+                            @foreach ($errors->all() as $err)
+                                <li>{{ $err }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <input type="text" 
-                           class="glass-input" 
-                           id="nisn" 
-                           placeholder="Contoh: 12345678" 
-                           name="nisn" 
-                           autocomplete="username" 
-                           value="{{ old('nisn') }}" 
-                           autofocus
-                           required>
                 </div>
+                @endif
 
-                <div class="glass-input-group mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label class="glass-input-label mb-0" for="code_access">
-                            <i class="bi bi-shield-lock-fill mr-1" style="color: var(--ocean-blue);"></i> Token / Kode Akses
-                        </label>
-                        <span class="badge" style="background: var(--cloudy-sky-light); color: var(--ocean-dark); font-size: 0.7rem; font-weight: 700; border-radius: 6px;">KODE RAHASIA</span>
-                    </div>
-                    <div class="glass-input-wrapper">
-                        <input type="password" 
-                               class="glass-input font-weight-bold" 
-                               id="code_access" 
-                               placeholder="Contoh: USR-82910" 
-                               name="code_access" 
-                               autocomplete="off" 
-                               style="letter-spacing: 2px; text-transform: uppercase;"
+                <!-- Auth Form -->
+                <form action="{{ route('auth.user') }}" method="post" id="voterLoginForm" class="space-y-4">
+                    @csrf
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5 px-0.5">
+                            <label for="nisn" class="text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
+                                <i class="bi bi-person-badge-fill text-ocean-500"></i> Username / NISN
+                            </label>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-700 bg-ocean-50 border border-ocean-200/60 px-2 py-0.5 rounded-md">Wajib</span>
+                        </div>
+                        <input type="text" 
+                               class="input-island" 
+                               id="nisn" 
+                               placeholder="Contoh: 12345678" 
+                               name="nisn" 
+                               autocomplete="username" 
+                               value="{{ old('nisn') }}" 
+                               autofocus
                                required>
-                        <button type="button" class="glass-input-toggle" id="toggleCodeBtn" title="Lihat / Sembunyikan Kode">
-                            <i class="bi bi-eye" id="toggleEyeIcon"></i>
-                        </button>
                     </div>
-                </div>
 
-                <!-- Guidance Tip Box -->
-                <div class="glass-login-tip">
-                    <i class="bi bi-info-circle-fill" style="color: var(--ocean-blue); font-size: 1.05rem; margin-top: 1px; flex-shrink: 0;"></i>
-                    <span>Satu kode akses hanya berlaku untuk <strong>1 kali pemilihan</strong> suara. Pastikan Anda menyelesaikan pemilihan hingga tuntas.</span>
-                </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5 px-0.5">
+                            <label for="code_access" class="text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
+                                <i class="bi bi-shield-lock-fill text-ocean-500"></i> Token / Kode Akses
+                            </label>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-700 bg-ocean-50 border border-ocean-200/60 px-2 py-0.5 rounded-md">Rahasia</span>
+                        </div>
+                        <div class="relative flex items-center">
+                            <input type="password" 
+                                   class="input-island pr-11 font-mono tracking-widest uppercase font-bold" 
+                                   id="code_access" 
+                                   placeholder="Contoh: USR-82910" 
+                                   name="code_access" 
+                                   autocomplete="off" 
+                                   required>
+                            <button type="button" 
+                                    id="toggleCodeBtn" 
+                                    class="absolute right-3 p-1.5 text-cloudy-400 hover:text-ocean-600 transition-colors duration-200 focus:outline-none"
+                                    title="Tampilkan / Sembunyikan Kode">
+                                <i class="bi bi-eye text-lg" id="toggleEyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                <button type="submit" class="glass-btn-primary mb-3" id="submitBtn">
-                    <span id="btnText"><i class="bi bi-box-arrow-in-right mr-1"></i> Masuk ke Bilik Suara</span>
-                    <span id="btnSpinner" style="display: none;">
-                        <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-                        Memverifikasi Hak Suara...
-                    </span>
-                </button>
+                    <!-- Guidance Tip Box -->
+                    <div class="p-3 rounded-2xl bg-ocean-50/60 border border-dashed border-ocean-200/80 text-ocean-800 text-[11px] sm:text-xs leading-relaxed flex items-start gap-2.5">
+                        <i class="bi bi-shield-check text-ocean-600 text-sm shrink-0 mt-0.5"></i>
+                        <span>Satu kode akses hanya berlaku untuk <strong>1 kali pemungutan suara</strong>. Pastikan Anda menyelesaikan pilihan sebelum menutup jendela.</span>
+                    </div>
 
-                <!-- Navigation Quick Links -->
-                <div class="d-flex align-items-center justify-content-between pt-3 mt-1" style="border-top: 1.5px solid var(--cloudy-sky-border);">
-                    <a href="/live-count" style="color: var(--text-muted); font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; transition: color 0.2s;" onmouseover="this.style.color='var(--ocean-blue)'" onmouseout="this.style.color='var(--text-muted)'">
-                        <i class="bi bi-broadcast" style="color: var(--ocean-blue);"></i> Pantau Live Count
-                    </a>
-                    <a href="/admin/login" style="color: var(--text-muted); font-size: 0.84rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; transition: color 0.2s;" onmouseover="this.style.color='var(--ocean-blue)'" onmouseout="this.style.color='var(--text-muted)'">
-                        <i class="bi bi-shield-lock-fill" style="color: var(--ocean-blue);"></i> Portal Admin
-                    </a>
-                </div>
-            </form>
+                    <!-- Button-in-Button CTA -->
+                    <button type="submit" id="submitBtn" class="btn-island-primary w-full mt-2">
+                        <span id="btnText" class="flex items-center gap-2">
+                            <span>Masuk ke Bilik Suara</span>
+                        </span>
+                        <span id="btnSpinner" class="hidden items-center gap-2">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            <span>Memverifikasi Hak Suara...</span>
+                        </span>
+                        <div class="btn-island-icon">
+                            <i class="bi bi-arrow-right text-base text-white"></i>
+                        </div>
+                    </button>
+
+                    <!-- Split Navigation Links -->
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-cloudy-500">
+                        <a href="/live-count" class="inline-flex items-center gap-1.5 hover:text-ocean-600 transition-colors">
+                            <i class="bi bi-broadcast text-ocean-500"></i> Pantau Live Count
+                        </a>
+                        <a href="/admin/login" class="inline-flex items-center gap-1.5 hover:text-ocean-600 transition-colors">
+                            <i class="bi bi-shield-lock-fill text-ocean-500"></i> Portal Admin
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
+    </main>
 
-        <!-- Creator & School Watermark -->
-        <div class="text-center mt-3 text-muted small" style="position: relative; z-index: 2;">
-            <span style="color: var(--ocean-navy); font-weight: 700;">Zidan Fathul</span> • 
-            <a href="https://instagram.com/zidan_kebanyakan_tugas" target="_blank" rel="noopener noreferrer" style="color: #e1306c; text-decoration: none; font-weight: 600;">
-                <i class="bi bi-instagram mr-1"></i>@zidan_kebanyakan_tugas
+    <!-- Micro Footer -->
+    <footer class="w-full pb-6 px-4 text-center text-xs text-cloudy-400">
+        <div class="inline-flex items-center gap-2 flex-wrap justify-center">
+            <span class="font-medium text-ocean-900/80">{{ $web_setting?->web_title ?? 'PEMILOS' }} &copy; {{ date('Y') }}</span>
+            <span>•</span>
+            <span class="font-medium text-ocean-900">Zidan Fathul</span>
+            <span>•</span>
+            <a href="https://instagram.com/zidan_kebanyakan_tugas" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600 font-medium transition-colors inline-flex items-center gap-1">
+                <i class="bi bi-instagram text-pink-500"></i>@zidan_kebanyakan_tugas
             </a>
         </div>
-    </div>
+    </footer>
 
-    <!-- Scripts -->
-    <script src="{{ asset('admin-page/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Interactive Client Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto dismiss alert after 5s
-            window.setTimeout(function() {
-                $(".alert").fadeTo(300, 0).slideUp(300, function() {
-                    $(this).remove();
-                });
-            }, 5000);
-
-            // Toggle Token Visibility
+            // Password / Token visibility toggle
             var toggleBtn = document.getElementById('toggleCodeBtn');
             var codeInput = document.getElementById('code_access');
             var eyeIcon = document.getElementById('toggleEyeIcon');
@@ -183,15 +194,15 @@
                 toggleBtn.addEventListener('click', function() {
                     if (codeInput.type === 'password') {
                         codeInput.type = 'text';
-                        eyeIcon.className = 'bi bi-eye-slash';
+                        eyeIcon.className = 'bi bi-eye-slash text-lg text-ocean-600';
                     } else {
                         codeInput.type = 'password';
-                        eyeIcon.className = 'bi bi-eye';
+                        eyeIcon.className = 'bi bi-eye text-lg text-cloudy-400';
                     }
                 });
             }
 
-            // Auto uppercase on code access input
+            // Auto uppercase & space-strip on token entry
             if (codeInput) {
                 codeInput.addEventListener('input', function() {
                     var start = this.selectionStart;
@@ -201,7 +212,7 @@
                 });
             }
 
-            // Double submit prevention with tactile spinner feedback
+            // Tactile Loading State on Submit
             var loginForm = document.getElementById('voterLoginForm');
             var submitBtn = document.getElementById('submitBtn');
             var btnText = document.getElementById('btnText');
@@ -210,10 +221,12 @@
             if (loginForm && submitBtn) {
                 loginForm.addEventListener('submit', function() {
                     submitBtn.disabled = true;
-                    submitBtn.style.opacity = '0.85';
-                    submitBtn.style.cursor = 'wait';
-                    if (btnText) btnText.style.display = 'none';
-                    if (btnSpinner) btnSpinner.style.display = 'inline-flex';
+                    submitBtn.classList.add('opacity-80', 'cursor-wait');
+                    if (btnText) btnText.classList.add('hidden');
+                    if (btnSpinner) {
+                        btnSpinner.classList.remove('hidden');
+                        btnSpinner.classList.add('flex');
+                    }
                 });
             }
         });
