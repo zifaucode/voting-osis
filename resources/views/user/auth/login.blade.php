@@ -91,12 +91,9 @@
                 <form action="{{ route('auth.user') }}" method="post" id="voterLoginForm" class="space-y-4">
                     @csrf
                     <div>
-                        <div class="flex justify-between items-center mb-1.5 px-0.5">
-                            <label for="nisn" class="text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
-                                <i class="bi bi-person-badge-fill text-ocean-500"></i> Username
-                            </label>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-700 bg-ocean-50 border border-ocean-200/60 px-2 py-0.5 rounded-md">Wajib</span>
-                        </div>
+                        <label for="nisn" class="block mb-1.5 px-0.5 text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
+                            <i class="bi bi-person-badge-fill text-ocean-500"></i> Username
+                        </label>
                         <input type="text" 
                                class="input-island" 
                                id="nisn" 
@@ -109,12 +106,9 @@
                     </div>
 
                     <div>
-                        <div class="flex justify-between items-center mb-1.5 px-0.5">
-                            <label for="code_access" class="text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
-                                <i class="bi bi-shield-lock-fill text-ocean-500"></i> Token / Kode Akses
-                            </label>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-ocean-700 bg-ocean-50 border border-ocean-200/60 px-2 py-0.5 rounded-md">Rahasia</span>
-                        </div>
+                        <label for="code_access" class="block mb-1.5 px-0.5 text-xs sm:text-sm font-bold text-ocean-900 flex items-center gap-1.5">
+                            <i class="bi bi-shield-lock-fill text-ocean-500"></i> Token / Kode Akses
+                        </label>
                         <div class="relative flex items-center">
                             <input type="password" 
                                    class="input-island pr-11 font-mono tracking-widest uppercase font-bold" 
@@ -155,11 +149,8 @@
                         </div>
                     </button>
 
-                    <!-- Split Navigation Links -->
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-cloudy-500">
-                        <a href="/live-count" class="inline-flex items-center gap-1.5 hover:text-ocean-600 transition-colors">
-                            <i class="bi bi-broadcast text-ocean-500"></i> Pantau Live Count
-                        </a>
+                    <!-- Navigation Link -->
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-center text-xs font-semibold text-cloudy-500">
                         <a href="/admin/login" class="inline-flex items-center gap-1.5 hover:text-ocean-600 transition-colors">
                             <i class="bi bi-shield-lock-fill text-ocean-500"></i> Portal Admin
                         </a>
