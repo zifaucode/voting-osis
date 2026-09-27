@@ -246,54 +246,90 @@
                         </div>
                         <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-ocean-50 text-ocean-700 border border-ocean-100">Suara Sah</span>
                     </div>
-                    <div class="relative w-full" style="height:300px">
+                    <div class="relative w-full" style="height:320px">
                         <canvas id="liveBarChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Doughnut Chart -->
+            <!-- Proporsi Persentase (Progress Bar Paslon) -->
             <div class="lg:col-span-5 bezel-card-shell">
-                <div class="bezel-card-core p-5 sm:p-6">
-                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div class="bezel-card-core p-5 sm:p-6 flex flex-col justify-between">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-xl bg-cloudy-100 text-cloudy-600 flex items-center justify-center text-sm">
-                                <i class="bi bi-pie-chart-fill"></i>
+                            <div class="w-8 h-8 rounded-xl bg-ocean-50 text-ocean-500 flex items-center justify-center text-sm">
+                                <i class="bi bi-bar-chart-fill"></i>
                             </div>
                             <h3 class="font-display font-bold text-sm sm:text-base text-ocean-950">Proporsi Persentase</h3>
                         </div>
-                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cloudy-100 text-cloudy-600 border border-cloudy-200">%</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-ocean-50 text-ocean-700 border border-ocean-100">Live Update</span>
                     </div>
-                    <div class="relative w-full" style="height:300px">
-                        <canvas id="livePieChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- ─── Candidate Cards ─── -->
-        <div class="anim-fade-up anim-d3">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="font-display font-extrabold text-xl sm:text-2xl text-ocean-950">
-                    Rincian Perolehan Setiap Paslon
-                </h2>
-                <div class="eyebrow-badge text-[10px]">
-                    <span class="relative flex w-2 h-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ocean-400 opacity-60"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-ocean-500"></span>
-                    </span>
-                    Live Update
-                </div>
-            </div>
+                    <div id="candidateProgressContainer" class="space-y-3 flex-1 flex flex-col justify-center">
+                        @if (isset($initial_payload['candidates']) && count($initial_payload['candidates']) > 0)
+                            @php
+                                $palette = [
+                                    ['bg' => '#2872A1', 'border' => '#1e5e86', 'light' => 'rgba(240,247,251,0.9)'],
+                                    ['bg' => '#0d9488', 'border' => '#0f766e', 'light' => 'rgba(240,253,250,0.9)'],
+                                    ['bg' => '#d97706', 'border' => '#b45309', 'light' => 'rgba(255,251,235,0.9)'],
+                                    ['bg' => '#7c3aed', 'border' => '#6d28d9', 'light' => 'rgba(245,243,255,0.9)'],
+                                    ['bg' => '#db2777', 'border' => '#be185d', 'light' => 'rgba(253,242,248,0.9)'],
+                                ];
+                                $maxVotes = collect($initial_payload['candidates'])->max('votes') ?? 0;
+                            @endphp
+                            @foreach ($initial_payload['candidates'] as $idx => $cand)
+                                @php
+                                    $col = $palette[$idx % count($palette)];
+                                    $isLeader = ($maxVotes > 0 && ($cand['votes'] ?? 0) === $maxVotes);
+                                @endphp
+                                <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-50/80 border {{ $isLeader ? 'border-amber-300 shadow-sm bg-gradient-to-r from-amber-50/40 to-white' : 'border-slate-100/90' }} transition-all">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <!-- Photo Thumbnail with number badge -->
+                                        <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/80 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                                            <img src="{{ $cand['image'] ? asset('file/image/' . $cand['image']) : asset('gambar/logo-osis.png') }}"
+                                                 onerror="this.src='{{ asset('gambar/logo-osis.png') }}'"
+                                                 alt="{{ $cand['name'] }}"
+                                                 class="max-w-full max-h-full object-contain">
+                                            <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:{{ $col['bg'] }}">
+                                                #{{ $cand['sequence_number'] }}
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Details -->
+                                        <div class="min-w-0 flex-1">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate flex items-center gap-1.5">
+                                                    <span>{{ $cand['name'] }}</span>
+                                                    @if($isLeader)
+                                                        <span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200">
+                                                            <i class="bi bi-trophy-fill text-[8px] text-amber-600"></i> Unggul
+                                                        </span>
+                                                    @endif
+                                                </h4>
+                                                <span class="text-xs font-black tabular-nums shrink-0" style="color:{{ $col['bg'] }}">
+                                                    {{ $cand['percentage'] }}%
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center justify-between gap-2 text-[11px] text-cloudy-500 mt-0.5">
+                                                <span class="truncate">{{ $cand['vice_name'] ? '& ' . $cand['vice_name'] : ($cand['class'] ?? 'Kandidat') }}</span>
+                                                <span class="font-semibold text-ocean-900 shrink-0">{{ number_format($cand['votes'] ?? 0, 0, ',', '.') }} suara</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5" id="candidateCardsContainer">
-                <!-- Loading placeholder -->
-                <div class="col-span-full flex items-center justify-center py-12 text-cloudy-400">
-                    <div class="text-center">
-                        <div class="w-10 h-10 mx-auto mb-2.5 rounded-2xl bg-ocean-50 border border-ocean-100 text-ocean-400 flex items-center justify-center text-xl">
-                            <i class="bi bi-broadcast"></i>
-                        </div>
-                        <p class="text-xs font-semibold">Memuat data kandidat…</p>
+                                    <!-- Progress Bar -->
+                                    <div class="w-full h-2 rounded-full bg-slate-200/70 overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-700" 
+                                             style="width:{{ min(100, $cand['percentage'] ?? 0) }}%; background:linear-gradient(90deg, {{ $col['bg'] }}, {{ $col['border'] }})">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="py-8 text-center text-xs text-cloudy-400">
+                                Memuat data paslon...
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -331,7 +367,32 @@
             { bg: '#db2777', border: '#be185d', light: 'rgba(253,242,248,0.9)' },
         ];
 
-        let barChart = null, pieChart = null;
+        let barChart = null;
+
+        // ── Custom Plugin: Tampilkan Jumlah Pemilih di Atas Setiap Bar ─────────────
+        const barTopLabelsPlugin = {
+            id: 'barTopLabels',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                chart.data.datasets.forEach((dataset, datasetIndex) => {
+                    const meta = chart.getDatasetMeta(datasetIndex);
+                    if (!meta || meta.hidden) return;
+                    meta.data.forEach((bar, index) => {
+                        const val = dataset.data[index];
+                        if (val === undefined || val === null) return;
+
+                        const text = Number(val).toLocaleString('id-ID') + ' Suara';
+                        ctx.save();
+                        ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillStyle = '#0b1e2c';
+                        ctx.fillText(text, bar.x, Math.max(bar.y - 6, 16));
+                        ctx.restore();
+                    });
+                });
+            }
+        };
 
         // ── Init Charts ─────────────────────────────────────────────────────────
         function initCharts() {
@@ -343,11 +404,13 @@
                     backgroundColor: PALETTE.map(p => p.bg + 'cc'),
                     borderColor: PALETTE.map(p => p.border),
                     borderWidth: 1.5, borderRadius: 10, maxBarThickness: 56 }] },
+                plugins: [barTopLabelsPlugin],
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     animation: { duration: 600, easing: 'easeOutQuart' },
                     scales: {
                         y: { beginAtZero: true,
+                             grace: '18%',
                              ticks: { precision: 0, font: { ...baseFont, weight: '600' }, color: '#64748b' },
                              grid: { color: 'rgba(203,221,233,0.35)', drawBorder: false } },
                         x: { ticks: { autoSkip: false, maxRotation: 0, minRotation: 0, font: { ...baseFont, weight: '700', size: 11 }, color: '#0b1e2c' },
@@ -361,30 +424,6 @@
                             bodyFont: { ...baseFont, size: 12 },
                             padding: 12, cornerRadius: 12,
                             callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString('id-ID') + ' suara' }
-                        }
-                    }
-                }
-            });
-
-            pieChart = new Chart(document.getElementById('livePieChart').getContext('2d'), {
-                type: 'doughnut',
-                data: { labels: [], datasets: [{ data: [],
-                    backgroundColor: PALETTE.map(p => p.bg),
-                    borderColor: '#ffffff', borderWidth: 3, hoverOffset: 8 }] },
-                options: {
-                    responsive: true, maintainAspectRatio: false, cutout: '68%',
-                    animation: { duration: 600, easing: 'easeOutQuart' },
-                    plugins: {
-                        legend: { position: 'bottom', labels: {
-                            font: { ...baseFont, weight: '700' },
-                            boxWidth: 12, boxHeight: 12, useBorderRadius: true, borderRadius: 4,
-                            padding: 16, color: '#0b1e2c' }
-                        },
-                        tooltip: {
-                            backgroundColor: '#0b1e2c',
-                            titleFont: { ...baseFont, weight: '700', size: 13 },
-                            bodyFont: { ...baseFont, size: 12 }, padding: 12, cornerRadius: 12,
-                            callbacks: { label: ctx => ' ' + ctx.parsed.toFixed(1) + '%' }
                         }
                     }
                 }
@@ -439,11 +478,7 @@
                 return line2 ? [line1, line2] : [line1];
             });
 
-            const pieLabels = data.candidates.map(c =>
-                '#' + c.sequence_number + ' ' + c.name + (c.vice_name ? ' & ' + c.vice_name : '')
-            );
-            const votes  = data.candidates.map(c => c.votes || 0);
-            const percs  = data.candidates.map(c => parseFloat(c.percentage) || 0);
+            const votes = data.candidates.map(c => c.votes || 0);
 
             if (barChart) {
                 barChart.data.labels = barLabels;
@@ -454,100 +489,68 @@
                 barChart.update();
             }
 
-            if (pieChart) {
-                pieChart.data.labels = pieLabels;
-                pieChart.data.datasets[0].data = percs;
-                pieChart.update();
-            }
-
-            renderCandidateCards(data.candidates, leaderIdx);
+            renderProgressBars(data.candidates, leaderIdx);
         }
 
-        // ── Candidate Cards Renderer (Compact 3-in-a-row) ───────────────────────
-        function renderCandidateCards(candidates, leaderIdx) {
-            const container = document.getElementById('candidateCardsContainer');
+        // ── Candidate Progress Bars Renderer (Gantikan Donut Chart & Rincian Bawah) ─────────────
+        function renderProgressBars(candidates, leaderIdx) {
+            const container = document.getElementById('candidateProgressContainer');
+            if (!container) return;
             container.innerHTML = '';
 
             candidates.forEach((cand, idx) => {
-                const color    = PALETTE[idx % PALETTE.length];
+                const color = PALETTE[idx % PALETTE.length];
                 const isWinner = idx === leaderIdx && cand.votes > 0;
+                const pct = parseFloat(cand.percentage) || 0;
+                const votes = parseInt(cand.votes || 0);
 
-                const col = document.createElement('div');
-                col.className = 'bezel-card-shell relative transition-all duration-300 ' + (isWinner ? 'card-winner' : '');
+                const row = document.createElement('div');
+                row.className = 'p-2.5 sm:p-3 rounded-2xl bg-slate-50/80 border ' + 
+                    (isWinner ? 'border-amber-300 shadow-sm bg-gradient-to-r from-amber-50/40 to-white' : 'border-slate-100/90') + 
+                    ' transition-all duration-300';
 
                 const winnerBadge = isWinner ? `
-                    <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-white text-[10px] font-bold uppercase tracking-wider shadow-md border border-amber-300 whitespace-nowrap" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
-                        <i class="bi bi-trophy-fill" style="font-size:9px"></i> Unggul
-                    </div>
+                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold uppercase bg-amber-100 text-amber-800 border border-amber-200">
+                        <i class="bi bi-trophy-fill text-[8px] text-amber-600"></i> Unggul
+                    </span>
                 ` : '';
 
-                const sloganHtml = cand.slogan ? `
-                    <div class="my-1.5 px-2.5 py-1 rounded-lg border text-center font-medium italic text-[11px] truncate leading-tight" style="background:${color.light};border-color:${color.bg}25;color:${color.border}" title="${cand.slogan}">
-                        &ldquo;${cand.slogan}&rdquo;
-                    </div>
-                ` : '';
+                const subText = cand.vice_name ? '& ' + cand.vice_name : (cand.class || 'Kandidat');
 
-                const viceHtml = cand.vice_name ? `
-                    <div class="pt-1.5 border-t border-slate-200/60 flex items-center justify-between gap-1.5">
+                row.innerHTML = `
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-slate-200/80 p-1 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+                            <img src="${cand.image ? '/file/image/' + cand.image : '/gambar/logo-osis.png'}"
+                                 onerror="this.src='/gambar/logo-osis.png'"
+                                 alt="${cand.name}"
+                                 class="max-w-full max-h-full object-contain">
+                            <span class="absolute top-0.5 left-0.5 px-1.5 py-0.2 rounded text-[9px] font-extrabold text-white shadow-xs leading-tight" style="background:${color.bg}">
+                                #${cand.sequence_number}
+                            </span>
+                        </div>
                         <div class="min-w-0 flex-1">
-                            <span class="block text-[9px] font-bold uppercase tracking-wider text-cloudy-400">Calon Wakil</span>
-                            <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate">${cand.vice_name}</h4>
+                            <div class="flex items-center justify-between gap-2">
+                                <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate flex items-center gap-1.5">
+                                    <span>${cand.name}</span>
+                                    ${winnerBadge}
+                                </h4>
+                                <span class="text-xs font-black tabular-nums shrink-0" style="color:${color.bg}">
+                                    ${cand.percentage}%
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between gap-2 text-[11px] text-cloudy-500 mt-0.5">
+                                <span class="truncate">${subText}</span>
+                                <span class="font-semibold text-ocean-900 shrink-0">${votes.toLocaleString('id-ID')} suara</span>
+                            </div>
                         </div>
-                        <span class="text-[10px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-1.5 py-0.5 rounded shrink-0">${cand.vice_class || '—'}</span>
                     </div>
-                ` : '';
-
-                col.innerHTML = `
-                    ${winnerBadge}
-                    <div class="bezel-card-core p-3.5 sm:p-4 flex flex-col justify-between h-full">
-                        <!-- Top Header Strip -->
-                        <div>
-                            <div class="flex items-center justify-between gap-2 mb-2">
-                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-white font-display font-extrabold text-xs shadow-sm" style="background:${color.bg}">
-                                    <i class="bi bi-star-fill text-[9px]"></i> #${cand.sequence_number}
-                                </span>
-                                <span class="text-xs font-bold text-ocean-950 bg-slate-100/90 border border-slate-200/80 px-2.5 py-0.5 rounded-full tabular-nums">
-                                    ${parseInt(cand.votes).toLocaleString('id-ID')} Suara
-                                </span>
-                            </div>
-
-                            <!-- Compact Photo Container -->
-                            <div class="relative w-full h-28 sm:h-32 my-2 rounded-xl overflow-hidden border border-slate-100/90 flex items-center justify-center p-2 group" style="background:linear-gradient(135deg,${color.light},#ffffff)">
-                                <img src="${cand.image ? '/file/image/' + cand.image : '/gambar/logo-osis.png'}"
-                                     onerror="this.src='/gambar/logo-osis.png'"
-                                     alt="${cand.name}"
-                                     class="max-w-full max-h-full object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105">
-                            </div>
-
-                            ${sloganHtml}
-
-                            <!-- Candidate Details -->
-                            <div class="p-2.5 my-2 rounded-xl bg-slate-50/80 border border-slate-100/90 space-y-1.5">
-                                <div class="flex items-center justify-between gap-1.5">
-                                    <div class="min-w-0 flex-1">
-                                        <span class="block text-[9px] font-bold uppercase tracking-wider" style="color:${color.bg}">Calon Ketua</span>
-                                        <h4 class="font-display font-bold text-xs sm:text-sm text-ocean-950 truncate">${cand.name}</h4>
-                                    </div>
-                                    <span class="text-[10px] font-bold text-ocean-900 bg-white border border-slate-200/80 px-1.5 py-0.5 rounded shrink-0">${cand.class || '—'}</span>
-                                </div>
-                                ${viceHtml}
-                            </div>
-                        </div>
-
-                        <!-- Vote Progress Footer -->
-                        <div class="pt-2 mt-auto border-t border-slate-100">
-                            <div class="flex justify-between items-center text-xs mb-1">
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-cloudy-400">Persentase</span>
-                                <span class="font-black text-xs tabular-nums" style="color:${color.bg}">${cand.percentage}%</span>
-                            </div>
-                            <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                                <div class="h-full rounded-full progress-grow transition-all duration-700"
-                                     style="width:${cand.percentage}%;background:linear-gradient(90deg,${color.bg},${color.border})"></div>
-                            </div>
+                    <div class="w-full h-2 rounded-full bg-slate-200/70 overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-700"
+                             style="width:${Math.min(pct, 100)}%; background:linear-gradient(90deg, ${color.bg}, ${color.border})">
                         </div>
                     </div>
                 `;
-                container.appendChild(col);
+                container.appendChild(row);
             });
         }
 
