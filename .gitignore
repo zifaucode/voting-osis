@@ -17,3 +17,31 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+*.sql
+*.xlsx
+*.xls
+!public/file/format/*.xlsx
+/public/file/excel/*
+!public/file/excel/.gitkeep
+
+# Database & SQLite files
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+/database/*.sqlite
+/database/*.sqlite-wal
+/database/*.sqlite-shm
+
+# Backups & private storage
+/storage/backups/*
+!storage/backups/.gitkeep
+/storage/app/imports/*
+!storage/app/imports/.gitkeep
+
+# Realtime Server Node modules
+/realtime-server/node_modules/
+
+# Agent & local assistant configs
+/.agents/
+skills-lock.json
+

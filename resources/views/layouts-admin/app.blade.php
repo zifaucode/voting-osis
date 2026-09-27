@@ -31,6 +31,21 @@
             padding-top: 10px;
             padding-bottom: 10px;
         }
+
+        /* Fix: Override AdminLTE Layout.js min-height to prevent footer mid-page */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .content-wrapper {
+            min-height: auto !important;
+            flex: 1 1 auto;
+        }
+        .main-footer {
+            flex-shrink: 0;
+            margin-top: auto;
+        }
     </style>
 
     @yield('header')
@@ -38,23 +53,17 @@
 
 
 
-<body>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        @include('layouts-admin.header')
 
-    <body class="hold-transition sidebar-mini">
-        <div class="wrapper">
-            @include('layouts-admin.header')
-
-            @include('layouts-admin.sidebar')
-            <div class="content-wrapper">
-                @yield('content')
-
-            </div>
-            <br>
-            <br>
-            <br>
-            @include('layouts-admin.footer')
-
+        @include('layouts-admin.sidebar')
+        <div class="content-wrapper pb-3">
+            @yield('content')
         </div>
+
+        @include('layouts-admin.footer')
+    </div>
 
 
 

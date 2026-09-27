@@ -1,108 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User | Masuk</title>
+    <title>Login Pemilih | {{ $web_setting?->web_title ?? 'PEMILOS' }}</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Bootstrap & Icons -->
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-page/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('admin-page/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('admin-page/dist/css/adminlte.min.css?v=3.2.0') }}">
-
-    <style>
-        .bg-custom {
-            background-color: #048b8e !important;
-        }
-    </style>
+    <!-- Glassmorphism Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
-
-        <div class="card card-outline card-green-light">
-            <div class="card-header text-center bg-custom">
-                <h1 style="color: white;"><b>Login User</b></h1>
+<body>
+    <div class="ambient-wrapper glass-auth-wrapper">
+        <div class="glass-login-card" style="max-width: 480px;">
+            <div class="glass-login-header">
+                <div class="glass-login-logo">
+                    <img src="{{ $web_setting?->logo_image ? asset('gambar/logo/' . $web_setting->logo_image) : asset('gambar/logo-osis.png') }}" alt="Logo OSIS">
+                </div>
+                <div class="school-badge mb-2">
+                    <i class="bi bi-award-fill mr-1"></i>
+                    <span>{{ $web_setting?->school_name ?? 'SMK / SMA INDONESIA' }}</span>
+                </div>
+                <h1 class="glass-login-title">Bilik Suara Pemilih</h1>
+                <p class="glass-login-subtitle">Masukkan Username dan Kode Akses kartu suara untuk memberikan hak pilih Anda</p>
             </div>
-            <div class="card-body">
 
-                <div style="text-align: center; padding: 15px;">
-                    <img src="/gambar/logounpam (1).png" alt="Logo UNPAM">
-                    <img src="/gambar/logorsu (1).png" alt="Logo RSU">
+            @if (Session::has('success'))
+            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 600;">
+                <i class="bi bi-check-circle-fill mr-2"></i> {{ Session::get('success') }}
+            </div>
+            @endif
 
+            @if (Session::has('error'))
+            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(239, 68, 68, 0.15); color: #991b1b; font-weight: 600;">
+                <i class="bi bi-exclamation-triangle-fill mr-2"></i> {{ Session::get('error') }}
+            </div>
+            @endif
+
+            @if ($errors->any())
+            <div class="alert alert-warning border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(245, 158, 11, 0.15); color: #92400e; font-weight: 600;">
+                <ul class="mb-0 pl-3">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <form action="{{ route('auth.user') }}" method="post">
+                @csrf
+                <div class="glass-input-group mb-3">
+                    <label class="glass-input-label" for="nisn">
+                        <i class="bi bi-person-badge-fill text-muted mr-1"></i> Username
+                    </label>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="nisn" 
+                           placeholder="Masukkan Username Anda" 
+                           name="nisn" 
+                           autocomplete="off" 
+                           value="{{ old('nisn') }}" 
+                           required>
                 </div>
 
-                @if (Session::has('success'))
-                <div class="alert alert-success">
-                    {{ Session::get('success') }}
+                <div class="glass-input-group mb-4">
+                    <label class="glass-input-label" for="code_access">
+                        <i class="bi bi-key-fill text-muted mr-1"></i> Token / Kode Akses Pemilih
+                    </label>
+                    <input type="text" 
+                           class="glass-input letter-spacing-1 font-weight-bold" 
+                           id="code_access" 
+                           placeholder="Contoh: USR-82910" 
+                           name="code_access" 
+                           autocomplete="off" 
+                           required>
                 </div>
-                @endif
 
-                @if (Session::has('error'))
-                <div class="alert alert-danger mb-0" role="alert">
-                    <span>{{ Session::get('error') }}</span>
+                <button type="submit" class="glass-btn-primary mb-3">
+                    <i class="bi bi-box-arrow-in-right mr-1"></i> Masuk ke Bilik Suara
+                </button>
 
-                </div>
-                @endif
-                <br>
-
-                <form class="form-main" action="{{ route('auth.user') }}" method="post">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email" name="email" autocomplete="off" value="{{ old('email') }}">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="py-2" style="text-align: right;">
-                        <button type="submit" class="btn" style="background-color: #048b8e; color:white">Masuk</button>
-                    </div>
-
-                </form>
-
-                <!-- <div class="social-auth-links text-center mt-2 mb-3">
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                <div style="text-align: center; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.06);">
+                    <a href="/admin/login" style="color: #64748b; font-size: 0.875rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#059669'" onmouseout="this.style.color='#64748b'">
+                        <i class="bi bi-shield-lock-fill" style="color: #059669; font-size: 1rem;"></i> Masuk sebagai Administrator
                     </a>
-                </div> -->
-
-
-                <p class="mb-0">
-                    <a href="/user/register" class="text-center">Daftar akun baru</a>
-                </p>
-            </div>
-
+                </div>
+            </form>
         </div>
 
+        <div class="text-center mt-3 text-muted small" style="position: relative; z-index: 2;">
+            <strong>Zidan Fathul</strong> • 
+            <a href="https://instagram.com/zidan_kebanyakan_tugas" target="_blank" rel="noopener noreferrer" style="color: #e1306c; text-decoration: none; font-weight: 600;">
+                <i class="bi bi-instagram mr-1"></i>@zidan_kebanyakan_tugas
+            </a>
+        </div>
     </div>
 
-
-    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Scripts -->
     <script src="{{ asset('admin-page/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin-page/dist/js/adminlte.min.js?v=3.2.0') }}"></script>
-
-    <script type="text/javascript">
+    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(300, 0).slideUp(300, function() {
                 $(this).remove();
             });
-
-        }, 3000);
+        }, 5000);
     </script>
 </body>
 

@@ -68,6 +68,8 @@ class SettingWebController extends Controller
 
 
             DB::commit();
+            \Illuminate\Support\Facades\Cache::forget('pemilos_web_setting');
+
             return response()->json([
                 'message' => 'Data has been saved',
                 'code' => 200,
@@ -116,6 +118,7 @@ class SettingWebController extends Controller
             }
 
             DB::commit();
+            \Illuminate\Support\Facades\Cache::forget('pemilos_web_setting');
             return response()->json([
                 'message' => 'Data has been saved',
                 'code' => 200,

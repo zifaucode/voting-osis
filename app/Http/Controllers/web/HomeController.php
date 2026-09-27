@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\OsisChairmanCandidate;
+use App\Models\User;
 use App\Models\WebSetting;
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +18,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $webSetting = WebSetting::first();
+        $webSetting = \Illuminate\Support\Facades\Cache::rememberForever('pemilos_web_setting', function () {
+            return WebSetting::first();
+        });
 
         if (!$webSetting || empty($webSetting->start_date) || empty($webSetting->end_time)) {
             return view('frontend.dashboard.default', [
@@ -25,15 +28,39 @@ class HomeController extends Controller
             ]);
         }
 
-        $osisCandidate = OsisChairmanCandidate::all();
+        // Pemilih harus login terlebih dahulu dengan NIS dan Kode Akses sebelum masuk ke bilik suara
+        if (!auth()->check()) {
+            return redirect()->route('login.user');
+        }
+
+        // Jika yang login adalah Admin (role 1), arahkan ke dashboard admin
+        if (auth()->user()->role == 1) {
+            return redirect()->route('dashboard');
+        }
+
+        // Jika pemilih sudah pernah memilih, otomatis logout dan larang akses kembali
+        if (auth()->user()->vote_status != 0) {
+            auth()->logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            return redirect()->route('login.user')->with('error', 'Hak suara Anda telah digunakan. Anda tidak dapat login kembali.');
+        }
+
+        // Cache daftar paslon untuk efisiensi konkurensi bilik suara
+        $osisCandidate = \Illuminate\Support\Facades\Cache::remember('pemilos_candidates_list', 3600, function () {
+            return OsisChairmanCandidate::orderBy('sequence_number', 'asc')->get();
+        });
+
         $yearPlus = '';
-        if (isset($webSetting)) {
+        if (isset($webSetting) && $webSetting->year_period) {
             $yearPlus = Carbon::parse($webSetting->year_period)->addYears(1)->format('Y');
         }
+
         return view('frontend.dashboard.index', [
             'osis_candidate' => $osisCandidate,
             'web_setting' => $webSetting,
             'year_plus' => $yearPlus,
+            'current_user' => auth()->user(),
         ]);
     }
 
@@ -60,6 +87,38 @@ class HomeController extends Controller
         ]);
     }
 
+    public function liveCount()
+    {
+        // Live Count hanya diizinkan untuk Admin (role = 1)
+        if (!auth()->check() || auth()->user()->role != 1) {
+            return redirect()->route('login')->with('error', 'Halaman Live Count hanya dapat diakses oleh Administrator.');
+        }
+
+        $webSetting = WebSetting::first();
+        $yearPlus = $webSetting && $webSetting->year_period 
+            ? Carbon::parse($webSetting->year_period)->addYears(1)->format('Y') 
+            : '';
+
+        return view('frontend.dashboard.live-count', [
+            'web_setting' => $webSetting,
+            'year_plus' => $yearPlus,
+        ]);
+    }
+
+    public function liveVotesApi()
+    {
+        // API Live count hanya untuk Admin (role = 1)
+        if (!auth()->check() || auth()->user()->role != 1) {
+            return response()->json(['error' => 'Akses ditolak. Hanya administrator yang dapat mengakses live count.'], 403);
+        }
+
+        $payload = \Illuminate\Support\Facades\Cache::remember('live_votes_api_payload', 2, function () {
+            return \App\Services\RealtimeBroadcaster::getCurrentVotePayload();
+        });
+
+        return response()->json($payload);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -81,13 +140,16 @@ class HomeController extends Controller
         try {
             DB::beginTransaction();
             $updateStatus = WebSetting::first();
-            $updateStatus->status = 'dibuka';
-            $updateStatus->save();
-
+            if ($updateStatus) {
+                $updateStatus->status = 'dibuka';
+                $updateStatus->save();
+            }
 
             DB::commit();
+            \Illuminate\Support\Facades\Cache::forget('pemilos_web_setting');
+
             return response()->json([
-                'message' => 'Data has been saved',
+                'message' => 'Status pemilihan berhasil dibuka.',
                 'code' => 200,
                 'error' => false,
                 'data' => $updateStatus,
@@ -95,11 +157,9 @@ class HomeController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'message' => 'Internal error',
+                'message' => 'Gagal mengubah status pemilihan.',
                 'code' => 500,
                 'error' => true,
-                'errors' => $e->getMessage(),
-                'line' => $e->getLine(),
             ], 500);
         }
     }

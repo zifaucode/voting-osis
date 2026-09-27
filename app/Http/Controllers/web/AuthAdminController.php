@@ -81,9 +81,12 @@ class AuthAdminController extends Controller
         //
     }
 
-    public function adminLogout()
+    public function adminLogout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
     }
 }

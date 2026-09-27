@@ -4,126 +4,93 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WebSetting;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session as FacadesSession;
 
 class AuthUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan halaman login pemilih dengan NIS dan Kode Akses.
      */
     public function index()
     {
         if (Auth::check()) {
-            return redirect()->route('question.user');
+            if (Auth::user()->role == 1) {
+                return redirect()->route('dashboard'); // Admin dashboard
+            }
+
+            // Jika pemilih sudah pernah memilih, langsung logout
+            if (Auth::user()->vote_status != 0) {
+                Auth::logout();
+                request()->session()->invalidate();
+                request()->session()->regenerateToken();
+                return redirect()->route('login.user')->with('error', 'Hak suara Anda telah digunakan. Anda tidak dapat login kembali.');
+            }
+
+            return redirect('/');
         }
-        return view('user.auth.login', []);
-    }
 
-    public function register()
-    {
-        return view('user.auth.register', []);
-    }
+        $webSetting = \Illuminate\Support\Facades\Cache::rememberForever('pemilos_web_setting', function () {
+            return WebSetting::first();
+        });
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('user.auth.login', [
+            'web_setting' => $webSetting,
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Autentikasi Pemilih menggunakan NIS dan Kode Akses.
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function authenticate(Request $request)
     {
-        $email = $request->email;
-        $password = $request->password;
+        $request->validate([
+            'nisn' => 'required|string',
+            'code_access' => 'required|string',
+        ], [
+            'nisn.required' => 'Username wajib diisi.',
+            'code_access.required' => 'Kode akses pemilih wajib diisi.',
+        ]);
 
-        // dd($username, $password);
+        $nisn = trim($request->nisn);
+        $codeAccess = trim($request->code_access);
 
-        Auth::attempt(['email' => $email, 'password' => $password]);
-        if (Auth::check()) {
-            $request->session()->regenerate();
-            return redirect()->intended('/user/question');
+        // Cari pemilih berdasarkan Username / NIS dan Kode Akses (role = 2 / pemilih)
+        $user = User::where('nisn', $nisn)
+            ->where('code_access', $codeAccess)
+            ->where('role', 2)
+            ->first();
+
+        if (!$user) {
+            FacadesSession::flash('error', 'Kombinasi Username dan Kode Akses tidak ditemukan. Pastikan data yang dimasukkan sesuai dengan kartu suara Anda.');
+            return redirect()->route('login.user')->withInput($request->only('nisn'));
         }
-        FacadesSession::flash('error', 'Email atau password salah');
-        return redirect()->route('login.user');
-    }
 
-    public function newRegister(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $newQuestion = new User();
-            $newQuestion->role = 2;
-            $newQuestion->name = $request->name;
-            $newQuestion->email = $request->email;
-            $newQuestion->age = $request->age;
-            $newQuestion->phone = $request->phone;
-            $newQuestion->address = $request->address;
-            $newQuestion->gender = $request->gender;
-            $newQuestion->password = Hash::make($request->password);
-            $newQuestion->save();
-            DB::commit();
-            return redirect()->route('register')->with('message', 'Selamat anda sudah terdaftar');
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'message' => 'Internal error',
-                'code' => 500,
-                'error' => true,
-                'errors' => $e->getMessage(),
-                'line' => $e->getLine(),
-            ], 500);
+        // Cegah pemilih yang sudah pernah memilih untuk login kembali
+        if ($user->vote_status != 0 || $user->is_vote !== null) {
+            FacadesSession::flash('error', 'Hak suara untuk Username ' . $user->nisn . ' (' . $user->name . ') sudah pernah digunakan. Setiap pemilih hanya dapat memilih 1 kali dan tidak dapat login kembali.');
+            return redirect()->route('login.user')->withInput($request->only('nisn'));
         }
+
+        // Matikan remember me (false) pada bilik suara lab komputer publik demi efisiensi I/O & keamanan sesi
+        Auth::login($user, false);
+        $request->session()->regenerate();
+
+        return redirect()->intended('/');
     }
 
     /**
-     * Display the specified resource.
+     * Logout Pemilih dari bilik suara.
      */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    public function userLogout()
+    public function userLogout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login.user');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login.user')->with('success', 'Anda telah berhasil keluar dari bilik suara.');
     }
 }

@@ -1,105 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin | Masuk</title>
+    <title>Admin Login | Pemilos</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Bootstrap & Icons -->
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-page/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('admin-page/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('admin-page/dist/css/adminlte.min.css?v=3.2.0') }}">
-
-    <style>
-        .bg-custom {
-            background-color: #048b8e !important;
-        }
-    </style>
+    <!-- Glassmorphism Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
+<body>
+    <div class="ambient-wrapper glass-auth-wrapper">
+        <!-- Ambient Glowing Blobs -->
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
 
-        <div class="card card-outline">
-            <div class="card-header text-center bg-custom">
-                <h1 style="color: white;"><b>Login Admin</b></h1>
+        <div class="glass-login-card">
+            <div class="glass-login-header">
+                <div class="glass-login-logo">
+                    <img src="/gambar/logo-osis.png" alt="Logo OSIS">
+                </div>
+                <h1 class="glass-login-title">Admin Portal</h1>
+                <p class="glass-login-subtitle">Masuk untuk mengelola data pemilihan & paslon</p>
             </div>
-            <div class="card-body">
 
-                <div style="text-align: center; padding: 15px;">
-                    <img src="/gambar/logo-osis.png" width="100px" alt="Logo OSIS">
+            @if (Session::has('success'))
+            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 600;">
+                <i class="bi bi-check-circle-fill mr-2"></i> {{ Session::get('success') }}
+            </div>
+            @endif
 
+            @if (Session::has('error'))
+            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(239, 68, 68, 0.15); color: #991b1b; font-weight: 600;">
+                <i class="bi bi-exclamation-triangle-fill mr-2"></i> {{ Session::get('error') }}
+            </div>
+            @endif
 
+            <form action="{{ route('auth.admin') }}" method="post">
+                @csrf
+                <div class="glass-input-group">
+                    <label class="glass-input-label" for="username">
+                        <i class="bi bi-person-fill text-muted mr-1"></i> Username
+                    </label>
+                    <input type="text" 
+                           class="glass-input" 
+                           id="username" 
+                           placeholder="Masukkan username" 
+                           name="username" 
+                           autocomplete="off" 
+                           value="{{ old('username') }}" 
+                           required>
                 </div>
 
-                @if (Session::has('success'))
-                <div class="alert alert-success">
-                    {{ Session::get('success') }}
+                <div class="glass-input-group mb-4">
+                    <label class="glass-input-label" for="password">
+                        <i class="bi bi-lock-fill text-muted mr-1"></i> Password
+                    </label>
+                    <input type="password" 
+                           class="glass-input" 
+                           id="password" 
+                           placeholder="Masukkan password" 
+                           name="password" 
+                           autocomplete="off" 
+                           required>
                 </div>
-                @endif
 
-                @if (Session::has('error'))
-                <div class="alert alert-danger mb-0" role="alert">
-                    <span>{{ Session::get('error') }}</span>
+                <button type="submit" class="glass-btn-primary mb-3">
+                    <i class="bi bi-box-arrow-in-right"></i> Masuk Sekarang
+                </button>
 
-                </div>
-                @endif
-                <br>
-
-                <form class="form-main" action="{{ route('auth.admin') }}" method="post">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="username" name="username" autocomplete="off" value="{{ old('username') }}">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password" autocomplete="off">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="py-2" style="text-align: right;">
-                        <button type="submit" class="btn" style="background-color: #048b8e; color:white">Masuk</button>
-                    </div>
-
-                </form>
-
-                <!-- <div class="social-auth-links text-center mt-2 mb-3">
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                <div class="text-center mt-3">
+                    <a href="/" class="text-muted small text-decoration-none font-weight-bold" style="transition: color 0.2s;">
+                        <i class="bi bi-arrow-left"></i> Kembali ke Beranda Pemilihan
                     </a>
-                </div> -->
-
-
-            </div>
-
+                </div>
+            </form>
         </div>
-
     </div>
 
-
-    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Scripts -->
     <script src="{{ asset('admin-page/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin-page/dist/js/adminlte.min.js?v=3.2.0') }}"></script>
-
-    <script type="text/javascript">
+    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
         window.setTimeout(function() {
             $(".alert").fadeTo(300, 0).slideUp(300, function() {
                 $(this).remove();
             });
-
-        }, 3000);
+        }, 4000);
     </script>
 </body>
 

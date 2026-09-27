@@ -19,10 +19,29 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        $user = User::where('role', 2)->whereNot('id', 1)->get();
+        $users = User::select('id', 'name', 'nisn', 'class', 'code_access', 'vote_status')
+            ->where('role', 2)
+            ->where('id', '!=', 1)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $users->transform(function ($u) {
+            $classUpper = strtoupper(trim((string)$u->class));
+            $nisnUpper = strtoupper(trim((string)$u->nisn));
+            $u->is_teacher = (
+                str_contains($classUpper, 'GURU') ||
+                str_contains($classUpper, 'GUKAR') ||
+                str_contains($classUpper, 'KARYAWAN') ||
+                str_contains($classUpper, 'TATA USAHA') ||
+                str_starts_with($nisnUpper, 'GUKAR') ||
+                str_starts_with($nisnUpper, 'GURU') ||
+                str_starts_with($nisnUpper, 'G-')
+            );
+            return $u;
+        });
 
         return view('admin.user.index', [
-            'user' => $user,
+            'user' => $users,
         ]);
     }
 
@@ -93,24 +112,44 @@ class AdminUserController extends Controller
     {
         // validation
         $this->validate($request, [
-            'file' => 'required|mimes:csv,xls,xlsx'
+            'file' => 'required|mimes:csv,xls,xlsx|max:10240'
         ]);
 
         // get file excel
         $file = $request->file('file');
 
-        // create unique file name
-        $nama_file = rand() . $file->getClientOriginalName();
+        // create unique secure file name in private storage
+        $fileName = 'import_' . time() . '_' . \Illuminate\Support\Str::random(12) . '.' . $file->getClientOriginalExtension();
+        $importDir = storage_path('app/imports');
+        if (!file_exists($importDir)) {
+            mkdir($importDir, 0750, true);
+        }
 
-        // upload file to public folder
-        $file->move('file/excel', $nama_file);
+        $fullPath = $file->move($importDir, $fileName);
 
-        // import data
-        Excel::import(new UsersImport, 'file/excel/' . $nama_file);
+        try {
+            // import data
+            Excel::import(new UsersImport, $fullPath);
+        } finally {
+            // Hapus file excel secara instan agar data kredensial tidak tertinggal di server
+            if (file_exists($fullPath)) {
+                @unlink($fullPath);
+            }
+        }
 
+        // Refresh cache live vote payload
+        \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'message' => 'Data Pemilih berhasil diimpor.',
+                'code' => 200,
+                'error' => false,
+            ]);
+        }
 
         // redirect to main page upload
-        return redirect('/admin/user');
+        return redirect('/admin/user')->with('success', 'Data Pemilih berhasil diimpor.');
     }
 
     /**
@@ -136,20 +175,28 @@ class AdminUserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $deleteUser =  User::with('totalVoteUser')->findOrFail($id);
+            $deleteUser = User::with('totalVoteUser')->findOrFail($id);
 
-            if ($deleteUser->totalVoteUser != null) {
-                $deleteUser->totalVoteUser()->delete();
-            }
+            // Hapus rekaman suara terkait jika pemilih sudah memilih
+            \App\Models\TotalVoteUser::where('user_id', $deleteUser->id)->delete();
+            $deletedId = $deleteUser->id;
+            $deletedName = $deleteUser->name;
             $deleteUser->delete();
 
-
             DB::commit();
+
+            // Refresh cache dan pancarkan update realtime
+            \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
+            \App\Services\RealtimeBroadcaster::broadcast();
+
             return response()->json([
                 'message' => 'Data has been saved',
                 'code' => 200,
                 'error' => false,
-                'data' => $deleteUser,
+                'data' => [
+                    'id' => $deletedId,
+                    'name' => $deletedName,
+                ],
             ]);
         } catch (Exception $e) {
             DB::rollBack();
@@ -167,31 +214,62 @@ class AdminUserController extends Controller
     {
         try {
             DB::beginTransaction();
-            $userId = $request->userIds;
-            foreach ($userId as $user) {
-                $deleteUser =  User::with('totalVoteUser')->findOrFail($user);
-
-                if ($deleteUser->totalVoteUser != null) {
-                    $deleteUser->totalVoteUser()->delete();
-                }
-                $deleteUser->delete();
+            $userIds = $request->userIds;
+            if (!empty($userIds) && is_array($userIds)) {
+                // Hanya hapus akun pemilih (role = 2), JANGAN hapus akun Admin
+                $targetIds = User::whereIn('id', $userIds)->where('role', 2)->pluck('id');
+                \App\Models\TotalVoteUser::whereIn('user_id', $targetIds)->delete();
+                User::whereIn('id', $targetIds)->delete();
             }
 
             DB::commit();
+
+            // Refresh cache dan pancarkan update realtime
+            \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
+            \App\Services\RealtimeBroadcaster::broadcast();
+
             return response()->json([
-                'message' => 'Data has been saved',
+                'message' => 'Data pemilih yang dipilih berhasil dihapus.',
                 'code' => 200,
                 'error' => false,
-                'data' => $deleteUser,
             ]);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'message' => 'Internal error',
+                'message' => 'Gagal menghapus data: ' . $e->getMessage(),
                 'code' => 500,
                 'error' => true,
-                'errors' => $e->getMessage(),
-                'line' => $e->getLine(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk Delete: Kosongkan seluruh data pemilih (role = 2).
+     */
+    public function deleteAll(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $voterIds = User::where('role', 2)->pluck('id');
+            \App\Models\TotalVoteUser::whereIn('user_id', $voterIds)->delete();
+            User::where('role', 2)->delete();
+
+            DB::commit();
+
+            \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
+            \App\Services\RealtimeBroadcaster::broadcast();
+
+            return response()->json([
+                'message' => 'Semua data pemilih berhasil dikosongkan.',
+                'code' => 200,
+                'error' => false,
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Gagal mengosongkan data pemilih: ' . $e->getMessage(),
+                'code' => 500,
+                'error' => true,
             ], 500);
         }
     }

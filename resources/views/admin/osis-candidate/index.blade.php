@@ -45,45 +45,78 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover table-striped">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%; text-align:center;">No Urut </th>
-                                        <th style="text-align:center;">Nama Kandidat </th>
-                                        <th style="text-align:center;">Kelas </th>
-                                        <th style="text-align:center;">Visi </th>
-                                        <th style="text-align:center;">Misi </th>
-                                        <th style="text-align:center;">Foto </th>
-                                        <th style="width: 100px;">Aksi </th>
-
+                                        <th style="width: 6%; text-align:center;">No. Urut</th>
+                                        <th style="width: 10%; text-align:center;">Foto</th>
+                                        <th style="width: 25%;">Pasangan Calon (Ketua & Wakil)</th>
+                                        <th style="width: 18%;">Jargon / Slogan</th>
+                                        <th style="width: 15%;">Visi & Misi</th>
+                                        <th style="width: 16%;">Program Kerja</th>
+                                        <th style="width: 10%; text-align:center;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    <tr v-for="candidate in osisCandidate">
-                                        <td style="text-align:center;">@{{ candidate.sequence_number ?? ''}}</td>
-                                        <td style="text-align:center;">@{{ candidate.name ?? ''}}</td>
-                                        <td style="text-align:center;">@{{ candidate.class ?? ''}}</td>
-                                        <td>@{{ candidate.visi ?? ''}}</td>
-                                        <td>@{{ candidate.misi ?? ''}}</td>
-                                        <td>
-                                            <img :src="`/file/image/` + candidate.image" alt="" width="100px">
+                                    <tr v-for="candidate in osisCandidate" :key="candidate.id">
+                                        <td class="text-center font-weight-bold align-middle">
+                                            <span class="badge badge-primary px-2 py-1" style="font-size: 1rem;">
+                                                #@{{ candidate.sequence_number ?? '-' }}
+                                            </span>
                                         </td>
-                                        <td class="text-center">
-                                            <a :href="`/admin/osis-candidate/edit/` + candidate.id" class="btn btn-warning">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-                                                </svg>
-                                            </a>
-                                            <a href="#" @click.prevent="deleteRecord(candidate.id)" class="btn btn-danger" title="Delete">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                </svg>
-                                            </a>
+                                        <td class="text-center align-middle">
+                                            <img :src="candidate.image ? '/file/image/' + candidate.image : '/gambar/logo-osis.png'" 
+                                                 alt="Foto" 
+                                                 style="width: 75px; height: 75px; object-fit: cover; border-radius: 10px; border: 2px solid #e2e8f0;">
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="mb-2">
+                                                <small class="text-success font-weight-bold d-block text-uppercase" style="letter-spacing: 0.5px;">
+                                                    <i class="fas fa-user-tie mr-1"></i> Calon Ketua
+                                                </small>
+                                                <strong>@{{ candidate.name ?? '-' }}</strong>
+                                                <span class="badge badge-light border ml-1">@{{ candidate.class ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <small class="text-info font-weight-bold d-block text-uppercase" style="letter-spacing: 0.5px;">
+                                                    <i class="fas fa-user-friends mr-1"></i> Calon Wakil
+                                                </small>
+                                                <strong>@{{ candidate.vice_name ?? '-' }}</strong>
+                                                <span class="badge badge-light border ml-1">@{{ candidate.vice_class ?? '-' }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span v-if="candidate.slogan" class="font-italic text-muted d-block small" style="border-left: 3px solid #f59e0b; padding-left: 8px;">
+                                                “@{{ candidate.slogan }}”
+                                            </span>
+                                            <span v-else class="text-muted small">-</span>
+                                        </td>
+                                        <td class="align-middle small">
+                                            <div class="mb-1">
+                                                <strong class="text-primary">Visi:</strong>
+                                                <p class="mb-1 text-truncate" style="max-width: 200px;" :title="candidate.visi">@{{ candidate.visi || '-' }}</p>
+                                            </div>
+                                            <div>
+                                                <strong class="text-danger">Misi:</strong>
+                                                <p class="mb-0 text-truncate" style="max-width: 200px;" :title="candidate.misi">@{{ candidate.misi || '-' }}</p>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle small">
+                                            <p class="mb-0 text-truncate" style="max-width: 220px;" :title="candidate.work_program">
+                                                @{{ candidate.work_program || '-' }}
+                                            </p>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            <div class="btn-group">
+                                                <a :href="'/admin/osis-candidate/edit/' + candidate.id" class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
+                                                <button type="button" @click.prevent="deleteRecord(candidate.id)" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-
                                 </tbody>
 
                             </table>

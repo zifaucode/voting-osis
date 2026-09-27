@@ -28,15 +28,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthUserController::class)->prefix('/user')->group(function () {
     Route::get('/login', 'index')->name('login.user');
-    Route::get('/register', 'register')->name('register');
-    Route::post('/new-register', 'newRegister')->name('new.register');
     Route::post('/auth', 'authenticate')->name('auth.user');
     Route::get('/logout', 'userLogout')->name('logout.user');
 });
 
 Route::controller(AuthAdminController::class)->prefix('/admin')->group(function () {
     Route::get('/login', 'index')->name('login');
-    Route::post('/auth', 'authenticate')->name('auth.admin');
+    Route::post('/auth', 'authenticate')->name('auth.admin')->middleware('throttle:5,1');
     Route::get('/logout', 'adminLogout')->name('logout.admin');
 });
 /*
@@ -61,6 +59,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::controller(AdminController::class)->prefix('/admin')->group(function () {
         Route::get('/', 'index')->name('dashboard');
+        Route::post('/reset-all-votes', 'resetAllVotes')->name('admin.reset-all-votes');
     });
 
     Route::controller(OsisChairmanCandidateController::class)->prefix('/admin/osis-candidate')->group(function () {
@@ -80,6 +79,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::post('/reset/{id}', 'resetQuestion')->name('user.reset');
         Route::delete('/{id}', 'destroy')->name('user.delete');
         Route::post('/selected-delete', 'selectedDestroy')->name('user.selected.delete');
+        Route::post('/delete-all', 'deleteAll')->name('user.delete.all');
         Route::post('/import-excel', 'import_excel')->name('question.upload');
     });
 
@@ -95,6 +95,7 @@ Route::group(['middleware' => 'admin'], function () {
         Route::get('/', 'index')->name('web-setting.index');
         Route::post('/front-user-page', 'storeFrontPage')->name('web-setting.front-page');
         Route::post('/voting-time', 'storeVotingTime')->name('web-setting.voting-time');
+        Route::post('/update-status', [HomeController::class, 'updateStatus'])->name('update.status');
     });
 });
 /*
@@ -114,9 +115,10 @@ Route::group(['middleware' => 'admin'], function () {
 |--------------------------------------------------------------------------
 */
 Route::controller(HomeController::class)->prefix('/')->group(function () {
-    Route::get('/', 'index')->name('dashboard');
+    Route::get('/', 'index')->name('home');
+    Route::get('/live-count', 'liveCount')->name('live.count');
+    Route::get('/api/live-votes', 'liveVotesApi')->name('api.live.votes');
     Route::get('/show-off', 'showOff')->name('dashboard.showoff');
-    Route::post('/update-status', 'updateStatus')->name('update.status');
 });
 
 Route::controller(UserSelectCandidateController::class)->prefix('/user-choose')->group(function () {

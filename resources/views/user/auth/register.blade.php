@@ -1,145 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>User | Daftar</title>
+    <title>Pendaftaran Pemilih | Pemilos</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Bootstrap & Icons -->
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('user-page/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-page/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('admin-page/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('admin-page/dist/css/adminlte.min.css?v=3.2.0') }}">
+    <!-- Glassmorphism Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('css/glassmorphism.css') }}">
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
+<body>
+    <div class="ambient-wrapper glass-auth-wrapper py-5">
+        <!-- Ambient Glowing Blobs -->
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
 
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <b>Pendaftaran User</b>
+        <div class="glass-login-card" style="max-width: 540px;">
+            <div class="glass-login-header">
+                <div class="glass-login-logo">
+                    <img src="/gambar/logo-osis.png" alt="Logo OSIS">
+                </div>
+                <h1 class="glass-login-title">Daftar Pemilih Baru</h1>
+                <p class="glass-login-subtitle">Lengkapi identitas untuk mendaftar sebagai pemilih</p>
             </div>
-            <div class="card-body">
 
-                <div style="text-align: center; padding: 15px;">
-                    <img src="/gambar/logorsu (1).png" alt="Logo RSU">
+            @if(session()->has('message'))
+            <div class="alert alert-success border-0 shadow-sm mb-4" role="alert" style="border-radius: 14px; background: rgba(16, 185, 129, 0.15); color: #065f46; font-weight: 600;">
+                <i class="bi bi-check-circle-fill mr-2"></i> {{ session()->get('message') }}
+            </div>
+            @endif
+
+            <form method="post" action="{{ route('new.register') }}">
+                @csrf
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">Nama Lengkap</label>
+                            <input type="text" class="glass-input" placeholder="Masukkan nama lengkap" name="name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">Usia / Umur</label>
+                            <input type="number" class="glass-input" placeholder="Contoh: 16" name="age" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">No. Telepon / WA</label>
+                            <input type="text" class="glass-input" placeholder="08xxxxxxxxxx" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">Jenis Kelamin</label>
+                            <select name="gender" class="glass-input" required>
+                                <option value="">-- Pilih Jenis Kelamin --</option>
+                                <option value="Laki-Laki">Laki-Laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">Alamat / Kelas</label>
+                            <textarea name="address" class="glass-input" rows="2" placeholder="Alamat atau kelas siswa"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="glass-input-group">
+                            <label class="glass-input-label">Email</label>
+                            <input type="email" class="glass-input" placeholder="email@sekolah.sch.id" name="email" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="glass-input-group mb-4">
+                            <label class="glass-input-label">Password</label>
+                            <input type="password" class="glass-input" placeholder="Buat kata sandi akun" name="password" required>
+                        </div>
+                    </div>
                 </div>
 
-                @if(session()->has('message'))
-                <div class="alert alert-success">
-                    {{ session()->get('message') }}
-                </div>
-                @endif
-                <form method="post" action="{{ route('new.register') }}">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Nama Lengkap" name="name">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
+                <button type="submit" class="glass-btn-primary mb-3">
+                    <i class="bi bi-person-check-fill"></i> Selesaikan Pendaftaran
+                </button>
 
-                    <div class="input-group mb-3">
-                        <input type="number" class="form-control" placeholder="Umur" name="age">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fa fa-bookmark"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="No Telepon" name="phone">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fa fa-phone"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <!-- <input type="text" class="form-control" placeholder="Alamat" name="address"> -->
-                        <textarea name="address" class="form-control" placeholder="Alamat"></textarea>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-map-marker-alt"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <!-- <input type="text" class="form-control" placeholder="Gender" name="gender"> -->
-                        <select name="gender" class="form-control">
-                            <option value=""> - PILIH GENDER -</option>
-                            <option value="Laki-Laki">Laki-Laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                            <option value="Tidak Menyebutkan">Tidak Menyebutkan</option>
-                        </select>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fa fa-tasks"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email" name="email">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="py-2" style="text-align: right;">
-                        <button type="submit" class="btn btn-primary">Daftar</button>
-                    </div>
-
-                </form>
-
-                <!-- <div class="social-auth-links text-center mt-2 mb-3">
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                    <a href="/" class="text-muted small text-decoration-none">
+                        <i class="bi bi-arrow-left"></i> Beranda
                     </a>
-                </div> -->
-
-
-                <p class="mb-0">
-                    sudah punya akun? <a href="/user/login" class="text-center"> masuk</a>
-                </p>
-            </div>
-
+                    <span class="small text-muted">
+                        Sudah punya akun? <a href="/user/login" class="font-weight-bold" style="color: var(--primary-emerald); text-decoration: none;">Masuk di sini</a>
+                    </span>
+                </div>
+            </form>
         </div>
-
     </div>
 
-
-    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Scripts -->
     <script src="{{ asset('admin-page/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin-page/dist/js/adminlte.min.js?v=3.2.0') }}"></script>
-
-    <script type="text/javascript">
-        window.setTimeout(function() {
-            $(".alert").fadeTo(300, 0).slideUp(300, function() {
-                $(this).remove();
-            });
-
-        }, 3000);
-    </script>
+    <script src="{{ asset('admin-page/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 
 </html>
