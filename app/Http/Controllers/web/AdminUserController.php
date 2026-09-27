@@ -40,6 +40,8 @@ class AdminUserController extends Controller
             return $u;
         });
 
+        $users->makeVisible(['code_access']);
+
         return view('admin.user.index', [
             'user' => $users,
         ]);
