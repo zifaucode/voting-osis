@@ -1,0 +1,5 @@
+# Amneshia ephemeral SQLite cache (rebuilt automatically from knowledge/)
+*.db
+*.db-wal
+*.db-shm
+*.log

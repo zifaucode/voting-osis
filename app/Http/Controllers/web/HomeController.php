@@ -9,6 +9,7 @@ use App\Models\WebSetting;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -18,7 +19,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $webSetting = \Illuminate\Support\Facades\Cache::rememberForever('pemilos_web_setting', function () {
+        $webSetting = Cache::rememberForever('pemilos_web_setting', function () {
             return WebSetting::first();
         });
 
@@ -47,7 +48,7 @@ class HomeController extends Controller
         }
 
         // Validasi sesi aktif: pastikan perangkat ini adalah bilik suara yang sah (cegah multi-login)
-        $activeSessionId = \Illuminate\Support\Facades\Cache::get('active_voter_' . auth()->id());
+        $activeSessionId = Cache::get('active_voter_' . auth()->id());
         if ($activeSessionId && $activeSessionId !== request()->session()->getId()) {
             auth()->logout();
             request()->session()->invalidate();
@@ -56,10 +57,10 @@ class HomeController extends Controller
         }
 
         // Perbarui masa aktif sesi bilik (5 menit dari aktivitas terakhir)
-        \Illuminate\Support\Facades\Cache::put('active_voter_time_' . auth()->id(), now(), now()->addMinutes(5));
+        Cache::put('active_voter_time_' . auth()->id(), now(), now()->addMinutes(5));
 
         // Cache daftar paslon untuk efisiensi konkurensi bilik suara
-        $osisCandidate = \Illuminate\Support\Facades\Cache::remember('pemilos_candidates_list', 3600, function () {
+        $osisCandidate = Cache::remember('pemilos_candidates_list', 3600, function () {
             return OsisChairmanCandidate::orderBy('sequence_number', 'asc')->get();
         });
 
@@ -78,7 +79,9 @@ class HomeController extends Controller
 
     public function showOff()
     {
-        $webSetting = WebSetting::first();
+        $webSetting = Cache::rememberForever('pemilos_web_setting', function () {
+            return WebSetting::first();
+        });
 
         if (!$webSetting || empty($webSetting->start_date) || empty($webSetting->end_time)) {
             return view('frontend.dashboard.default', [
@@ -86,7 +89,11 @@ class HomeController extends Controller
             ]);
         }
 
-        $osisCandidate = OsisChairmanCandidate::all();
+        // Cache daftar paslon untuk halaman aula/show-off agar tidak membebani query database saat reload
+        $osisCandidate = Cache::remember('pemilos_candidates_list', 3600, function () {
+            return OsisChairmanCandidate::orderBy('sequence_number', 'asc')->get();
+        });
+
         $yearPlus = (isset($webSetting) && $webSetting->year_period) 
             ? (string)((int)$webSetting->year_period + 1) 
             : '';
@@ -104,7 +111,9 @@ class HomeController extends Controller
             return redirect()->route('login')->with('error', 'Halaman Live Count hanya dapat diakses oleh Administrator.');
         }
 
-        $webSetting = WebSetting::first();
+        $webSetting = Cache::rememberForever('pemilos_web_setting', function () {
+            return WebSetting::first();
+        });
         $yearPlus = ($webSetting && $webSetting->year_period) 
             ? (string)((int)$webSetting->year_period + 1) 
             : '';

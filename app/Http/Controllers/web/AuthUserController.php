@@ -8,6 +8,7 @@ use App\Models\WebSetting;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session as FacadesSession;
 
 class AuthUserController extends Controller
@@ -33,7 +34,7 @@ class AuthUserController extends Controller
             return redirect('/');
         }
 
-        $webSetting = \Illuminate\Support\Facades\Cache::rememberForever('pemilos_web_setting', function () {
+        $webSetting = Cache::rememberForever('pemilos_web_setting', function () {
             return WebSetting::first();
         });
 
@@ -87,54 +88,47 @@ class AuthUserController extends Controller
             return redirect()->route('login.user')->withInput($request->only('nisn'));
         }
 
-        // Proteksi Anti-Double Login (Mencegah 2 PC login bersamaan dengan akun yang sama)
-        $lockAcquired = false;
+        // 1. Cek sesi aktif di bilik lain via Cache (Non-blocking check)
+        $activeSessionId = Cache::get('active_voter_' . $user->id);
+        $activeSessionTime = Cache::get('active_voter_time_' . $user->id);
+
+        if ($activeSessionId && $activeSessionId !== $request->session()->getId()) {
+            if ($activeSessionTime && now()->diffInSeconds($activeSessionTime) < 300) {
+                FacadesSession::flash('error', 'Akun pemilih ini sedang aktif dibuka di bilik suara lain. Harap selesaikan pemilihan di bilik tersebut, atau tunggu beberapa menit.');
+                return redirect()->route('login.user')->withInput($request->only('nisn'));
+            }
+        }
+
+        // 2. Proteksi Anti-Race Condition Konkuren: Gunakan Atomic Cache Lock (bukan DB Row Lock)
+        // Mencegah 2 bilik mengeksekusi login pada milidetik yang sama persis tanpa membebani tabel database
+        $loginLock = Cache::lock('voter_login_lock_' . $user->id, 5);
+
+        if (!$loginLock->get()) {
+            FacadesSession::flash('error', 'Akun pemilih ini sedang diproses masuk di bilik suara lain. Silakan coba sesaat lagi.');
+            return redirect()->route('login.user')->withInput($request->only('nisn'));
+        }
+
         try {
-            \Illuminate\Support\Facades\DB::transaction(function () use ($user, $request, &$lockAcquired) {
-                // Kunci baris pemilih di database untuk serialisasi request konkuren
-                $lockedUser = User::where('id', $user->id)->lockForUpdate()->first();
+            // Verifikasi ganda status vote pemilih
+            $user->refresh();
+            if ($user->vote_status != 0 || $user->is_vote !== null) {
+                FacadesSession::flash('error', 'Hak suara untuk Username ' . $user->nisn . ' (' . $user->name . ') sudah pernah digunakan. Setiap pemilih hanya dapat memilih 1 kali dan tidak dapat login kembali.');
+                return redirect()->route('login.user')->withInput($request->only('nisn'));
+            }
 
-                if (!$lockedUser || $lockedUser->vote_status != 0 || $lockedUser->is_vote !== null) {
-                    return;
-                }
+            // Login pemilih terlebih dahulu (agar ID sesi dimigrasikan oleh AuthGuard)
+            Auth::login($user, false);
+            $request->session()->regenerate();
+            $finalSessionId = $request->session()->getId();
 
-                // Periksa apakah akun ini sedang aktif dibuka di bilik suara / PC lain
-                $activeSessionId = \Illuminate\Support\Facades\Cache::get('active_voter_' . $lockedUser->id);
-                $activeSessionTime = \Illuminate\Support\Facades\Cache::get('active_voter_time_' . $lockedUser->id);
+            // Daftarkan sesi bilik suara aktif selama 5 menit
+            Cache::put('active_voter_' . $user->id, $finalSessionId, now()->addMinutes(5));
+            Cache::put('active_voter_time_' . $user->id, now(), now()->addMinutes(5));
 
-                if ($activeSessionId && $activeSessionId !== $request->session()->getId()) {
-                    if ($activeSessionTime && now()->diffInSeconds($activeSessionTime) < 300) {
-                        return; // Akun sedang aktif di bilik lain dalam 5 menit terakhir
-                    }
-                }
-
-                $lockAcquired = true;
-            }, 3);
-        } catch (\Throwable $e) {
-            $lockAcquired = false;
+            return redirect()->intended('/');
+        } finally {
+            $loginLock->release();
         }
-
-        $user->refresh();
-        if ($user->vote_status != 0 || $user->is_vote !== null) {
-            FacadesSession::flash('error', 'Hak suara untuk Username ' . $user->nisn . ' (' . $user->name . ') sudah pernah digunakan. Setiap pemilih hanya dapat memilih 1 kali dan tidak dapat login kembali.');
-            return redirect()->route('login.user')->withInput($request->only('nisn'));
-        }
-
-        if (!$lockAcquired) {
-            FacadesSession::flash('error', 'Akun pemilih ini sedang aktif dibuka di bilik suara lain. Harap selesaikan pemilihan di bilik tersebut, atau tunggu beberapa menit.');
-            return redirect()->route('login.user')->withInput($request->only('nisn'));
-        }
-
-        // Login pemilih terlebih dahulu (agar ID sesi dimigrasikan oleh AuthGuard)
-        Auth::login($user, false);
-        $request->session()->regenerate();
-        $finalSessionId = $request->session()->getId();
-
-        // Kunci sesi aktif selama 5 menit di bilik ini
-        \Illuminate\Support\Facades\Cache::put('active_voter_' . $user->id, $finalSessionId, now()->addMinutes(5));
-        \Illuminate\Support\Facades\Cache::put('active_voter_time_' . $user->id, now(), now()->addMinutes(5));
-
-        return redirect()->intended('/');
     }
 
     /**

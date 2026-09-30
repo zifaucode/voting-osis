@@ -29,10 +29,11 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         // Anti-Brute Force Login Pemilih (Lab-Friendly: dibatasi per kombinasi NISN + IP)
-        // 40 siswa dengan NISN berbeda di satu lab komputer tidak akan saling memblokir
+        // 120 bilik di 3 lab komputer tidak akan saling memblokir karena key terisolasi per NISN.
+        // Limit dilonggarkan ke 15 percobaan/menit agar siswa yang salah ketik kode akses tidak langsung terkunci.
         RateLimiter::for('voter-login', function (Request $request) {
             $key = trim(strtolower((string)$request->input('nisn', 'guest'))) . '|' . $request->ip();
-            return Limit::perMinute(6)->by($key)->response(function () {
+            return Limit::perMinute(15)->by($key)->response(function () {
                 return back()
                     ->withInput(request()->only('nisn'))
                     ->with('error', 'Terlalu banyak percobaan login gagal untuk akun ini. Harap tunggu 1 menit sebelum mencoba kembali.');

@@ -44,4 +44,10 @@ yarn-error.log
 # Agent & local assistant configs
 /.agents/
 skills-lock.json
-
+/spam
+# Amneshia global dump & local cache
+MEMORY.md
+.amneshia/*.db
+.amneshia/*.db-wal
+.amneshia/*.db-shm
+.amneshia/*.log

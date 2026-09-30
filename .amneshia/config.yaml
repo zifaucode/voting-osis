@@ -1,0 +1,11 @@
+# Amneshia v3 Project Configuration
+version: "3.0.3"
+storage:
+  mode: "local"
+  dual_write: true
+truth_maintenance:
+  auto_cascade: true
+  contradiction_detection: true
+maintenance:
+  jaccard_threshold: 0.8
+  decay_enabled: true

@@ -143,6 +143,7 @@ class UserSelectCandidateController extends Controller
                 return response()->json([
                     'message' => $result['message'],
                     'code' => $result['code'],
+                    'error' => true,
                 ], $result['code']);
             }
 
