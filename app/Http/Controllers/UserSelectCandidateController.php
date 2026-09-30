@@ -80,6 +80,18 @@ class UserSelectCandidateController extends Controller
             }
         }
 
+        // Validasi sesi aktif bilik suara: tolak vote jika sesi di perangkat ini tidak cocok dengan sesi aktif terdaftar
+        $activeSessionId = \Illuminate\Support\Facades\Cache::get('active_voter_' . $currentUser->id);
+        if ($activeSessionId && $activeSessionId !== $request->session()->getId()) {
+            auth()->logout();
+            $request->session()->invalidate();
+            return response()->json([
+                'message' => 'Sesi bilik suara Anda telah dialihkan atau dibuka di perangkat lain.',
+                'code' => 403,
+                'error' => true,
+            ], 403);
+        }
+
         // 2. Transaksi Database dengan Row-Level Locking (Pessimistic Locking)
         try {
             $result = DB::transaction(function () use ($request, $currentUser) {
@@ -136,6 +148,10 @@ class UserSelectCandidateController extends Controller
 
             // Invalidate cache live votes
             \Illuminate\Support\Facades\Cache::forget('live_votes_api_payload');
+
+            // Hapus kunci sesi aktif pemilih setelah suara sukses tersimpan
+            \Illuminate\Support\Facades\Cache::forget('active_voter_' . $currentUser->id);
+            \Illuminate\Support\Facades\Cache::forget('active_voter_time_' . $currentUser->id);
 
             // Kirim pembaruan realtime via background queue worker
             // Membebaskan bilik suara pemilih seketika (<15ms) tanpa terhambat network latency socket

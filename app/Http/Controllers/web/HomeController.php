@@ -46,6 +46,18 @@ class HomeController extends Controller
             return redirect()->route('login.user')->with('error', 'Hak suara Anda telah digunakan. Anda tidak dapat login kembali.');
         }
 
+        // Validasi sesi aktif: pastikan perangkat ini adalah bilik suara yang sah (cegah multi-login)
+        $activeSessionId = \Illuminate\Support\Facades\Cache::get('active_voter_' . auth()->id());
+        if ($activeSessionId && $activeSessionId !== request()->session()->getId()) {
+            auth()->logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            return redirect()->route('login.user')->with('error', 'Sesi bilik suara Anda telah dialihkan atau dibuka di perangkat lain.');
+        }
+
+        // Perbarui masa aktif sesi bilik (5 menit dari aktivitas terakhir)
+        \Illuminate\Support\Facades\Cache::put('active_voter_time_' . auth()->id(), now(), now()->addMinutes(5));
+
         // Cache daftar paslon untuk efisiensi konkurensi bilik suara
         $osisCandidate = \Illuminate\Support\Facades\Cache::remember('pemilos_candidates_list', 3600, function () {
             return OsisChairmanCandidate::orderBy('sequence_number', 'asc')->get();
