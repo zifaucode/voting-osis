@@ -125,16 +125,14 @@ class AuthUserController extends Controller
             return redirect()->route('login.user')->withInput($request->only('nisn'));
         }
 
-        // Regenerasi ID sesi sebelum mengunci sesi
+        // Login pemilih terlebih dahulu (agar ID sesi dimigrasikan oleh AuthGuard)
+        Auth::login($user, false);
         $request->session()->regenerate();
-        $newSessionId = $request->session()->getId();
+        $finalSessionId = $request->session()->getId();
 
         // Kunci sesi aktif selama 5 menit di bilik ini
-        \Illuminate\Support\Facades\Cache::put('active_voter_' . $user->id, $newSessionId, now()->addMinutes(5));
+        \Illuminate\Support\Facades\Cache::put('active_voter_' . $user->id, $finalSessionId, now()->addMinutes(5));
         \Illuminate\Support\Facades\Cache::put('active_voter_time_' . $user->id, now(), now()->addMinutes(5));
-
-        // Matikan remember me (false) pada bilik suara lab komputer publik demi efisiensi I/O & keamanan sesi
-        Auth::login($user, false);
 
         return redirect()->intended('/');
     }
