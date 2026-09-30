@@ -58,13 +58,25 @@ class AuthUserController extends Controller
         $nisn = trim($request->nisn);
         $codeAccess = trim($request->code_access);
 
-        // Cari pemilih berdasarkan Username / NIS dan Kode Akses (role = 2 / pemilih)
+        // Cari pemilih berdasarkan Username / NIS (role = 2 / pemilih)
         $user = User::where('nisn', $nisn)
-            ->where('code_access', $codeAccess)
             ->where('role', 2)
             ->first();
 
-        if (!$user) {
+        // Verifikasi kode akses yang telah di-hash dengan Bcrypt (dengan fallback upgrade otomatis)
+        $isCodeValid = false;
+        if ($user && !empty($user->code_access)) {
+            if (\Illuminate\Support\Facades\Hash::check($codeAccess, $user->code_access)) {
+                $isCodeValid = true;
+            } elseif ((string)$user->code_access === $codeAccess) {
+                // Jika masih ada data legacy plain text, otomatis upgrade ke Bcrypt hash
+                $user->code_access = \Illuminate\Support\Facades\Hash::make($codeAccess);
+                $user->save();
+                $isCodeValid = true;
+            }
+        }
+
+        if (!$user || !$isCodeValid) {
             FacadesSession::flash('error', 'Kombinasi Username dan Kode Akses tidak ditemukan. Pastikan data yang dimasukkan sesuai dengan kartu suara Anda.');
             return redirect()->route('login.user')->withInput($request->only('nisn'));
         }

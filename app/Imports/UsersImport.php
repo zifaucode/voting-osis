@@ -34,12 +34,16 @@ class UsersImport implements ToModel, WithStartRow
             return null;
         }
 
+        $hashedCode = !empty($codeAccess)
+            ? (str_starts_with($codeAccess, '$2y$') ? $codeAccess : Hash::make($codeAccess))
+            : null;
+
         $existing = User::where('nisn', $nisn)->first();
         if ($existing) {
             $existing->update([
                 'name' => $name,
                 'class' => $class ?: $existing->class,
-                'code_access' => $codeAccess ?: $existing->code_access,
+                'code_access' => $hashedCode ?: $existing->code_access,
             ]);
             return null;
         }
@@ -48,7 +52,7 @@ class UsersImport implements ToModel, WithStartRow
             'nisn' => $nisn,
             'name' => $name,
             'class' => $class,
-            'code_access' => $codeAccess,
+            'code_access' => $hashedCode,
             'role' => 2,
             'vote_status' => 0,
             'password' => Hash::make('12345678'),

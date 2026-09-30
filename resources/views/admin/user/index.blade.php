@@ -262,7 +262,12 @@ Data Pemilih (Siswa & Guru)
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge-code">@{{ item.code_access || '-' }}</span>
+                                        <span v-if="item.code_access && (item.code_access.startsWith('$2y$') || item.code_access.length > 20)" 
+                                              class="badge badge-success px-2 py-1 shadow-xs font-weight-normal" 
+                                              title="Kode akses terproteksi enkripsi Bcrypt satu arah demi keamanan">
+                                            <i class="fas fa-shield-alt mr-1"></i> Terhash (Aman)
+                                        </span>
+                                        <span v-else class="badge-code">@{{ item.code_access || '-' }}</span>
                                     </td>
                                     <td class="text-center">
                                         <span class="badge badge-success px-2 py-1" v-if="item.vote_status == 1">

@@ -68,13 +68,14 @@ class ImportStudentsRoster extends Command
                     $name = trim((string)$s['name']);
                     $class = trim((string)$s['class']);
                     $code = trim((string)$s['code_access']);
+                    $hashedCode = str_starts_with($code, '$2y$') ? $code : Hash::make($code);
 
                     $existing = User::where('nisn', $nis)->first();
                     if ($existing) {
                         $existing->update([
                             'name' => $name,
                             'class' => $class,
-                            'code_access' => $code,
+                            'code_access' => $hashedCode,
                             'role' => 2,
                             'updated_at' => $now,
                         ]);
@@ -84,7 +85,7 @@ class ImportStudentsRoster extends Command
                             'nisn' => $nis,
                             'name' => $name,
                             'class' => $class,
-                            'code_access' => $code,
+                            'code_access' => $hashedCode,
                             'role' => 2,
                             'vote_status' => 0,
                             'is_vote' => null,
