@@ -148,13 +148,6 @@
                             <i class="bi bi-arrow-right text-base text-white"></i>
                         </div>
                     </button>
-
-                    <!-- Navigation Link -->
-                    <div class="pt-4 border-t border-slate-100 flex items-center justify-center text-xs font-semibold text-cloudy-500">
-                        <a href="/admin/login" class="inline-flex items-center gap-1.5 hover:text-ocean-600 transition-colors">
-                            <i class="bi bi-shield-lock-fill text-ocean-500"></i> Portal Admin
-                        </a>
-                    </div>
                 </form>
             </div>
         </div>
