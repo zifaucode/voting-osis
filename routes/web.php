@@ -28,7 +28,7 @@ Route::controller(AuthUserController::class)->prefix('/user')->group(function ()
 
 Route::controller(AuthAdminController::class)->prefix('/admin')->group(function () {
     Route::get('/login', 'index')->name('login');
-    Route::post('/auth', 'authenticate')->name('auth.admin')->middleware('throttle:5,1');
+    Route::post('/auth', 'authenticate')->name('auth.admin')->middleware('throttle:admin-login');
     Route::get('/logout', 'adminLogout')->name('logout.admin');
 });
 /*

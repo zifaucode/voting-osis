@@ -41,18 +41,33 @@ class AuthAdminController extends Controller
 
     public function authenticate(Request $request)
     {
-        $username = $request->username;
-        $password = $request->password;
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ], [
+            'username.required' => 'Username administrator wajib diisi.',
+            'password.required' => 'Kata sandi administrator wajib diisi.',
+        ]);
 
-        // dd($username, $password);
+        $username = trim((string)$request->username);
+        $password = (string)$request->password;
 
-        Auth::attempt(['username' => $username, 'password' => $password]);
-        if (Auth::check()) {
+        if (Auth::attempt(['username' => $username, 'password' => $password])) {
+            // Pastikan akun memiliki hak akses administrator (role = 1)
+            if (Auth::user()->role != 1) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect()->route('login')->with('error', 'Akses ditolak. Akun Anda tidak memiliki hak akses administrator.');
+            }
+
             $request->session()->regenerate();
             return redirect()->intended('/admin');
         }
-        FacadesSession::flash('error', 'Username atau password salah');
-        return redirect()->route('login');
+
+        return redirect()->route('login')
+            ->withInput($request->only('username'))
+            ->with('error', 'Username atau kata sandi administrator salah.');
     }
 
     /**

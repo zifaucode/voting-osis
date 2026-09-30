@@ -39,6 +39,17 @@ class RouteServiceProvider extends ServiceProvider
             });
         });
 
+        // Anti-Brute Force Login Administrator
+        // Dibatasi maksimal 5 percobaan per menit per kombinasi username + IP
+        RateLimiter::for('admin-login', function (Request $request) {
+            $key = trim(strtolower((string)$request->input('username', 'admin'))) . '|' . $request->ip();
+            return Limit::perMinute(5)->by($key)->response(function () {
+                return back()
+                    ->withInput(request()->only('username'))
+                    ->with('error', 'Terlalu banyak percobaan login admin yang gagal. Harap tunggu 1 menit sebelum mencoba kembali.');
+            });
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
