@@ -30,5 +30,10 @@ class AppServiceProvider extends ServiceProvider
                 $pdo->exec('PRAGMA temp_store = MEMORY;');
             }
         });
+
+        // Paksa HTTPS di production / environment domain SSL untuk mencegah mixed content
+        if (config('app.env') === 'production' || str_starts_with(config('app.url', ''), 'https://')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
